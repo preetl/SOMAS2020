@@ -4,7 +4,7 @@ import (
 	"github.com/SOMAS2020/SOMAS2020/internal/common/baseclient"
 	"github.com/SOMAS2020/SOMAS2020/internal/common/shared"
 	"math/rand"
-	"time"
+	_ "time"
 
 	"github.com/SOMAS2020/SOMAS2020/internal/common/gamestate"
 	"github.com/SOMAS2020/SOMAS2020/internal/common/roles"
@@ -17,8 +17,9 @@ type baseSpeaker struct {
 	Id            int
 	budget        int
 	judgeSalary   int
-	RuleToVote    string
-	VotingResult  bool
+	ruleToVote    string
+	ballotBox     voting.BallotBox
+	votingResult  bool
 	clientSpeaker roles.Speaker
 }
 
@@ -50,61 +51,87 @@ func (s *baseSpeaker) PayJudge() (int, error) {
 	return hold, nil
 }
 
-// Receive a rule to call a vote on
-func (s *baseSpeaker) setRuleToVote(r string) {
-	s.RuleToVote = r
+//setRuleToVote sets the rule to be voted on.
+//This action has no cost. Serves as a utility function for non-compliant agents
+func (s *baseSpeaker) setRuleToVote(givenRuleID string) {
+	var chosenRuleID string
+	var err error
+
+	if s.clientSpeaker != nil {
+		chosenRuleID, err = s.clientSpeaker.DecideAgenda(s.ruleToVote)
+		if err != nil {
+			chosenRuleID = givenRuleID
+		}
+	} else {
+		chosenRuleID = givenRuleID
+	}
+	//TODO: log of chosenRule vs givenRuleID
+	s.ruleToVote = chosenRuleID
 }
 
-//Asks islands to vote on a rule
-//Called by orchestration
-func (s *baseSpeaker) setVotingResult(iigoClients map[shared.ClientID]baseclient.Client) {
-	//if s.clientSpeaker != nil {
-	//	result, err := s.clientSpeaker.RunVote(s.RuleToVote)
-	//	if err != nil {
-	//		s.VotingResult, _ = s.RunVote(s.RuleToVote)
-	//	} else {
-	//		s.VotingResult = result
-	//	}
-	//} else {
-	//	s.VotingResult, _ = s.RunVote(s.RuleToVote)
-	//}
+//DecideAgenda the interface implementation and example of a well behaved Speaker
+//who sets the vote to be voted on to be the rule the President provided
+func (s *baseSpeaker) DecideAgenda(ruleID string) (string, error) {
+	return ruleID, nil
+}
 
-	//Speaker gets no choice, voting just happens implementation
-	//this is not MVP, but it works
-	//TODO: Separate and clearly define speaker held information and vote held information (see ruleToVote)
-	//TODO: Remove tests
-	ruleVote := voting.RuleVote{}
-	ruleVote.ProposeMotion(s.RuleToVote)
+//TODO: Write tests for setVotingResult
+//setVotingResult is called by orchestration and provides the Speaker with the power
+//to conduct a vote on a rule.
+func (s *baseSpeaker) setVotingResult() {
 
 	//TODO: for loop should not be done here
 	var clientIDs []shared.ClientID
 	for id := range getIslandAlive() {
 		clientIDs = append(clientIDs, shared.ClientID(id))
 	}
-	ruleVote.OpenBallot(clientIDs)
-	ruleVote.Vote(iigoClients)
-	s.VotingResult = ruleVote.CloseBallot().Result
+
+	if s.clientSpeaker != nil {
+		ruleID, participatingIslands, err := s.clientSpeaker.DecideVote(s.ruleToVote, clientIDs)
+		if err != nil {
+			s.ballotBox = s.RunVote(s.ruleToVote, clientIDs)
+		} else {
+			s.ballotBox = s.RunVote(ruleID, participatingIslands)
+		}
+	} else {
+		s.ballotBox = s.RunVote(s.ruleToVote, clientIDs)
+	}
+
+	//Vote counting always happens and the cost incurred through running the vote
+	s.votingResult = s.ballotBox.CountVotesMajority()
 
 }
 
-//Deprecated
-//Creates the voting object, collect ballots & count the votes
-//Functional so it corresponds to the interface, to the client implementation
-//If agent decides not to use voting functions, it is assumed they have not performed them
-func (s *baseSpeaker) RunVote(ruleID string) (bool, error) {
-	s.budget -= 10
-	if ruleID == "" {
-		// No rules were proposed by the islands
-		return false, nil
-	} else {
-		////TODO: updateTurnHistory of rule-given-to-vote vs RuleToVote
-		//TODO: pass in islandID for log
-		//ballotsFor, ballotsAgainst, result = voting.VoteRule(ruleID, getIslandAlive())
+//RunVote creates the voting object, returns votes by category (for, against) in BallotBox.
+//Passing in empty ruleID or empty clientIDs results in no vote occurring
+func (s *baseSpeaker) RunVote(ruleID string, clientIDs []shared.ClientID) voting.BallotBox {
 
-		//Return a random result for now
-		rand.Seed(time.Now().UnixNano())
-		return rand.Int31()&0x01 == 0, nil
+	if ruleID == "" || len(clientIDs) == 0 {
+		return voting.BallotBox{}
 	}
+	s.budget -= 10
+	ruleVote := voting.RuleVote{}
+
+	//TODO: check if rule is valid, otherwise return empty ballot, raise error?
+	ruleVote.SetRule(ruleID)
+
+	//TODO: intersection of islands alive and islands chosen to vote in case of client error
+	//TODO: check if remaining slice is >0, otherwise return empty ballot, raise error?
+	ruleVote.SetVotingIslands(clientIDs)
+
+	ruleVote.GatherBallots(iigoClients)
+	//TODO: log of vote occurring with ruleID, clientIDs
+	//TODO: log of clientIDs vs islandsAllowedToVote
+	//TODO: log of ruleID vs s.RuleToVote
+	return ruleVote.GetBallotBox()
+}
+
+//DecideVote is the interface implementation and example of a well behaved Speaker
+//who calls a vote on the proposed rule and asks all available islands to vote.
+//Return an empty string or empty []shared.ClientID for no vote to occur
+func (s *baseSpeaker) DecideVote(ruleID string, aliveClients []shared.ClientID) (string, []shared.ClientID, error) {
+	//TODO: disregard islands with sanctions
+	return ruleID, aliveClients, nil
 }
 
 //Speaker declares a result of a vote (see spec to see conditions on what this means for a rule-abiding speaker)
@@ -117,31 +144,37 @@ func (s *baseSpeaker) announceVotingResult() error {
 
 	if s.clientSpeaker != nil {
 		//Power to change what is declared completely, return "", _ for no announcement to occur
-		rule, result, err = s.clientSpeaker.DecideAnnouncement(s.RuleToVote, s.VotingResult)
+		rule, result, err = s.clientSpeaker.DecideAnnouncement(s.ruleToVote, s.votingResult)
 		//TODO: log of given vs. returned rule and result
 		if err != nil {
-			rule, result, _ = s.DecideAnnouncement(s.RuleToVote, s.VotingResult)
+			rule, result, _ = s.DecideAnnouncement(s.ruleToVote, s.votingResult)
 		}
 	} else {
-		rule, result, _ = s.DecideAnnouncement(s.RuleToVote, s.VotingResult)
+		rule, result, _ = s.DecideAnnouncement(s.ruleToVote, s.votingResult)
 	}
 
 	if rule != "" {
 		//Deduct action cost
 		s.budget -= 10
 
-		//Reset
-		s.RuleToVote = ""
-		s.VotingResult = false
+		s.reset()
 
 		//Perform announcement
 		broadcastToAllIslands(shared.TeamIDs[s.Id], generateVotingResultMessage(rule, result))
 		return s.updateRules(rule, result)
 	}
+
+	s.reset()
 	return nil
 }
 
-//Example of the client implementation of DecideAnnouncement
+func (s *baseSpeaker) reset() {
+	s.ruleToVote = ""
+	s.ballotBox = voting.BallotBox{}
+	s.votingResult = false
+}
+
+//DecideAnnouncement is the interface implementation and example of a well behaved Speaker
 //A well behaved speaker announces what had been voted on and the corresponding result
 //Return "", _ for no announcement to occur
 func (s *baseSpeaker) DecideAnnouncement(ruleId string, result bool) (string, bool, error) {

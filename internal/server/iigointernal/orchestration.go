@@ -28,7 +28,7 @@ var featureSpeaker = baseSpeaker{
 	Id:          0,
 	budget:      0,
 	judgeSalary: 0,
-	RuleToVote:  "",
+	ruleToVote:  "",
 }
 
 // featurePresident is an instantiation of the President interface
@@ -124,7 +124,7 @@ func RunIIGO(g *gamestate.GameState, clientMap *map[shared.ClientID]baseclient.C
 
 	// 3 Speaker actions
 	featureSpeaker.setRuleToVote(ruleToVote)
-	featureSpeaker.setVotingResult(iigoClients)
+	featureSpeaker.setVotingResult()
 	_ = featureSpeaker.announceVotingResult()
 
 	// 4 Declare performance (Judge) (in future all the iigointernal)
