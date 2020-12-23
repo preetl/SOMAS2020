@@ -1,9 +1,10 @@
 package iigointernal
 
 import (
+	"math/rand"
+
 	"github.com/SOMAS2020/SOMAS2020/internal/common/baseclient"
 	"github.com/SOMAS2020/SOMAS2020/internal/common/shared"
-	"math/rand"
 
 	"github.com/SOMAS2020/SOMAS2020/internal/common/gamestate"
 	"github.com/SOMAS2020/SOMAS2020/internal/common/roles"
@@ -24,6 +25,7 @@ type BaseJudge struct {
 	clientJudge       roles.Judge
 }
 
+//Function to initialise the BallotID and ResAllocID
 func (j *BaseJudge) init() {
 	j.BallotID = 0
 	j.ResAllocID = 0
@@ -40,6 +42,7 @@ func (j *BaseJudge) withdrawPresidentSalary(gameState *gamestate.GameState) erro
 	return withdrawError
 }
 
+// Calculates and sets the salary of the president object
 func (j *BaseJudge) sendPresidentSalary() {
 	if j.clientJudge != nil {
 		amount, err := j.clientJudge.PayPresident()
@@ -52,18 +55,22 @@ func (j *BaseJudge) sendPresidentSalary() {
 	featurePresident.budget = amount
 }
 
-// Pay the president
+// PayPresident sets the salary of president and returns the amount
 func (j *BaseJudge) PayPresident() (int, error) {
 	hold := j.presidentSalary
 	j.presidentSalary = 0
 	return hold, nil
 }
 
+// Assigns the speakerID and presidentID to speaker and president respectively
 func (j *BaseJudge) setSpeakerAndPresidentIDs(speakerId int, presidentId int) {
 	j.speakerID = speakerId
 	j.presidentID = presidentId
 }
 
+// Function iterates through every entry in TurnHistory, selects rules affected by the specific
+// variables and then evaluates if those rules evaluate to true (implying the rule is correctly
+// in play). Function returns outputMap containing rules that evaluate to true.
 func (j *BaseJudge) inspectHistoryInternal() {
 	outputMap := map[int]roles.EvaluationReturn{}
 	for _, v := range TurnHistory {
@@ -97,6 +104,8 @@ func (j *BaseJudge) inspectHistoryInternal() {
 	j.EvaluationResults = outputMap
 }
 
+// Function that enables clientJudge to override their own implementation of InspectHistory
+// otherwise will use the implementation of BaseJudge InspectHistory
 func (j *BaseJudge) InspectHistory() (map[int]roles.EvaluationReturn, error) {
 	j.budget -= 10
 	if j.clientJudge != nil {
@@ -112,10 +121,9 @@ func (j *BaseJudge) InspectHistory() (map[int]roles.EvaluationReturn, error) {
 	return j.EvaluationResults, nil
 }
 
+// Function that audits Ballot rules only and returns a boolean on whether the specific rules
+// return a true when evaluated
 func (j *BaseJudge) inspectBallot() (bool, error) {
-	// 1. Evaluate difference between newRules and oldRules to check
-	//    rule changes are in line with RuleToVote in previous ballot
-	// 2. Compare each ballot action adheres to rules in ruleSet matrix
 	j.budget -= 10
 	rulesAffectedBySpeaker := j.EvaluationResults[j.speakerID]
 	indexOfBallotRule, err := searchForRule("inspect_ballot_rule", rulesAffectedBySpeaker.Rules)
@@ -126,6 +134,8 @@ func (j *BaseJudge) inspectBallot() (bool, error) {
 	}
 }
 
+// Function that audits Allocation rules only and returns a boolean on whether the specific rules
+// return a true when evaluated
 func (j *BaseJudge) inspectAllocation() (bool, error) {
 	// 1. Evaluate difference between commonPoolNew and commonPoolOld
 	//    to check resource allocation changes are in line with ResourceRequests
@@ -142,6 +152,7 @@ func (j *BaseJudge) inspectAllocation() (bool, error) {
 	}
 }
 
+// Function that returns the searched rule from the RuleMatrix
 func searchForRule(ruleName string, listOfRuleMatrices []rules.RuleMatrix) (int, error) {
 	for i, v := range listOfRuleMatrices {
 		if v.RuleName == ruleName {
@@ -160,6 +171,8 @@ func (j *BaseJudge) declareSpeakerPerformanceInternal() (int, bool, int, bool, e
 	return j.BallotID, result, j.speakerID, conductedRole, nil
 }
 
+// Function that returns the performance of the speaker with ballotID, boolean result,
+// speakerID and boolean checkRole (if the audit was conducted)
 func (j *BaseJudge) DeclareSpeakerPerformance() (int, bool, int, bool, error) {
 
 	j.budget -= 10
@@ -190,6 +203,8 @@ func (j *BaseJudge) declareSpeakerPerformanceWrapped() {
 	}
 }
 
+// Function that returns the performance of the president with ballotID, boolean result,
+// speakerID and boolean checkRole (if the audit was conducted)
 func (j *BaseJudge) DeclarePresidentPerformance() (int, bool, int, bool, error) {
 
 	j.budget -= 10
@@ -231,11 +246,13 @@ func (j *BaseJudge) declarePresidentPerformanceInternal() (int, bool, int, bool,
 	return j.ResAllocID, result, j.presidentID, conductedRole, nil
 }
 
+// Function that randomly assigns the next president
 func (j *BaseJudge) appointNextPresident() int {
 	j.budget -= 10
 	return rand.Intn(5)
 }
 
+// Function that generates a map for communication indexed by the four return variables from declare functions
 func generateSpeakerPerformanceMessage(BID int, result bool, SID int, conductedRole bool) map[int]baseclient.Communication {
 	returnMap := map[int]baseclient.Communication{}
 
@@ -258,6 +275,7 @@ func generateSpeakerPerformanceMessage(BID int, result bool, SID int, conductedR
 	return returnMap
 }
 
+// Function that generates a map for communication indexed by the four return variables from declare functions
 func generatePresidentPerformanceMessage(RID int, result bool, PID int, conductedRole bool) map[int]baseclient.Communication {
 	returnMap := map[int]baseclient.Communication{}
 
