@@ -3,7 +3,7 @@ package iigointernal
 import (
 	"github.com/SOMAS2020/SOMAS2020/internal/common/baseclient"
 	"github.com/SOMAS2020/SOMAS2020/internal/common/shared"
-	"math/rand"
+	//"math/rand"
 	_ "time"
 
 	"github.com/SOMAS2020/SOMAS2020/internal/common/gamestate"
