@@ -3,6 +3,7 @@ package baseclient
 
 import (
 	"fmt"
+	"github.com/SOMAS2020/SOMAS2020/internal/common/rules"
 	"log"
 
 	"github.com/SOMAS2020/SOMAS2020/internal/common/gamestate"
@@ -39,8 +40,19 @@ type Client interface {
 	MakePrediction() (shared.PredictionInfo, error)
 	ReceivePredictions(receivedPredictions shared.PredictionInfoDict) error
 
+	//Foraging
+	DecideForage() (shared.ForageDecision, error)
+	//IITO: COMPULSORY
+	RequestGift() uint
+	OfferGifts(giftRequestDict shared.GiftDict) (shared.GiftDict, error)
+	AcceptGifts(receivedGiftDict shared.GiftDict) (shared.GiftInfoDict, error)
+	UpdateGiftInfo(acceptedGifts map[shared.ClientID]shared.GiftInfoDict) error
+
+	//TODO: THESE ARE NOT DONE yet, how do people think we should implement the actual transfer?
+	SendGift(receivingClient shared.ClientID, amount int) error
+	ReceiveGift(sendingClient shared.ClientID, amount int) error
 	GetVoteForRule(ruleName string) bool
-	GetVoteForElection(numOfIslands int) error
+	GetVoteForElection(roleToElect Role) []shared.ClientID
 }
 
 var ourPredictionInfo shared.PredictionInfo
@@ -97,13 +109,36 @@ func (c *BaseClient) GameStateUpdate(gameState gamestate.ClientGameState) {
 	c.clientGameState = gameState
 }
 
+type Role = int
 
+const (
+	President Role = iota
+	Speaker
+	Judge
+)
+
+// GetVoteForRule returns the client's vote in favour of or against a rule.
 func (c *BaseClient) GetVoteForRule(ruleName string) bool {
+	// TODO implement decision on voting that considers the rule
 	return true
 }
 
-func (c *BaseClient) GetVoteForElection(numOfIslands int) error {
-	return nil
+// GetVoteForElection returns the client's Borda vote for the role to be elected.
+func (c *BaseClient) GetVoteForElection(roleToElect Role) []shared.ClientID {
+	// Done ;)
+	// Get all alive islands
+	aliveClients := rules.VariableMap["islands_alive"]
+	// Convert to ClientID type and place into unordered map
+	aliveClientIDs := map[int]shared.ClientID{}
+	for i, v := range aliveClients.Values {
+		aliveClientIDs[i] = shared.ClientID(int(v))
+	}
+	// Recombine map, in shuffled order
+	var returnList []shared.ClientID
+	for _, v := range aliveClientIDs {
+		returnList = append(returnList, v)
+	}
+	return returnList
 }
 
 type CommunicationContentType = int
