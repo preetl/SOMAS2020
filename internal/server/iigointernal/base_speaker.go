@@ -23,7 +23,10 @@ type baseSpeaker struct {
 	clientSpeaker roles.Speaker
 }
 
+//withdrawJudgeSalary deducts appropriate amount of Judge salary from the CP
 func (s *baseSpeaker) withdrawJudgeSalary(gameState *gamestate.GameState) error {
+	//Note, Should make it so that the speaker cannot keep the resources, they have the power to pay the judge,
+	//dont have the power to pocket the money
 	var judgeSalary = int(rules.VariableMap["judgeSalary"].Values[0])
 	var withdrawError = WithdrawFromCommonPool(judgeSalary, gameState)
 	if withdrawError != nil {
@@ -32,23 +35,18 @@ func (s *baseSpeaker) withdrawJudgeSalary(gameState *gamestate.GameState) error 
 	return withdrawError
 }
 
+//sendJudgeSalary asks the speaker how much to add to the budget of the Judge
 func (s *baseSpeaker) sendJudgeSalary() {
 	if s.clientSpeaker != nil {
 		amount, err := s.clientSpeaker.PayJudge()
 		if err == nil {
+			//TODO: reorder actions so speaker could not provide a larger amount than withdrawn (what is withdrawn is sent)
 			featureJudge.budget = amount
 			return
 		}
 	}
 	amount, _ := s.PayJudge()
 	featureJudge.budget = amount
-}
-
-// Pay the judge
-func (s *baseSpeaker) PayJudge() (int, error) {
-	hold := s.judgeSalary
-	s.judgeSalary = 0
-	return hold, nil
 }
 
 //setRuleToVote sets the rule to be voted on.
@@ -69,15 +67,8 @@ func (s *baseSpeaker) setRuleToVote(givenRuleID string) {
 	s.ruleToVote = chosenRuleID
 }
 
-//DecideAgenda the interface implementation and example of a well behaved Speaker
-//who sets the vote to be voted on to be the rule the President provided
-func (s *baseSpeaker) DecideAgenda(ruleID string) (string, error) {
-	return ruleID, nil
-}
-
 //TODO: Write tests for setVotingResult
-//setVotingResult is called by orchestration and provides the Speaker with the power
-//to conduct a vote on a rule.
+//setVotingResult is called by orchestration and provides the Speaker with the power to conduct a vote on a rule.
 func (s *baseSpeaker) setVotingResult() {
 
 	//TODO: for loop should not be done here
@@ -126,16 +117,9 @@ func (s *baseSpeaker) RunVote(ruleID string, clientIDs []shared.ClientID) voting
 	return ruleVote.GetBallotBox()
 }
 
-//DecideVote is the interface implementation and example of a well behaved Speaker
-//who calls a vote on the proposed rule and asks all available islands to vote.
-//Return an empty string or empty []shared.ClientID for no vote to occur
-func (s *baseSpeaker) DecideVote(ruleID string, aliveClients []shared.ClientID) (string, []shared.ClientID, error) {
-	//TODO: disregard islands with sanctions
-	return ruleID, aliveClients, nil
-}
-
-//Speaker declares a result of a vote (see spec to see conditions on what this means for a rule-abiding speaker)
-//Called by orchestration
+//announceVotingResult gives the speaker the power to declare a result of a vote
+//(see spec to see conditions on what this means for a rule-abiding speaker).
+//Called by orchestration.
 func (s *baseSpeaker) announceVotingResult() error {
 
 	var rule string
@@ -168,19 +152,14 @@ func (s *baseSpeaker) announceVotingResult() error {
 	return nil
 }
 
+//reset resets internal variables for safety
 func (s *baseSpeaker) reset() {
 	s.ruleToVote = ""
 	s.ballotBox = voting.BallotBox{}
 	s.votingResult = false
 }
 
-//DecideAnnouncement is the interface implementation and example of a well behaved Speaker
-//A well behaved speaker announces what had been voted on and the corresponding result
-//Return "", _ for no announcement to occur
-func (s *baseSpeaker) DecideAnnouncement(ruleId string, result bool) (string, bool, error) {
-	return ruleId, result, nil
-}
-
+//generateVotingResultMessage packs up the ruleID and the result in a package to be sent to the clients
 func generateVotingResultMessage(ruleID string, result bool) map[int]baseclient.Communication {
 	returnMap := map[int]baseclient.Communication{}
 
@@ -196,6 +175,7 @@ func generateVotingResultMessage(ruleID string, result bool) map[int]baseclient.
 	return returnMap
 }
 
+//updateRules updates the rules depending on the ruleID provided and the result
 func (s *baseSpeaker) updateRules(ruleName string, ruleVotedIn bool) error {
 	s.budget -= 10
 	//TODO: might want to log the errors as normal messages rather than completely ignoring them? But then Speaker needs access to client's logger
@@ -222,6 +202,8 @@ func (s *baseSpeaker) updateRules(ruleName string, ruleVotedIn bool) error {
 
 }
 
+//appointNextJudge runs an election for next Judge
+//This is not MVP, needs to be turned into a power rather than an external event
 func (s *baseSpeaker) appointNextJudge(clientIDs []shared.ClientID) int {
 	s.budget -= 10
 	var election voting.Election
@@ -229,4 +211,37 @@ func (s *baseSpeaker) appointNextJudge(clientIDs []shared.ClientID) int {
 	election.OpenBallot(clientIDs)
 	election.Vote(iigoClients)
 	return int(election.CloseBallot())
+}
+
+//---- Speaker Interface Implementations ----
+//TODO: move to separate file?
+
+//PayJudge is the interface implementation and example of a well behaved Speaker,
+//who decides to pay the speaker everything that has been withdrawn from the CP
+//(should be decides to pay the judge what the rule dictates instead)
+func (s *baseSpeaker) PayJudge() (int, error) {
+	hold := s.judgeSalary
+	s.judgeSalary = 0
+	return hold, nil
+}
+
+//DecideAgenda the interface implementation and example of a well behaved Speaker
+//who sets the vote to be voted on to be the rule the President provided
+func (s *baseSpeaker) DecideAgenda(ruleID string) (string, error) {
+	return ruleID, nil
+}
+
+//DecideVote is the interface implementation and example of a well behaved Speaker
+//who calls a vote on the proposed rule and asks all available islands to vote.
+//Return an empty string or empty []shared.ClientID for no vote to occur
+func (s *baseSpeaker) DecideVote(ruleID string, aliveClients []shared.ClientID) (string, []shared.ClientID, error) {
+	//TODO: disregard islands with sanctions
+	return ruleID, aliveClients, nil
+}
+
+//DecideAnnouncement is the interface implementation and example of a well behaved Speaker
+//A well behaved speaker announces what had been voted on and the corresponding result
+//Return "", _ for no announcement to occur
+func (s *baseSpeaker) DecideAnnouncement(ruleId string, result bool) (string, bool, error) {
+	return ruleId, result, nil
 }
