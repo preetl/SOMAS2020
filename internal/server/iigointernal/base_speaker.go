@@ -72,9 +72,6 @@ func (s *baseSpeaker) setRuleToVote(givenRuleID string) {
 func (s *baseSpeaker) setVotingResult(clientIDs []shared.ClientID) {
 
 	//TODO: for loop should not be done here
-	var clientIDs []shared.ClientID
-	for id := range getIslandAlive() {
-		clientIDs = append(clientIDs, shared.ClientID(id))
 	}
 
 	if s.clientSpeaker != nil {
