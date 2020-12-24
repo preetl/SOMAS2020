@@ -69,7 +69,7 @@ func (s *baseSpeaker) setRuleToVote(givenRuleID string) {
 
 //TODO: Write tests for setVotingResult
 //setVotingResult is called by orchestration and provides the Speaker with the power to conduct a vote on a rule.
-func (s *baseSpeaker) setVotingResult() {
+func (s *baseSpeaker) setVotingResult(clientIDs []shared.ClientID) {
 
 	//TODO: for loop should not be done here
 	var clientIDs []shared.ClientID
