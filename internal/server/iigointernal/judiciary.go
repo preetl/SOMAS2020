@@ -13,6 +13,7 @@ import (
 
 // to be moved to paramters
 const sanctionCacheDepth = 3
+const historyCacheDepth = 3
 
 // to be changed
 const sanctionLength = 2
@@ -28,6 +29,7 @@ type judiciary struct {
 	sanctionThresholds    map[roles.IIGOSanctionTier]roles.IIGOSanctionScore
 	ruleViolationSeverity map[string]roles.IIGOSanctionScore
 	localSanctionCache    map[int][]roles.Sanction
+	localHistoryCache     map[int][]shared.Accountability
 }
 
 // Loads ruleViolationSeverity and sanction thresholds
@@ -128,6 +130,23 @@ func (j *judiciary) cycleSanctionCache() {
 	j.localSanctionCache = newMap
 }
 
+// cycleHistoryCache rolls the history cache (for retributive justice) forward
+func (j *judiciary) cycleHistoryCache(iigoHistory []shared.Accountability) {
+	newMap := j.localHistoryCache
+	delete(newMap, historyCacheDepth-1)
+	newMapCache := newMap
+	for i := 0; i < historyCacheDepth-1; i++ {
+		newMap[i+1] = newMapCache[i]
+	}
+	newMap[0] = iigoHistory
+	j.localHistoryCache = newMap
+}
+
+// clearHistoryCache wipes the history cache (when retributive justice has happened)
+func (j *judiciary) clearHistoryCache() {
+	j.localHistoryCache = defaultInitLocalHistoryCache(historyCacheDepth)
+}
+
 // Helper functions //
 
 // getDefaultSanctionThresholds provides default thresholds for sanctions
@@ -201,6 +220,46 @@ func implementPardons(sanctionCache map[int][]roles.Sanction, pardons map[int][]
 		return true, finalSanctionCache, communicationsAboutPardons
 	}
 	return false, sanctionCache, nil
+}
+
+// defaultInitLocalHistoryCache generates a blank history cache
+func defaultInitLocalHistoryCache(depth int) map[int][]shared.Accountability {
+	returnMap := map[int][]shared.Accountability{}
+	for i := 0; i < depth; i++ {
+		returnMap[i] = []shared.Accountability{}
+	}
+	return returnMap
+}
+
+// checkPardons checks the pardons issued by an island judge making sure they are valid, returns the remaining sanctions
+func checkPardons(sanctionCache map[int][]roles.Sanction, pardons map[int]map[int]roles.Sanction) (pardonsValid bool, communications map[shared.ClientID][]map[shared.CommunicationFieldName]shared.CommunicationContent, finalCache map[int][]roles.Sanction) {
+	comms := map[shared.ClientID][]map[shared.CommunicationFieldName]shared.CommunicationContent{}
+	newSanctionCache := map[int][]roles.Sanction{}
+	for k, v := range sanctionCache {
+		newSanctionCache[k] = v
+	}
+	for i, v := range pardons {
+		for iSan, vSan := range v {
+			if sanctionCache[i][iSan] != vSan {
+				return false, map[shared.ClientID][]map[shared.CommunicationFieldName]shared.CommunicationContent{}, sanctionCache
+			} else {
+				comms[vSan.ClientID] = append(comms[vSan.ClientID], map[shared.CommunicationFieldName]shared.CommunicationContent{
+					shared.PardonClientID: {
+						T:           shared.CommunicationInt,
+						IntegerData: int(vSan.ClientID),
+					},
+					shared.PardonTier: {
+						T:           shared.CommunicationInt,
+						IntegerData: int(vSan.SanctionTier),
+					},
+				})
+				copyOfNewSanctionCache := make([]roles.Sanction, len(newSanctionCache[i]))
+				copy(copyOfNewSanctionCache, newSanctionCache[i])
+				newSanctionCache[i] = removeSanctions(copyOfNewSanctionCache, iSan-getDifferenceInLength(sanctionCache[i], copyOfNewSanctionCache))
+			}
+		}
+	}
+	return true, comms, newSanctionCache
 }
 
 func generateEmptyCommunicationsMap(allTeamIds []shared.ClientID) map[shared.ClientID][]map[shared.CommunicationFieldName]shared.CommunicationContent {
@@ -287,4 +346,76 @@ func removeSanctions(slice []roles.Sanction, s int) []roles.Sanction {
 // getDifferenceInLength helper function to get difference in length between two lists
 func getDifferenceInLength(slice1 []roles.Sanction, slice2 []roles.Sanction) int {
 	return len(slice1) - len(slice2)
+}
+
+// pickUpRulesByVariable returns a list of rule_id's which are affected by certain variables.
+func pickUpRulesByVariable(variableName rules.VariableFieldName, ruleStore map[string]rules.RuleMatrix, variableMap map[rules.VariableFieldName]rules.VariableValuePair) ([]string, bool) {
+	var Rules []string
+	if _, ok := variableMap[variableName]; ok {
+		for k, v := range ruleStore {
+			_, found := searchForVariableInArray(variableName, v.RequiredVariables)
+			if found {
+				Rules = append(Rules, k)
+			}
+		}
+		return Rules, true
+	} else {
+		// fmt.Sprintf("Variable name '%v' was not found in the variable cache", variableName)
+		return []string{}, false
+	}
+}
+
+func searchForVariableInArray(val rules.VariableFieldName, array []rules.VariableFieldName) (int, bool) {
+	for i, v := range array {
+		if v == val {
+			return i, true
+		}
+	}
+	return -1, false
+}
+
+// cullCheckedRules removes any entries in the history that have been evaluated in evalResults (for historical retribution)
+func cullCheckedRules(iigoHistory []shared.Accountability, evalResults map[shared.ClientID]roles.EvaluationReturn, rulesCache map[string]rules.RuleMatrix, variableCache map[rules.VariableFieldName]rules.VariableValuePair) []shared.Accountability {
+	reducedAccountability := []shared.Accountability{}
+	for _, v := range iigoHistory {
+		pairsAffected := v.Pairs
+		var allRulesAffected []string
+		for _, pair := range pairsAffected {
+			additionalRules, success := pickUpRulesByVariable(pair.VariableName, rulesCache, variableCache)
+			if success {
+				allRulesAffected = append(allRulesAffected, additionalRules...)
+			}
+		}
+		allRulesAffected = streamlineRulesAffected(allRulesAffected)
+		for _, ruleAff := range allRulesAffected {
+			found := searchEvalReturnForRuleName(ruleAff, evalResults[v.ClientID])
+			if !found {
+				reducedAccountability = append(reducedAccountability, v)
+			}
+		}
+	}
+	return reducedAccountability
+}
+
+// streamlineRulesAffected removes duplicate rules
+func streamlineRulesAffected(input []string) []string {
+	streamlineMap := map[string]bool{}
+	for _, v := range input {
+		streamlineMap[v] = true
+	}
+	var returnArray []string
+	for key := range streamlineMap {
+		returnArray = append(returnArray, key)
+	}
+	return returnArray
+}
+
+func searchEvalReturnForRuleName(name string, evaluationReturn roles.EvaluationReturn) bool {
+	rulesAffected := evaluationReturn.Rules
+	for _, v := range rulesAffected {
+		if v.RuleName == name {
+			return true
+		}
+	}
+	return false
 }
