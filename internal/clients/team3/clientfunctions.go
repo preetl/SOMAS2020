@@ -2,6 +2,7 @@ package team3
 
 import (
 	"math"
+	"math/rand"
 
 	"github.com/SOMAS2020/SOMAS2020/internal/common/baseclient"
 	"github.com/SOMAS2020/SOMAS2020/internal/common/shared"
@@ -62,6 +63,14 @@ func (c *client) updateCompliance() {
 			math.Exp(-float64(c.timeSinceCaught)/math.Pow((float64(c.numTimeCaught)+1.0), c.params.recidivism))
 		c.timeSinceCaught += 1
 	}
+}
+
+// shouldICheat returns whether or not our agent should cheat based
+// the compliance at a specific time in the game. If the compliance is
+// 1, we expect this method to always return False.
+func (c *client) shouldICheat() bool {
+	var should_i_cheat = rand.Float64() < c.compliance
+	return should_i_cheat
 }
 
 // func (c *client) GetClientPresidentPointer() roles.President {
