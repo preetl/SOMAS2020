@@ -1,9 +1,10 @@
 package team3
 
 import (
+	"math"
+
 	"github.com/SOMAS2020/SOMAS2020/internal/common/baseclient"
 	"github.com/SOMAS2020/SOMAS2020/internal/common/shared"
-	"math"
 )
 
 // NewClient initialises the island state
@@ -34,7 +35,7 @@ func (c *client) getLocalResources() shared.Resources {
 	return currentState.ClientInfo.Resources
 }
 
-// getIslandsAlive retrives number of islands still alive
+// getIslandsAlive retrieves number of islands still alive
 func (c *client) getIslandsAlive() int {
 	var lifeStatuses map[shared.ClientID]shared.ClientLifeStatus
 	var aliveCount int
@@ -49,16 +50,19 @@ func (c *client) getIslandsAlive() int {
 	return aliveCount
 }
 
-func(c *client) updateCompliance(){
-	if c.timeSinceCaught==0 {
-		c.compliance=1
-		c.numTimeCaught+=1
-	} else{
-		c.compliance=c.params.complianceLevel+(1.0-c.params.complianceLevel)*
+// updateCompliance updates the compliance variable at the beginning of each turn.
+// In the case that our island has been caught cheating in the previous turn, it is
+// reset to 1 (aka. we fully comply and do not cheat)
+func (c *client) updateCompliance() {
+	if c.timeSinceCaught == 0 {
+		c.compliance = 1
+		c.numTimeCaught += 1
+	} else {
+		c.compliance = c.params.complianceLevel + (1.0-c.params.complianceLevel)*
+			math.Exp(-float64(c.timeSinceCaught)/math.Pow((float64(c.numTimeCaught)+1.0), c.params.recidivism))
+		c.timeSinceCaught += 1
 	}
 }
-
-
 
 // func (c *client) GetClientPresidentPointer() roles.President {
 // 	return c.presidentObj
