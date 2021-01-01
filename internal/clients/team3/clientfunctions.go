@@ -3,6 +3,7 @@ package team3
 import (
 	"github.com/SOMAS2020/SOMAS2020/internal/common/baseclient"
 	"github.com/SOMAS2020/SOMAS2020/internal/common/shared"
+	"math"
 )
 
 // NewClient initialises the island state
@@ -48,6 +49,17 @@ func (c *client) getIslandsAlive() int {
 	return aliveCount
 }
 
+func(c *client) updateCompliance(){
+	if c.timeSinceCaught==0 {
+		c.compliance=1
+		c.numTimeCaught+=1
+	} else{
+		c.compliance=c.params.complianceLevel+(1.0-c.params.complianceLevel)*
+	}
+}
+
+
+
 // func (c *client) GetClientPresidentPointer() roles.President {
 // 	return c.presidentObj
 // }
@@ -57,7 +69,10 @@ func (c *client) getIslandsAlive() int {
 //func (c *client) GetID() shared.ClientID { return id }
 
 // func (c *client) Initialise(baseclient.ServerReadHandle) {}
-// func (c *client) StartOfTurn()                           {}
+func (c *client) StartOfTurn() {
+	c.updateCompliance()
+}
+
 // func (c *client) Logf(format string, a ...interface{})   {}
 
 // func (c *client) GetVoteForRule(ruleName string) bool                          { return false }
