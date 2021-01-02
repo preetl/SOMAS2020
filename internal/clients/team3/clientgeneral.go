@@ -138,6 +138,22 @@ func (c *client) shouldICheat() bool {
 	return should_i_cheat
 }
 
+//updateCriticalThreshold updates our predicted value of what is the resources threshold of critical state
+// it uses estimated resources to find these bound. isIncriticalState is a boolean to indicate if the island
+// is in the critical state and the estimated resources is our estimated resources of the island i.e.
+// trust-adjusted resources.
+func (c *client) updateCriticalThreshold(isInCriticalState bool, estimatedResource shared.Resources) {
+	if !isInCriticalState {
+		if estimatedResource < c.criticalStatePrediction.upperBound {
+			c.criticalStatePrediction.upperBound = estimatedResource
+		}
+	} else {
+		if estimatedResource > c.criticalStatePrediction.lowerBound {
+			c.criticalStatePrediction.lowerBound = estimatedResource
+		}
+	}
+}
+
 /*
 	ReceiveCommunication(sender shared.ClientID, data map[shared.CommunicationFieldName]shared.CommunicationContent)
 	GetCommunications() *map[shared.ClientID][]map[shared.CommunicationFieldName]shared.CommunicationContent
