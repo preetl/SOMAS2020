@@ -145,7 +145,6 @@ func (c *client) shouldICheat() bool {
 
 	updateCompliance
 	shouldICheat
-	getCompliance
 
 	updateCriticalThreshold
 
