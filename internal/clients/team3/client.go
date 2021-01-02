@@ -3,7 +3,6 @@ package team3
 
 import (
 	"github.com/SOMAS2020/SOMAS2020/internal/common/baseclient"
-	"github.com/SOMAS2020/SOMAS2020/internal/common/rules"
 	"github.com/SOMAS2020/SOMAS2020/internal/common/shared"
 )
 
@@ -21,12 +20,14 @@ type client struct {
 
 	acceptedGifts        map[shared.ClientID]int
 	requestedGiftAmounts map[shared.ClientID]int
-	// receivedResponses // todo
+	receivedResponses    []shared.GiftResponse
 
 	// ## Trust ##
 
-	theirTrustScore map[shared.ClientID]uint
-	trustScore      map[shared.ClientID]uint
+	theirTrustScore  map[shared.ClientID]float64
+	trustScore       map[shared.ClientID]float64
+	trustMapAgg      map[shared.ClientID][]float64
+	theirTrustMapAgg map[shared.ClientID][]float64
 
 	// ## Role performance ##
 
@@ -52,12 +53,11 @@ type client struct {
 	numTimeCaught   uint
 	compliance      float64
 
-	// allVotes [rule][shared.ClientID] TODO
+	// allVotes stores the votes of each island for/against each rule
+	allVotes map[string]map[shared.ClientID]bool
 
 	// params is list of island wide function parameters
 	params islandParams
-
-	presidentObj president
 }
 
 type islandParams struct {
@@ -76,12 +76,4 @@ type islandParams struct {
 	friendliness                float64
 	anger                       float64
 	aggression                  float64
-}
-
-func (c *client) DemoEvaluation() {
-	evalResult, err := rules.BasicBooleanRuleEvaluator("Kinda Complicated Rule")
-	if err != nil {
-		panic(err.Error())
-	}
-	c.Logf("Rule Eval: %t", evalResult)
 }
