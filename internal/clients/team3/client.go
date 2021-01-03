@@ -93,8 +93,6 @@ type sanctionInfo struct {
 }
 
 type iigoCommunicationInfo struct {
-	// ourRole stores our current role in the IIGO
-	ourRole *shared.Role
 	// commonPoolAllocation gives resources allocated by president from requests
 	commonPoolAllocation shared.Resources
 	// taxationAmount gives tax amount decided by president
