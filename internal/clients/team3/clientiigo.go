@@ -70,8 +70,8 @@ func (c *client) ReceiveCommunication(sender shared.ClientID, data map[shared.Co
 				c.iigoInfo.ruleVotingResults[currentRuleID] = &ruleVoteInfo{resultAnnounced: true, result: data[shared.RuleVoteResult].BooleanData}
 			}
 		case shared.RoleMonitored:
-			c.iigoInfo.monitoringDeclared[content.IIGORole] = true
-			c.iigoInfo.monitoringOutcomes[content.IIGORole] = data[shared.MonitoringResult].BooleanData
+			c.iigoInfo.monitoringDeclared[content.IIGORoleData] = true
+			c.iigoInfo.monitoringOutcomes[content.IIGORoleData] = data[shared.MonitoringResult].BooleanData
 		}
 	}
 }
