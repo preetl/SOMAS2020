@@ -83,3 +83,37 @@ type islandParams struct {
 	anger                       float64
 	aggression                  float64
 }
+
+type ruleVoteInfo struct {
+	// ourVote needs to be updated accordingly
+	ourVote         bool
+	resultAnnounced bool
+	// true -> yes, false -> no
+	result bool
+}
+
+type iigoCommunicationInfo struct {
+	// Retrieved fully from communications
+
+	// ourRole stores our current role in the IIGO
+	ourRole *shared.Role
+	// commonPoolAllocation gives resources allocated by president from requests
+	commonPoolAllocation shared.Resources
+	// taxationAmount gives tax amount decided by president
+	taxationAmount shared.Resources
+	// monitoringOutcomes stores the outcome of the monitoring of an island.
+	// key is the role being monitored.
+	// true -> correct performance, false -> incorrect performance.
+	monitoringOutcomes map[shared.Role]bool
+	// monitoringDeclared stores as key the role being monitored and whether it was actually monitored.
+	monitoringDeclared map[shared.Role]bool
+
+	// Below need to be at least partially updated by our functions
+
+	// ruleVotingResults is a map of rules and the corresponding info
+	ruleVotingResults map[string]ruleVoteInfo
+	// ourRequest stores how much we requested from commonpool
+	ourRequest shared.Resources
+	// ourDeclaredResources stores how much we said we had to the president
+	ourDeclaredResources shared.Resources
+}

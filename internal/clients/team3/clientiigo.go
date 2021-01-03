@@ -40,3 +40,38 @@ func (c *client) GetClientPresidentPointer() roles.President {
 	// c.Logf("became president")
 	return &president{c: c}
 }
+
+//resetIIGOInfo clears the island's information regarding IIGO at start of turn
+func (c *client) resetIIGOInfo() {
+	c.Logf("%+v\n", c.iigoInfo)
+	c.iigoInfo.ourRole = nil
+	c.iigoInfo.commonPoolAllocation = 0
+	c.iigoInfo.taxationAmount = 0
+	c.iigoInfo.ruleVotingResults = make(map[string]ruleVoteInfo)
+	c.iigoInfo.monitoringOutcomes = make(map[shared.Role]bool)
+	c.iigoInfo.monitoringDeclared = make(map[shared.Role]bool)
+}
+
+// ReceiveCommunication is a function called by IIGO to pass the communication sent to the client.
+// This function is overridden to receive information and update local info accordingly.
+func (c *client) ReceiveCommunication(sender shared.ClientID, data map[shared.CommunicationFieldName]shared.CommunicationContent) {
+	c.Communications[sender] = append(c.Communications[sender], data)
+
+	for contentType, content := range data {
+		switch contentType {
+		case shared.TaxAmount:
+			c.iigoInfo.taxationAmount = shared.Resources(content.IntegerData)
+		case shared.AllocationAmount:
+			c.iigoInfo.commonPoolAllocation = shared.Resources(content.IntegerData)
+		case shared.RuleName:
+			currentRuleID := content.TextData
+			if _, ok := c.iigoInfo.ruleVotingResults[currentRuleID]; ok {
+				c.iigoInfo.ruleVotingResults[currentRuleID].result = data[shared.RuleVoteResult].BooleanData
+
+			}
+		case shared.RoleMonitored:
+			c.iigoInfo.monitoringDeclared[content.IIGORole] = true
+			c.iigoInfo.monitoringOutcomes[content.IIGORole] = data[shared.MonitoringResult].BooleanData
+		}
+	}
+}
