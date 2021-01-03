@@ -37,7 +37,7 @@ func (c *client) GetClientJudgePointer() roles.Judge {
 }
 
 func (c *client) GetClientPresidentPointer() roles.President {
-	// c.Logf("became president")
+	c.Logf("became president")
 	return &president{c: c}
 }
 
@@ -71,4 +71,9 @@ func (c *client) ReceiveCommunication(sender shared.ClientID, data map[shared.Co
 			c.iigoInfo.monitoringOutcomes[content.IIGORole] = data[shared.MonitoringResult].BooleanData
 		}
 	}
+}
+
+func (c *client) RequestAllocation() shared.Resources {
+	// TODO: Implement request equal to the allocation permitted by President.
+	return 0
 }
