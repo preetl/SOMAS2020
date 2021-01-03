@@ -1,6 +1,8 @@
 package team3
 
 import (
+	"math"
+
 	"github.com/SOMAS2020/SOMAS2020/internal/common/shared"
 )
 
@@ -38,4 +40,34 @@ func getAverage(lst []float64) float64 {
 	}
 
 	return (float64(total) / float64(len(lst)))
+}
+
+// mostTrusted return the ClientID that corresponds to the highest trust value
+func mostTrusted(values map[shared.ClientID][]float64) shared.ClientID {
+	var max = -math.MaxFloat64
+	var mostTrustedClient shared.ClientID
+
+	for client_id, trust_history := range values {
+		var last_trust = trust_history[len(trust_history)-1]
+		if last_trust > max {
+			max = last_trust
+			mostTrustedClient = client_id
+		}
+	}
+	return mostTrustedClient
+}
+
+// leastTrusted return the ClientID that corresponds to the smallest trust value
+func leastTrusted(values map[shared.ClientID][]float64) shared.ClientID {
+	var min = math.MaxFloat64
+	var leastTrustedClient shared.ClientID
+
+	for client_id, trust_history := range values {
+		var last_trust = trust_history[len(trust_history)-1]
+		if last_trust > min {
+			min = last_trust
+			leastTrustedClient = client_id
+		}
+	}
+	return leastTrustedClient
 }
