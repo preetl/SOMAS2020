@@ -4,7 +4,7 @@ import (
 	// "github.com/SOMAS2020/SOMAS2020/internal/common/baseclient"
 	"github.com/SOMAS2020/SOMAS2020/internal/common/roles"
 	// "github.com/SOMAS2020/SOMAS2020/internal/common/rules"
-	// "github.com/SOMAS2020/SOMAS2020/internal/common/shared"
+	"github.com/SOMAS2020/SOMAS2020/internal/common/shared"
 )
 
 /*
@@ -43,11 +43,10 @@ func (c *client) GetClientPresidentPointer() roles.President {
 
 //resetIIGOInfo clears the island's information regarding IIGO at start of turn
 func (c *client) resetIIGOInfo() {
-	c.Logf("%+v\n", c.iigoInfo)
-	c.iigoInfo.ourRole = nil
 	c.iigoInfo.commonPoolAllocation = 0
 	c.iigoInfo.taxationAmount = 0
-	c.iigoInfo.ruleVotingResults = make(map[string]ruleVoteInfo)
+	c.iigoInfo.ruleVotingResults = make(map[string]bool)
+	c.iigoInfo.ruleVotingResultAnnounced = make(map[string]bool)
 	c.iigoInfo.monitoringOutcomes = make(map[shared.Role]bool)
 	c.iigoInfo.monitoringDeclared = make(map[shared.Role]bool)
 }
@@ -65,10 +64,8 @@ func (c *client) ReceiveCommunication(sender shared.ClientID, data map[shared.Co
 			c.iigoInfo.commonPoolAllocation = shared.Resources(content.IntegerData)
 		case shared.RuleName:
 			currentRuleID := content.TextData
-			if _, ok := c.iigoInfo.ruleVotingResults[currentRuleID]; ok {
-				c.iigoInfo.ruleVotingResults[currentRuleID].result = data[shared.RuleVoteResult].BooleanData
-
-			}
+			c.iigoInfo.ruleVotingResultAnnounced[currentRuleID] = true
+			c.iigoInfo.ruleVotingResults[currentRuleID] = data[shared.RuleVoteResult].BooleanData
 		case shared.RoleMonitored:
 			c.iigoInfo.monitoringDeclared[content.IIGORole] = true
 			c.iigoInfo.monitoringOutcomes[content.IIGORole] = data[shared.MonitoringResult].BooleanData

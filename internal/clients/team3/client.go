@@ -3,6 +3,7 @@ package team3
 
 import (
 	"github.com/SOMAS2020/SOMAS2020/internal/common/baseclient"
+	"github.com/SOMAS2020/SOMAS2020/internal/common/roles"
 	"github.com/SOMAS2020/SOMAS2020/internal/common/shared"
 )
 
@@ -59,6 +60,8 @@ type client struct {
 
 	// params is list of island wide function parameters
 	params islandParams
+	// iigoInfo caches information regarding iigo in the current turn
+	iigoInfo iigoCommunicationInfo
 }
 
 type criticalStatePrediction struct {
@@ -84,23 +87,27 @@ type islandParams struct {
 	aggression                  float64
 }
 
-type ruleVoteInfo struct {
-	// ourVote needs to be updated accordingly
-	ourVote         bool
-	resultAnnounced bool
-	// true -> yes, false -> no
-	result bool
+type sanctionInfo struct {
+	// tierInfo provides tiers and sanction score required to get to that tier
+	tierInfo map[roles.IIGOSanctionTier]roles.IIGOSanctionScore
+	// rulePenalties provides sanction score given for breaking each rule
+	rulePenalties map[string]roles.IIGOSanctionScore
+	// islandSanctions stores sanction tier of each island (but not score)
+	islandSanctions map[shared.ClientID]roles.IIGOSanctionTier
+	// ourSanction is the sanction score for our island
+	ourSanction roles.IIGOSanctionScore
 }
 
 type iigoCommunicationInfo struct {
-	// Retrieved fully from communications
-
-	// ourRole stores our current role in the IIGO
-	ourRole *shared.Role
 	// commonPoolAllocation gives resources allocated by president from requests
 	commonPoolAllocation shared.Resources
 	// taxationAmount gives tax amount decided by president
 	taxationAmount shared.Resources
+	// ruleVotingResults is a map of rules and the result of the vote for it
+	// true -> yes, false -> no
+	ruleVotingResults map[string]bool
+	// ruleVotingResultAnnounced stores whether a specific rule vote was announced
+	ruleVotingResultAnnounced map[string]bool
 	// monitoringOutcomes stores the outcome of the monitoring of an island.
 	// key is the role being monitored.
 	// true -> correct performance, false -> incorrect performance.
@@ -108,12 +115,6 @@ type iigoCommunicationInfo struct {
 	// monitoringDeclared stores as key the role being monitored and whether it was actually monitored.
 	monitoringDeclared map[shared.Role]bool
 
-	// Below need to be at least partially updated by our functions
-
-	// ruleVotingResults is a map of rules and the corresponding info
-	ruleVotingResults map[string]ruleVoteInfo
-	// ourRequest stores how much we requested from commonpool
-	ourRequest shared.Resources
-	// ourDeclaredResources stores how much we said we had to the president
-	ourDeclaredResources shared.Resources
+	// Struct containing sanction information
+	sanctions sanctionInfo
 }
