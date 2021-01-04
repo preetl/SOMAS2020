@@ -102,11 +102,11 @@ func (c *client) RequestAllocation() shared.Resources {
 	}
 
 	// Base return - take what we are allocated, but make sure we are stolen from!
-	if ourAllocation > shared.Resources(0) {
-		return ourAllocation
-	} else {
-		return shared.Resources(0)
+	if ourAllocation < shared.Resources(0) {
+		ourAllocation = shared.Resources(0)
 	}
+	c.clientPrint("Taking %f from common pool", ourAllocation)
+	return ourAllocation
 
 }
 
@@ -130,7 +130,7 @@ func (c *client) CommonPoolResourceRequest() shared.Resources {
 		request += shared.Resources(float64(request) * c.params.selfishness)
 	}
 	// TODO request based on disaster prediction
-
+	c.clientPrint("Our Request: %f", request)
 	return request
 }
 
