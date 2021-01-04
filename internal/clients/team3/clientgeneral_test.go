@@ -10,19 +10,6 @@ import (
 	"github.com/SOMAS2020/SOMAS2020/internal/common/shared"
 )
 
-// type ServerForClient struct {
-// 	clientID shared.ClientID
-// 	server   *server.SOMASServer
-// }
-
-// // GetGameState gets the ClientGameState for the client matching s.clientID in
-// // s.server
-// func (s ServerForClient) GetGameState() gamestate.ClientGameState {
-// 	// return s.server.gameState.GetClientGameStateCopy(s.clientID)
-// 	gameState := gamestate.ClientGameState{}
-// 	return gameState
-// }
-
 func TestUpdateTrustMapAgg(t *testing.T) {
 	cases := []struct {
 		name        string
