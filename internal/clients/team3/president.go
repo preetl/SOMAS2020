@@ -48,7 +48,7 @@ func findAvgNoTails(resourceRequest map[shared.ClientID]shared.Resources) shared
 		}
 	}
 
-	return shared.Resources(int(sum) / len(shared.TeamIDs))
+	return shared.Resources(int(sum) / len(resourceRequest))
 }
 
 // EvaluateAllocationRequests sets allowed resource allocation based on each islands requests
@@ -63,7 +63,7 @@ func (p *president) EvaluateAllocationRequests(resourceRequest map[shared.Client
 	var sumRequest shared.Resources
 
 	// Make sure resource skew is greater than 1
-	resourceSkew := math.Max(float64(p.resourceSkew), 1)
+	resourceSkew := math.Max(float64(p.c.params.resourcesSkew), 1)
 
 	for island, req := range resourceRequest {
 		sumRequest += req
@@ -74,7 +74,7 @@ func (p *president) EvaluateAllocationRequests(resourceRequest map[shared.Client
 	avgResource = findAvgNoTails(resources)
 
 	for island, resource := range resources {
-		allocations[island] = float64(avgRequest) + p.equity*(float64(avgResource-resource)+float64(resourceRequest[island]-avgRequest))
+		allocations[island] = float64(avgRequest) + p.c.params.equity*(float64(avgResource-resource)+float64(resourceRequest[island]-avgRequest))
 
 		if island == id {
 			allocations[island] += math.Max(float64(resourceRequest[island])-allocations[island]*p.c.params.selfishness, 0)
@@ -94,8 +94,7 @@ func (p *president) EvaluateAllocationRequests(resourceRequest map[shared.Client
 	}
 
 	commonPoolThreshold = shared.Resources(p.commonPoolThresholdFactor * float64(availCommonPool))
-
-	if p.saveCriticalIslands {
+	if p.c.params.saveCriticalIsland {
 		for island := range resourceRequest {
 			if resources[island] < p.c.criticalStatePrediction.lowerBound {
 				finalAllocations[island] = shared.Resources(math.Max((allocWeights[island] * float64(commonPoolThreshold)), float64(p.c.criticalStatePrediction.lowerBound-resources[island])))
