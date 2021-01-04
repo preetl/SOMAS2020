@@ -12,16 +12,6 @@ type president struct {
 	*baseclient.BasePresident
 	// Our client
 	c *client
-
-	// stores the declared resources of each island for that turn
-	declaredResources map[shared.ClientID]shared.Resources
-
-	// Parameters
-
-	resourceSkew              uint
-	equity                    float64
-	commonPoolThresholdFactor float64
-	saveCriticalIslands       bool
 }
 
 func (p *president) PaySpeaker(salary shared.Resources) (shared.Resources, bool) {
@@ -77,7 +67,7 @@ func (p *president) EvaluateAllocationRequests(resourceRequest map[shared.Client
 
 	for island, req := range resourceRequest {
 		sumRequest += req
-		resources[island] = p.declaredResources[island] * shared.Resources(math.Pow(resourceSkew, 1-p.c.trustScore[island]))
+		resources[island] = p.c.declaredResources[island] * shared.Resources(math.Pow(resourceSkew, 1-p.c.trustScore[island]))
 	}
 
 	avgRequest = findAvgNoTails(resourceRequest)

@@ -118,7 +118,9 @@ func (c *client) CommonPoolResourceRequest() shared.Resources {
 
 	request = shared.Resources(c.params.minimumRequest)
 	if escapeCritical {
-		request += distCriticalThreshold
+		if request < distCriticalThreshold {
+			request = distCriticalThreshold
+		}
 	}
 	if c.shouldICheat() {
 		request += shared.Resources(float64(request) * c.params.selfishness)
