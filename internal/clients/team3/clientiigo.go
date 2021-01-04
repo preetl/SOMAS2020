@@ -2,6 +2,7 @@ package team3
 
 import (
 	// "github.com/SOMAS2020/SOMAS2020/internal/common/baseclient"
+
 	"github.com/SOMAS2020/SOMAS2020/internal/common/roles"
 	// "github.com/SOMAS2020/SOMAS2020/internal/common/rules"
 	"github.com/SOMAS2020/SOMAS2020/internal/common/shared"
@@ -22,9 +23,28 @@ import (
 	GetClientJudgePointer() roles.Judge
 	GetClientSpeakerPointer() roles.Speaker
 	TaxTaken(shared.Resources)
-	GetTaxContribution() shared.Resources
 	RequestAllocation() shared.Resources
 */
+func (c *client) GetTaxContribution() shared.Resources {
+	commonPool := c.BaseClient.ServerReadHandle.GetGameState().CommonPool
+	var totalToPay shared.Resources
+	if len(c.disasterPredictions) != 0 {
+		disaster := c.disasterPredictions[int(c.BaseClient.ServerReadHandle.GetGameState().Turn)][c.BaseClient.GetID()]
+		totalToPay = (shared.Resources(disaster.Magnitude) - commonPool) / shared.Resources(disaster.TimeLeft)
+	} else {
+		totalToPay = shared.Resources(c.params.riskFactor) * c.getLocalResources()
+	}
+	sumTrust := 0.0
+	for id, trust := range c.trustScore {
+		if id != c.BaseClient.GetID() {
+			sumTrust += trust
+		} else {
+			sumTrust += (1 - c.params.selfishness)
+		}
+	}
+	return totalToPay
+
+}
 
 func (c *client) GetClientSpeakerPointer() roles.Speaker {
 	// c.Logf("became speaker")
