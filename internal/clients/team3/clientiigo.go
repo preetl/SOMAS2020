@@ -2,11 +2,8 @@ package team3
 
 import (
 	"github.com/SOMAS2020/SOMAS2020/internal/clients/team3/dynamics"
-	// "github.com/SOMAS2020/SOMAS2020/internal/common/baseclient"
 	"github.com/SOMAS2020/SOMAS2020/internal/common/roles"
 	"github.com/SOMAS2020/SOMAS2020/internal/common/rules"
-
-	// "github.com/SOMAS2020/SOMAS2020/internal/common/rules"
 	"github.com/SOMAS2020/SOMAS2020/internal/common/shared"
 )
 
@@ -104,8 +101,12 @@ func (c *client) RequestAllocation() shared.Resources {
 		return ourAllocation + shared.Resources(float64(ourAllocation)*c.params.selfishness)
 	}
 
-	// Base return - take what we are allocated
-	return ourAllocation
+	// Base return - take what we are allocated, but make sure we are stolen from!
+	if ourAllocation > shared.Resources(0) {
+		return ourAllocation
+	} else {
+		return shared.Resources(0)
+	}
 
 }
 
