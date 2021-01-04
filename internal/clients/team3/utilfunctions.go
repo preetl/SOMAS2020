@@ -27,6 +27,15 @@ func (c *client) getIslandsAlive() int {
 	return aliveCount
 }
 
+// areWeCritical returns whether our client is critical or not
+func (c *client) areWeCritical() bool {
+	currentStatus := c.BaseClient.ServerReadHandle.GetGameState().ClientLifeStatuses
+	if currentStatus[c.GetID()] == shared.Critical {
+		return true
+	}
+	return false
+}
+
 // getAverage returns the average of the list
 func getAverage(lst []float64) float64 {
 
