@@ -44,11 +44,15 @@ func NewClient(clientID shared.ClientID) baseclient.Client {
 func (c *client) StartOfTurn() {
 	// c.Logf("Start of turn!")
 	// TODO add any functions and vairable changes here
+	c.updateCompliance()
 	c.resetIIGOInfo()
 }
 
 func (c *client) Initialise(serverReadHandle baseclient.ServerReadHandle) {
 	c.ServerReadHandle = serverReadHandle
+	c.ourSpeaker = speaker{c: c}
+	c.ourJudge = judge{c: c}
+	c.ourPresident = president{c: c}
 	// Initialise variables
 }
 
@@ -150,7 +154,7 @@ func (c *client) updateCompliance() {
 // the compliance at a specific time in the game. If the compliance is
 // 1, we expect this method to always return False.
 func (c *client) shouldICheat() bool {
-	var should_i_cheat = rand.Float64() < c.compliance
+	var should_i_cheat = rand.Float64() > c.compliance
 	return should_i_cheat
 }
 
