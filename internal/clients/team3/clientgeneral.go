@@ -42,7 +42,7 @@ func NewClient(clientID shared.ClientID) baseclient.Client {
 }
 
 func (c *client) StartOfTurn() {
-	// c.Logf("Start of turn!")
+	c.clientPrint("Start of turn!")
 	// TODO add any functions and vairable changes here
 	c.updateCompliance()
 	c.resetIIGOInfo()
@@ -156,6 +156,17 @@ func (c *client) updateCompliance() {
 func (c *client) shouldICheat() bool {
 	var should_i_cheat = rand.Float64() > c.compliance
 	return should_i_cheat
+}
+
+// ResourceReport overides the basic method to mis-report when we have a low compliance score
+func (c *client) ResourceReport() shared.Resources {
+	resource := c.BaseClient.ServerReadHandle.GetGameState().ClientInfo.Resources
+	if c.areWeCritical() || !c.shouldICheat() {
+		return resource
+	} else {
+		skewed_resource := resource / shared.Resources(c.params.resourcesSkew)
+		return skewed_resource
+	}
 }
 
 /*
