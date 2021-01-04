@@ -1,6 +1,6 @@
 package team3
 
-// IIGO client functions testing
+// IIGO President functions testing
 
 import (
 	"reflect"

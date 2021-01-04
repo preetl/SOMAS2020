@@ -3,7 +3,6 @@ package team3
 import (
 	// "github.com/SOMAS2020/SOMAS2020/internal/common/baseclient"
 
-	"fmt"
 	"math"
 
 	"github.com/SOMAS2020/SOMAS2020/internal/clients/team3/dynamics"
@@ -46,17 +45,12 @@ func (c *client) GetTaxContribution() shared.Resources {
 			sumTrust += (1 - c.params.selfishness) * 100
 		}
 	}
-	fmt.Printf("totalToPay %f sumTrust %v ", totalToPay, sumTrust)
 	toPay := (totalToPay / shared.Resources(sumTrust)) * (1 - shared.Resources(c.params.selfishness)) * 100
-	fmt.Printf("toPay %f ", toPay)
 	targetResources := shared.Resources(2-c.params.riskFactor) * (c.criticalStatePrediction.upperBound)
 	if c.getLocalResources()-toPay <= targetResources {
 		toPay = shared.Resources(math.Max(float64(c.getLocalResources()-targetResources), 0.0))
 	}
-	fmt.Printf("shouldICheat %v\n", c.shouldICheat())
-	fmt.Printf("ifstatement %v\n", c.iigoInfo.taxationAmount > toPay)
 	if (c.iigoInfo.taxationAmount > toPay) && !c.shouldICheat() {
-		fmt.Print("hnelo")
 		return c.iigoInfo.taxationAmount
 	}
 	return toPay

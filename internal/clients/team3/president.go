@@ -12,16 +12,6 @@ type president struct {
 	*baseclient.BasePresident
 	// Our client
 	c *client
-
-	// stores the declared resources of each island for that turn
-	declaredResources map[shared.ClientID]shared.Resources
-
-	// Parameters
-
-	resourceSkew              uint
-	equity                    float64
-	commonPoolThresholdFactor float64
-	saveCriticalIslands       bool
 }
 
 func (p *president) PaySpeaker(salary shared.Resources) (shared.Resources, bool) {
