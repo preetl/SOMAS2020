@@ -155,6 +155,16 @@ func (c *client) shouldICheat() bool {
 	return should_i_cheat
 }
 
+func (c *client) ResourceReport() {
+	resource := c.BaseClient.ServerReadHandle.GetGameState().ClientInfo.Resources
+	if c.areWeCritical() || !c.shouldICheat() {
+		return resource
+	} else {
+		skewed_resource := resource / shared.Resources(c.params.resourcesSkew)
+		return skewed_resource
+	}
+}
+
 /*
 	DisasterNotification(disasters.DisasterReport, map[shared.ClientID]shared.Magnitude)
 	updateCompliance
