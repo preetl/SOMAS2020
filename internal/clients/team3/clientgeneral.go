@@ -155,7 +155,8 @@ func (c *client) shouldICheat() bool {
 	return should_i_cheat
 }
 
-func (c *client) ResourceReport() {
+// ResourceReport overides the basic method to mis-report when we have a low compliance score
+func (c *client) ResourceReport() shared.Resources {
 	resource := c.BaseClient.ServerReadHandle.GetGameState().ClientInfo.Resources
 	if c.areWeCritical() || !c.shouldICheat() {
 		return resource
