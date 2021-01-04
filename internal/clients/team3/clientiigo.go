@@ -3,6 +3,9 @@ package team3
 import (
 	// "github.com/SOMAS2020/SOMAS2020/internal/common/baseclient"
 
+	"fmt"
+	"math"
+
 	"github.com/SOMAS2020/SOMAS2020/internal/common/roles"
 	// "github.com/SOMAS2020/SOMAS2020/internal/common/rules"
 	"github.com/SOMAS2020/SOMAS2020/internal/common/shared"
@@ -32,17 +35,30 @@ func (c *client) GetTaxContribution() shared.Resources {
 		disaster := c.disasterPredictions[int(c.BaseClient.ServerReadHandle.GetGameState().Turn)][c.BaseClient.GetID()]
 		totalToPay = (shared.Resources(disaster.Magnitude) - commonPool) / shared.Resources(disaster.TimeLeft)
 	} else {
-		totalToPay = shared.Resources(c.params.riskFactor) * c.getLocalResources()
+		totalToPay = 100 - commonPool
 	}
 	sumTrust := 0.0
 	for id, trust := range c.trustScore {
 		if id != c.BaseClient.GetID() {
 			sumTrust += trust
 		} else {
-			sumTrust += (1 - c.params.selfishness)
+			sumTrust += (1 - c.params.selfishness) * 100
 		}
 	}
-	return totalToPay
+	fmt.Printf("totalToPay %f sumTrust %v ", totalToPay, sumTrust)
+	toPay := (totalToPay / shared.Resources(sumTrust)) * (1 - shared.Resources(c.params.selfishness)) * 100
+	fmt.Printf("toPay %f ", toPay)
+	targetResources := shared.Resources(2-c.params.riskFactor) * (c.criticalStatePrediction.upperBound)
+	if c.getLocalResources()-toPay <= targetResources {
+		toPay = shared.Resources(math.Max(float64(c.getLocalResources()-targetResources), 0.0))
+	}
+	fmt.Printf("shouldICheat %v\n", c.shouldICheat())
+	fmt.Printf("ifstatement %v\n", c.iigoInfo.taxationAmount > toPay)
+	if (c.iigoInfo.taxationAmount > toPay) && !c.shouldICheat() {
+		fmt.Print("hnelo")
+		return c.iigoInfo.taxationAmount
+	}
+	return toPay
 
 }
 

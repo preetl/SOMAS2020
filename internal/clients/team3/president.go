@@ -128,6 +128,7 @@ func (p *president) EvaluateAllocationRequests(resourceRequest map[shared.Client
 	// Curently always evaluate, would there be a time when we don't want to?
 	return finalAllocations, true
 }
+
 func (p *president) SetTaxationAmount(islandsResources map[shared.ClientID]shared.Resources) (map[shared.ClientID]shared.Resources, bool) {
 	//decide if we want to run SetTaxationAmount
 	p.c.declaredResources = islandsResources
@@ -142,7 +143,7 @@ func (p *president) SetTaxationAmount(islandsResources map[shared.ClientID]share
 	var adjustedResources []float64
 	adjustedResourcesMap := make(map[shared.ClientID]shared.Resources)
 	for island, resource := range islandsResources {
-		adjustedResource := shared.Resources(math.Pow(float64(resource)*p.c.params.resourcesSkew, (1 - p.c.trustScore[island])))
+		adjustedResource := resource * shared.Resources(math.Pow(p.c.params.resourcesSkew, (100-p.c.trustScore[island])/100))
 		adjustedResources = append(adjustedResources, float64(adjustedResource))
 		adjustedResourcesMap[island] = adjustedResource
 	}
