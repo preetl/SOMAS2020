@@ -150,11 +150,11 @@ func (c *client) updateCriticalThreshold(isInCriticalState bool, estimatedResour
 func (c *client) updateCompliance() {
 	if c.timeSinceCaught == 0 {
 		c.compliance = 1
-		c.numTimeCaught += 1
+		c.numTimeCaught++
 	} else {
 		c.compliance = c.params.complianceLevel + (1.0-c.params.complianceLevel)*
 			math.Exp(-float64(c.timeSinceCaught)/math.Pow((float64(c.numTimeCaught)+1.0), c.params.recidivism))
-		c.timeSinceCaught += 1
+		c.timeSinceCaught++
 	}
 }
 
@@ -164,7 +164,6 @@ func (c *client) updateCompliance() {
 func (c *client) shouldICheat() bool {
 	return rand.Float64() > c.compliance
 }
-
 
 // checkIfCaught, checks if the island has been caught during the last turn
 // If it has been caught, it returns True, otherwise False.
