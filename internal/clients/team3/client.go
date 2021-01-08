@@ -113,6 +113,7 @@ type islandParams struct {
 	NoRequestGiftParam          float64
 	laziness                    float64
 	intelligence                bool
+	anarchy                     bool
 	//minimumInvestment			float64	// When fish foraging is implemented
 }
 
