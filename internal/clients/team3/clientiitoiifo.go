@@ -406,5 +406,11 @@ func (c *client) ReceiveForageInfo(forageInfo []shared.ForageShareInfo) {
 					turn:              c.ServerReadHandle.GetGameState().Turn,
 				},
 			)
+		c.Logf(
+			"Forage History Updated: Type %v ,Conribution: %v ,Return: %v",
+			val.DecisionMade.Type,
+			val.DecisionMade.Contribution,
+			val.ResourceObtained,
+		)
 	}
 }

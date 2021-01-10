@@ -16,7 +16,7 @@ import (
 func (c *client) DecideForage() (shared.ForageDecision, error) {
 
 	// No risk -> minimum is 2 times the critical threshold, Full risk -> minimum is the critical threshold
-	safetyFactor := 1.0 + 2*(1-c.params.riskFactor)
+	safetyFactor := 2.0 - c.params.riskFactor
 
 	//we want to have more than the critical threshold leftover after foraging
 	var minimumLeftoverResources = float64(c.criticalThreshold) * safetyFactor
@@ -29,10 +29,21 @@ func (c *client) DecideForage() (shared.ForageDecision, error) {
 
 	var forageType shared.ForageType
 
-	if c.computeRecentExpectedROI(shared.DeerForageType) > c.computeRecentExpectedROI(shared.FishForageType) {
-		forageType = shared.DeerForageType
+	fishingROI := c.computeRecentExpectedROI(shared.FishForageType)
+	deerHuntingROI := c.computeRecentExpectedROI(shared.DeerForageType)
+	if deerHuntingROI != 0 && fishingROI != 0 || (deerHuntingROI > 100 || fishingROI > 100) {
+		if deerHuntingROI > fishingROI {
+			forageType = shared.DeerForageType
+		} else {
+			forageType = shared.FishForageType
+		}
 	} else {
-		forageType = shared.FishForageType
+		if deerHuntingROI == 0 {
+			forageType = shared.DeerForageType
+		}
+		if fishingROI == 0 {
+			forageType = shared.FishForageType
+		}
 	}
 
 	return shared.ForageDecision{
@@ -46,16 +57,20 @@ func (c *client) computeRecentExpectedROI(forageType shared.ForageType) float64 
 	var sumOfROI float64
 	var numberOfROI uint
 
-	if len(data) == 0 {
+	for _, forage := range data {
+		if uint(forage.turn) == c.ServerReadHandle.GetGameState().Turn-1 || uint(forage.turn) == c.ServerReadHandle.GetGameState().Turn-2 {
+			if forage.amountContributed != 0 {
+				sumOfROI += float64((forage.amountReturned / forage.amountContributed) * 100)
+				numberOfROI++
+			}
+		}
+	}
+
+	if numberOfROI == 0 {
 		return 0
 	}
 
-	for _, forage := range data {
-		if uint(forage.turn) == c.ServerReadHandle.GetGameState().Turn-1 || uint(forage.turn) == c.ServerReadHandle.GetGameState().Turn-2 {
-			sumOfROI += float64((forage.amountReturned / forage.amountContributed) * 100)
-			numberOfROI++
-		}
-	}
+	c.Logf("Expected return of: %v %v // %v", forageType, (sumOfROI / float64(numberOfROI)), data)
 	return sumOfROI / float64(numberOfROI)
 }
 
@@ -69,4 +84,11 @@ func (c *client) ForageUpdate(forageDecision shared.ForageDecision, outcome shar
 				turn:              c.ServerReadHandle.GetGameState().Turn,
 			},
 		)
+
+	c.Logf(
+		"Forage History Updated: Type %v ,Conribution: %v ,Return: %v",
+		forageDecision.Type,
+		forageDecision.Contribution,
+		outcome,
+	)
 }
