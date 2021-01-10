@@ -70,7 +70,7 @@ func (c *client) computeRecentExpectedROI(forageType shared.ForageType) float64 
 		return 0
 	}
 
-	c.Logf("Expected return of: %v %v // %v", forageType, (sumOfROI / float64(numberOfROI)), data)
+	c.Logf("Expected return of %v: %v", forageType, (sumOfROI / float64(numberOfROI)))
 	return sumOfROI / float64(numberOfROI)
 }
 
@@ -84,11 +84,4 @@ func (c *client) ForageUpdate(forageDecision shared.ForageDecision, outcome shar
 				turn:              c.ServerReadHandle.GetGameState().Turn,
 			},
 		)
-
-	c.Logf(
-		"Forage History Updated: Type %v ,Conribution: %v ,Return: %v",
-		forageDecision.Type,
-		forageDecision.Contribution,
-		outcome,
-	)
 }
