@@ -3,7 +3,9 @@ package iigointernal
 import (
 	"fmt"
 	"reflect"
+	"sort"
 
+	"github.com/SOMAS2020/SOMAS2020/internal/common/baseclient"
 	"github.com/SOMAS2020/SOMAS2020/internal/common/config"
 	"github.com/SOMAS2020/SOMAS2020/internal/common/gamestate"
 	"github.com/SOMAS2020/SOMAS2020/internal/common/roles"
@@ -21,7 +23,13 @@ type legislature struct {
 	ballotBox     voting.BallotBox
 	votingResult  bool
 	clientSpeaker roles.Speaker
+	iigoClients   map[shared.ClientID]baseclient.Client
 	monitoring    *monitor
+	logger        shared.Logger
+}
+
+func (l *legislature) Logf(format string, a ...interface{}) {
+	l.logger("[LEGISLATURE]: %v", fmt.Sprintf(format, a...))
 }
 
 // loadClientSpeaker checks client pointer is good and if not panics
@@ -87,6 +95,16 @@ func (l *legislature) setVotingResult(clientIDs []shared.ClientID) (bool, error)
 	}
 
 	returnVote := l.clientSpeaker.DecideVote(l.ruleToVote, clientIDs)
+	returnedIslands := make([]shared.ClientID, len(returnVote.ParticipatingIslands))
+	copy(returnedIslands, returnVote.ParticipatingIslands)
+	sort.Sort(shared.SortClientByID(returnedIslands))
+	sort.Sort(shared.SortClientByID(clientIDs))
+
+	//log rule: All islands must participate in voting
+	variablesToCache := []rules.VariableFieldName{rules.AllIslandsAllowedToVote}
+	valuesToCache := [][]float64{{boolToFloat(reflect.DeepEqual(returnedIslands, clientIDs))}}
+	l.monitoring.addToCache(l.SpeakerID, variablesToCache, valuesToCache)
+
 	if returnVote.ActionTaken && returnVote.ContentType == shared.SpeakerVote {
 		if !l.incurServiceCharge(l.gameConf.SetVotingResultActionCost) {
 			return voteCalled, errors.Errorf("Insufficient Budget in common Pool: setVotingResult")
@@ -106,8 +124,10 @@ func (l *legislature) RunVote(ruleMatrix rules.RuleMatrix, clientIDs []shared.Cl
 	if ruleMatrix.RuleMatrixIsEmpty() || len(clientIDs) == 0 {
 		return voting.BallotBox{}
 	}
-
-	ruleVote := voting.RuleVote{}
+	l.Logf("Rule vote with islands %v allowed to vote", clientIDs)
+	ruleVote := voting.RuleVote{
+		Logger: l.logger,
+	}
 
 	//TODO: check if rule is valid, otherwise return empty ballot, raise error?
 	ruleVote.SetRule(ruleMatrix)
@@ -116,22 +136,18 @@ func (l *legislature) RunVote(ruleMatrix rules.RuleMatrix, clientIDs []shared.Cl
 	//TODO: check if remaining slice is >0, otherwise return empty ballot, raise error?
 	ruleVote.SetVotingIslands(clientIDs)
 
-	ruleVote.GatherBallots(iigoClients)
+	ruleVote.GatherBallots(l.iigoClients)
 	//TODO: log of vote occurring with ruleMatrix, clientIDs
 	//TODO: log of clientIDs vs islandsAllowedToVote
 	//TODO: log of ruleMatrix vs s.RuleToVote
-
-	variablesToCache := []rules.VariableFieldName{rules.IslandsAllowedToVote}
-	valuesToCache := [][]float64{{float64(len(clientIDs))}}
-	l.monitoring.addToCache(l.SpeakerID, variablesToCache, valuesToCache)
 
 	rulesEqual := false
 	if reflect.DeepEqual(ruleMatrix, l.ruleToVote) {
 		rulesEqual = true
 	}
 
-	variablesToCache = []rules.VariableFieldName{rules.SpeakerProposedPresidentRule}
-	valuesToCache = [][]float64{{boolToFloat(rulesEqual)}}
+	variablesToCache := []rules.VariableFieldName{rules.SpeakerProposedPresidentRule}
+	valuesToCache := [][]float64{{boolToFloat(rulesEqual)}}
 
 	l.monitoring.addToCache(l.SpeakerID, variablesToCache, valuesToCache)
 
@@ -146,24 +162,25 @@ func (l *legislature) announceVotingResult() (bool, error) {
 		return resultAnnounced, errors.Errorf("Insufficient Budget in common Pool: announceVotingResult")
 	}
 
-	returnAnouncement := l.clientSpeaker.DecideAnnouncement(l.ruleToVote, l.votingResult)
+	returnAnnouncement := l.clientSpeaker.DecideAnnouncement(l.ruleToVote, l.votingResult)
 
-	if returnAnouncement.ActionTaken && returnAnouncement.ContentType == shared.SpeakerAnnouncement {
+	if returnAnnouncement.ActionTaken && returnAnnouncement.ContentType == shared.SpeakerAnnouncement {
 		//Deduct action cost
 		if !l.incurServiceCharge(l.gameConf.AnnounceVotingResultActionCost) {
 			return resultAnnounced, errors.Errorf("Insufficient Budget in common Pool: announceVotingResult")
 		}
 
 		//Perform announcement
-		broadcastToAllIslands(shared.TeamIDs[l.SpeakerID], generateVotingResultMessage(returnAnouncement.RuleMatrix, returnAnouncement.VotingResult))
+		broadcastToAllIslands(l.iigoClients, shared.TeamIDs[l.SpeakerID], generateVotingResultMessage(returnAnnouncement.RuleMatrix, returnAnnouncement.VotingResult), *l.gameState)
 		resultAnnounced = true
 
 		//log rule "must announce what was called"
-		announcementRuleMatchesVote := reflect.DeepEqual(returnAnouncement.RuleMatrix, l.ruleToVote)
-		announcementResultMatchesVote := returnAnouncement.VotingResult == l.votingResult
+		announcementRuleMatchesVote := reflect.DeepEqual(returnAnnouncement.RuleMatrix, l.ruleToVote)
+		announcementResultMatchesVote := returnAnnouncement.VotingResult == l.votingResult
 		variablesToCache := []rules.VariableFieldName{rules.AnnouncementRuleMatchesVote, rules.AnnouncementResultMatchesVote}
 		valuesToCache := [][]float64{{boolToFloat(announcementRuleMatchesVote)}, {boolToFloat(announcementResultMatchesVote)}}
 		l.monitoring.addToCache(l.SpeakerID, variablesToCache, valuesToCache)
+		l.Logf("Rule: %v , voted in by islands: %v , result heeded by speaker: %v", returnAnnouncement.RuleMatrix.RuleName, l.votingResult, returnAnnouncement.VotingResult)
 
 	}
 	return resultAnnounced, nil
@@ -191,16 +208,16 @@ func (l *legislature) updateRules(ruleMatrix rules.RuleMatrix, ruleIsVotedIn boo
 	}
 	//TODO: might want to log the errors as logging messages too?
 	//notInRulesCache := errors.Errorf("Rule '%v' is not available in rules cache", ruleMatrix)
-	if _, ok := rules.AvailableRules[ruleMatrix.RuleName]; !ok || reflect.DeepEqual(ruleMatrix, rules.AvailableRules[ruleMatrix.RuleName]) { //if the proposed ruleMatrix has the same content as the rule with the same name in AvailableRules, the proposal is for putting a rule in/out of play.
+	if _, ok := l.gameState.RulesInfo.AvailableRules[ruleMatrix.RuleName]; !ok || reflect.DeepEqual(ruleMatrix, l.gameState.RulesInfo.AvailableRules[ruleMatrix.RuleName]) { //if the proposed ruleMatrix has the same content as the rule with the same name in AvailableRules, the proposal is for putting a rule in/out of play.
 		if ruleIsVotedIn {
-			err := rules.PullRuleIntoPlay(ruleMatrix.RuleName)
+			err := l.gameState.PullRuleIntoPlay(ruleMatrix.RuleName)
 			if ruleErr, ok := err.(*rules.RuleError); ok {
 				if ruleErr.Type() == rules.RuleNotInAvailableRulesCache {
 					return ruleErr
 				}
 			}
 		} else {
-			err := rules.PullRuleOutOfPlay(ruleMatrix.RuleName)
+			err := l.gameState.PullRuleOutOfPlay(ruleMatrix.RuleName)
 			if ruleErr, ok := err.(*rules.RuleError); ok {
 				if ruleErr.Type() == rules.RuleNotInAvailableRulesCache {
 					return ruleErr
@@ -210,7 +227,7 @@ func (l *legislature) updateRules(ruleMatrix rules.RuleMatrix, ruleIsVotedIn boo
 		}
 	} else { //if the proposed ruleMatrix has different content to the rule with the same name in AvailableRules, the proposal is for modifying the rule in the rule caches. It doesn't put a rule in/out of play.
 		if ruleIsVotedIn {
-			err := rules.ModifyRule(ruleMatrix.RuleName, ruleMatrix.ApplicableMatrix, ruleMatrix.AuxiliaryVector)
+			err := l.gameState.ModifyRule(ruleMatrix.RuleName, ruleMatrix.ApplicableMatrix, ruleMatrix.AuxiliaryVector)
 			return err
 		}
 	}
@@ -221,7 +238,9 @@ func (l *legislature) updateRules(ruleMatrix rules.RuleMatrix, ruleIsVotedIn boo
 
 // appointNextJudge returns the island ID of the island appointed to be Judge in the next turn
 func (l *legislature) appointNextJudge(monitoring shared.MonitorResult, currentJudge shared.ClientID, allIslands []shared.ClientID) (shared.ClientID, error) {
-	var election voting.Election
+	var election = voting.Election{
+		Logger: l.logger,
+	}
 	var appointedJudge shared.ClientID
 	electionSettings := l.clientSpeaker.CallJudgeElection(monitoring, int(l.gameState.IIGOTurnsInPower[shared.Judge]), allIslands)
 
@@ -237,9 +256,9 @@ func (l *legislature) appointNextJudge(monitoring shared.MonitorResult, currentJ
 		}
 		election.ProposeElection(shared.Judge, electionSettings.VotingMethod)
 		election.OpenBallot(electionSettings.IslandsToVote, allIslands)
-		election.Vote(iigoClients)
+		election.Vote(l.iigoClients)
 		l.gameState.IIGOTurnsInPower[shared.Judge] = 0
-		electedJudge := election.CloseBallot(iigoClients)
+		electedJudge := election.CloseBallot(l.iigoClients)
 		appointedJudge = l.clientSpeaker.DecideNextJudge(electedJudge)
 
 		//Log rule: Must appoint elected role
@@ -247,10 +266,11 @@ func (l *legislature) appointNextJudge(monitoring shared.MonitorResult, currentJ
 		variablesToCache := []rules.VariableFieldName{rules.AppointmentMatchesVote}
 		valuesToCache := [][]float64{{boolToFloat(appointmentMatchesVote)}}
 		l.monitoring.addToCache(l.SpeakerID, variablesToCache, valuesToCache)
-
+		l.Logf("Result of election for new Judge: %v", appointedJudge)
 	} else {
 		appointedJudge = currentJudge
 	}
+	l.gameState.IIGOElection = append(l.gameState.IIGOElection, election.GetVotingInfo())
 	return appointedJudge, nil
 }
 

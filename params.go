@@ -27,7 +27,7 @@ var (
 	)
 	initialCommonPool = flag.Float64(
 		"initialCommonPool",
-		100,
+		1000,
 		"The default number of resources in the common pool at the start of the game.",
 	)
 	costOfLiving = flag.Float64(
@@ -273,6 +273,36 @@ var (
 		"IIGO action cost for appointNextPresident",
 	)
 
+	iigoDefaultSanctionScore = flag.Uint(
+		"iigoDefaultSanctionScore",
+		5,
+		"Default penalty score for breaking a rule",
+	)
+
+	iigoSanctionCacheDepth = flag.Uint(
+		"iigoSanctionCacheDepth",
+		3,
+		"Turn depth of sanctions to be applied or pardoned",
+	)
+
+	iigoHistoryCacheDepth = flag.Uint(
+		"iigoHistoryCacheDepth",
+		3,
+		"Turn depth of history cache for events to be evaluated",
+	)
+
+	iigoAssumedResourcesNoReport = flag.Uint(
+		"iigoAssumedResourcesNoReport",
+		500,
+		"If an island doesn't report usaged this value is assumed for sanction calculations",
+	)
+
+	iigoSanctionLength = flag.Uint(
+		"iigoSanctionLength",
+		2,
+		"Sanction length for all sanctions",
+	)
+
 	// config.IIGOConfig - Legislative branch
 	iigoSetVotingResultActionCost = flag.Float64(
 		"iigoSetVotingResultActionCost",
@@ -304,28 +334,22 @@ var (
 		"IIGO action cost for appointNextJudge action",
 	)
 
-	iigoSanctionCacheDepth = flag.Uint(
-		"iigoSanctionCacheDepth",
-		3,
-		"Turn depth of sanctions to be applied or pardoned",
+	iigoTermLengthPresident = flag.Uint(
+		"iigoTermLengthPresident",
+		4,
+		"Length of the term for the President",
 	)
 
-	iigoHistoryCacheDepth = flag.Uint(
-		"iigoHistoryCacheDepth",
-		3,
-		"Turn depth of history cache for events to be evaluated",
+	iigoTermLengthSpeaker = flag.Uint(
+		"iigoTermLengthSpeaker",
+		4,
+		"Length of the term for the Speaker",
 	)
 
-	iigoAssumedResourcesNoReport = flag.Uint(
-		"iigoAssumedResourcesNoReport",
-		500,
-		"If an island doesn't report usaged this value is assumed for sanction calculations",
-	)
-
-	iigoSanctionLength = flag.Uint(
-		"iigoSanctionLength",
-		2,
-		"Sanction length for all sanctions",
+	iigoTermLengthJudge = flag.Uint(
+		"iigoTermLengthJudge",
+		4,
+		"Length of the term for the Judge",
 	)
 
 	startWithRulesInPlay = flag.Bool(
@@ -406,6 +430,9 @@ func parseConfig() (config.Config, error) {
 	}
 
 	iigoConf := config.IIGOConfig{
+		IIGOTermLengths: map[shared.Role]uint{shared.President: *iigoTermLengthPresident,
+			shared.Speaker: *iigoTermLengthSpeaker,
+			shared.Judge:   *iigoTermLengthJudge},
 		// Executive branch
 		GetRuleForSpeakerActionCost:        shared.Resources(*iigoGetRuleForSpeakerActionCost),
 		BroadcastTaxationActionCost:        shared.Resources(*iigoBroadcastTaxationActionCost),
@@ -419,6 +446,7 @@ func parseConfig() (config.Config, error) {
 		InspectBallotActionCost:         shared.Resources(*iigoInspectBallotActionCost),
 		InspectAllocationActionCost:     shared.Resources(*iigoInspectAllocationActionCost),
 		AppointNextPresidentActionCost:  shared.Resources(*iigoAppointNextPresidentActionCost),
+		DefaultSanctionScore:            shared.IIGOSanctionsScore(*iigoDefaultSanctionScore),
 		SanctionCacheDepth:              *iigoSanctionCacheDepth,
 		HistoryCacheDepth:               *iigoHistoryCacheDepth,
 		AssumedResourcesNoReport:        shared.Resources(*iigoAssumedResourcesNoReport),

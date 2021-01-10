@@ -1,10 +1,12 @@
 package voting
 
 import (
+	"fmt"
 	"math"
 	"sort"
 
 	"github.com/SOMAS2020/SOMAS2020/internal/common/baseclient"
+	"github.com/SOMAS2020/SOMAS2020/internal/common/gamestate"
 	"github.com/SOMAS2020/SOMAS2020/internal/common/shared"
 )
 
@@ -14,6 +16,12 @@ type Election struct {
 	candidateList []shared.ClientID
 	voterList     []shared.ClientID
 	votes         [][]shared.ClientID
+	Logger        shared.Logger
+}
+
+// Logf is the Election logger
+func (e *Election) Logf(format string, a ...interface{}) {
+	e.Logger("[ELECTION]: %v", fmt.Sprintf(format, a...))
 }
 
 // ProposeMotion sets the role to be voted on
@@ -37,6 +45,7 @@ func (e *Election) Vote(clientMap map[shared.ClientID]baseclient.Client) {
 	for i := 0; i < len(e.voterList); i++ {
 		e.votes = append(e.votes, clientMap[e.voterList[i]].VoteForElection(e.roleToElect, e.candidateList))
 	}
+	e.Logf("Votes: %v", e.votes)
 }
 
 // CloseBallot counts the votes received and returns the result.
@@ -357,4 +366,14 @@ func (e *Election) pluralityResult() shared.ClientID {
 func (e *Election) majorityResult() shared.ClientID {
 	// TODO implement majority winner selection method.
 	return e.pluralityResult()
+}
+
+// GetVotingInfo get a neccesery information to visualise in the form on gamestate.VotingInfo
+func (e *Election) GetVotingInfo() gamestate.VotingInfo {
+	return gamestate.VotingInfo{
+		RoleToElect:  e.roleToElect,
+		VotingMethod: e.votingMethod,
+		VoterList:    e.voterList,
+		Votes:        e.votes,
+	}
 }
