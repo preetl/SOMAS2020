@@ -141,7 +141,7 @@ func (c *client) ReceiveDisasterPredictions(receivedPredictions shared.ReceivedD
 		totalCoordinateX += c.trustScore[islandID] / 100 * prediction.PredictionMade.Confidence * prediction.PredictionMade.CoordinateX
 		totalCoordinateY += c.trustScore[islandID] / 100 * prediction.PredictionMade.Confidence * prediction.PredictionMade.CoordinateY
 		totalMagnitude += c.trustScore[islandID] / 100 * prediction.PredictionMade.Confidence * prediction.PredictionMade.Magnitude
-		totalTimeLeft += int(math.Round(c.trustScore[islandID]/100*prediction.PredictionMade.Confidence)) * prediction.PredictionMade.TimeLeft
+		totalTimeLeft += uint(math.Round(c.trustScore[islandID]/100*prediction.PredictionMade.Confidence)) * prediction.PredictionMade.TimeLeft
 		totalConfidence += c.trustScore[islandID] / 100 * prediction.PredictionMade.Confidence
 	}
 
@@ -368,4 +368,52 @@ func (c *client) ReceivedGift(received shared.Resources, from shared.ClientID) {
 // they wish to fulfill a gift offer they have previously made.
 func (c *client) DecideGiftAmount(toTeam shared.ClientID, giftOffer shared.Resources) shared.Resources {
 	return giftOffer
+}
+
+func (c *client) MakeForageInfo() shared.ForageShareInfo {
+
+	trustedIslands := make([]shared.ClientID, len(baseclient.RegisteredClientFactories))
+	for index, id := range shared.TeamIDs {
+		trustedIslands[index] = id
+	}
+
+	var lastDecision shared.ForageDecision
+	var lastForageOutput shared.Resources
+
+	for forageType, data := range c.forageData {
+		for _, forage := range data {
+			if uint(forage.turn) == c.ServerReadHandle.GetGameState().Turn-1 {
+				lastForageOutput = forage.amountReturned
+				lastDecision = shared.ForageDecision{
+					Type:         forageType,
+					Contribution: forage.amountContributed,
+				}
+			}
+		}
+	}
+
+	forageInfo := shared.ForageShareInfo{
+		DecisionMade:     lastDecision,
+		ResourceObtained: lastForageOutput,
+		ShareTo:          trustedIslands,
+	}
+
+	return forageInfo
+}
+
+func (c *client) ReceiveForageInfo(forageInfo []shared.ForageShareInfo) {
+	if c.ServerReadHandle.GetGameState().Turn == 1 {
+		c.forageData = make(map[shared.ForageType][]ForageData)
+	}
+	for _, val := range forageInfo {
+		c.forageData[val.DecisionMade.Type] =
+			append(
+				c.forageData[val.DecisionMade.Type],
+				ForageData{
+					amountContributed: val.DecisionMade.Contribution,
+					amountReturned:    val.ResourceObtained,
+					turn:              c.ServerReadHandle.GetGameState().Turn,
+				},
+			)
+	}
 }
