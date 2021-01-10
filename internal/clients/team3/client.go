@@ -46,7 +46,8 @@ type client struct {
 	ruleVotedOn string
 
 	// ## Game state & History ##
-	criticalStatePrediction criticalStatePrediction
+	// Minimum value for island to avoid critical
+	criticalThreshold shared.Resources
 
 	// declaredResources is a map of all declared island resources
 	declaredResources map[shared.ClientID]shared.Resources
@@ -72,6 +73,9 @@ type client struct {
 	// iigoInfo caches information regarding iigo in the current turn
 	iigoInfo iigoCommunicationInfo
 
+	// Last broken rules
+	oldBrokenRules []string
+
 	localVariableCache map[rules.VariableFieldName]rules.VariableValuePair
 
 	localInputsCache map[rules.VariableFieldName]dynamics.Input
@@ -81,40 +85,30 @@ type client struct {
 	forageData map[shared.ForageType][]ForageData
 }
 
-type criticalStatePrediction struct {
-	upperBound shared.Resources
-	lowerBound shared.Resources
-}
-
 type islandParams struct {
-	giftingThreshold            shared.Resources
-	equity                      float64
-	complianceLevel             float64
-	resourcesSkew               float64
-	saveCriticalIsland          bool
-	escapeCritcaIsland          bool
-	selfishness                 float64
-	minimumRequest              shared.Resources
-	disasterPredictionWeighting float64
-	recidivism                  float64
-	riskFactor                  float64
-	friendliness                float64
-	anger                       float64
-	aggression                  float64
-	sensitivity                 float64
-	salaryThreshold             float64
-	localPoolThreshold          float64
-	giftInflationPercentage     float64
-	trustConstantAdjustor       float64
-	trustParameter              float64
-	NoRequestGiftParam          float64
-	laziness                    float64
+	equity                  float64
+	complianceLevel         float64
+	resourcesSkew           float64
+	saveCriticalIsland      bool
+	escapeCritcaIsland      bool
+	selfishness             float64
+	recidivism              float64
+	riskFactor              float64
+	friendliness            float64
+	aggression              float64
+	sensitivity             float64
+	localPoolThreshold      float64
+	giftInflationPercentage float64
+	trustConstantAdjustor   float64
+	trustParameter          float64
+	NoRequestGiftParam      float64
+	intelligence            bool
 	//minimumInvestment			float64	// When fish foraging is implemented
 }
 
 type ruleVoteInfo struct {
 	// ourVote needs to be updated accordingly
-	ourVote         bool
+	ourVote         shared.RuleVoteType
 	resultAnnounced bool
 	// true -> yes, false -> no
 	result bool
@@ -127,8 +121,6 @@ type ForageData struct {
 }
 
 type iigoCommunicationInfo struct {
-	// ourRole stores our current role in the IIGO
-	ourRole *shared.Role
 	// Retrieved fully from communications
 	// commonPoolAllocation gives resources allocated by president from requests
 	commonPoolAllocation shared.Resources
@@ -152,10 +144,6 @@ type iigoCommunicationInfo struct {
 
 	// ruleVotingResults is a map of rules and the corresponding info
 	ruleVotingResults map[string]*ruleVoteInfo
-	// ourRequest stores how much we requested from commonpool
-	ourRequest shared.Resources
-	// ourDeclaredResources stores how much we said we had to the president
-	ourDeclaredResources shared.Resources
 }
 
 type sanctionInfo struct {

@@ -14,8 +14,8 @@ import (
 	MonitorIIGORole(shared.Role) bool
 	DecideIIGOMonitoringAnnouncement(bool) (bool, bool)
 
-	GetVoteForRule(ruleName string) bool
-	GetVoteForElection(roleToElect shared.Role) []shared.ClientID
+	VoteForRule(ruleName string) bool
+	VoteForElection(roleToElect shared.Role) []shared.ClientID
 
 	CommonPoolResourceRequest() shared.Resources
 	ResourceReport() shared.Resources
@@ -42,9 +42,39 @@ func (c *client) GetClientPresidentPointer() roles.President {
 	return &c.ourPresident
 }
 
+func (c *client) VoteForElection(roleToElect shared.Role, candidateList []shared.ClientID) []shared.ClientID {
+	// Vote based on trust, rank on trust
+	candidateNum := len(candidateList)
+	var returnList []shared.ClientID
+	highscore := 0.0
+	var highscoreIsland shared.ClientID
+
+	for i := 0; i < candidateNum; i++ {
+		// Find current top scorer from non voted for islands
+		for _, island := range candidateList {
+			if c.trustScore[island] > highscore {
+				// Check if already in return list
+				present := false
+				for _, votedIsland := range returnList {
+					if island == votedIsland {
+						present = true
+					}
+				}
+				if !present {
+					highscoreIsland = island
+				}
+			}
+		}
+		returnList = append(returnList, highscoreIsland)
+	}
+
+	// TODO Vote based on performance
+	return returnList
+
+}
+
 //resetIIGOInfo clears the island's information regarding IIGO at start of turn
 func (c *client) resetIIGOInfo() {
-	c.iigoInfo.ourRole = nil // TODO unused, remove
 	c.clientPrint("IIGO cache from previous turn: %+v", c.iigoInfo)
 	c.clientPrint("IIGO sanction info from previous turn: %+v", c.iigoInfo.sanctions)
 	c.iigoInfo.commonPoolAllocation = 0
@@ -61,8 +91,6 @@ func (c *client) resetIIGOInfo() {
 		ourSanction:     shared.IIGOSanctionsScore(0),
 	}
 	c.iigoInfo.ruleVotingResults = make(map[string]*ruleVoteInfo)
-	c.iigoInfo.ourRequest = 0
-	c.iigoInfo.ourDeclaredResources = 0
 }
 
 func (c *client) getOurRole() string {
@@ -80,11 +108,10 @@ func (c *client) getOurRole() string {
 
 func (c *client) GetTaxContribution() shared.Resources {
 	commonPool := c.BaseClient.ServerReadHandle.GetGameState().CommonPool
-	totalToPay := 100 - commonPool
-	if len(c.disasterPredictions) > int(c.ServerReadHandle.GetGameState().Turn) {
-		if disaster, ok := c.disasterPredictions[int(c.BaseClient.ServerReadHandle.GetGameState().Turn)][c.BaseClient.GetID()]; ok {
-			totalToPay = safeDivResources(shared.Resources(disaster.Magnitude)-commonPool, shared.Resources(disaster.TimeLeft))
-		}
+	totalToPay := shared.Resources(math.Max(float64(c.getIIGOCost()-commonPool), 0))
+	if len(c.globalDisasterPredictions) > int(c.ServerReadHandle.GetGameState().Turn) {
+		disaster := c.globalDisasterPredictions[int(c.ServerReadHandle.GetGameState().Turn)]
+		totalToPay += safeDivResources(shared.Resources(disaster.Magnitude)-commonPool, shared.Resources(disaster.TimeLeft+1))
 	}
 	sumTrust := 0.0
 	for id, trust := range c.trustScore {
@@ -94,8 +121,11 @@ func (c *client) GetTaxContribution() shared.Resources {
 			sumTrust += (1 - c.params.selfishness) * 100
 		}
 	}
-	toPay := safeDivResources(totalToPay, shared.Resources(sumTrust)) * (1 - shared.Resources(c.params.selfishness)) * 100
-	targetResources := shared.Resources(2-c.params.riskFactor) * (c.criticalStatePrediction.upperBound)
+	toPay := shared.Resources(0)
+	if sumTrust != 0 {
+		toPay = safeDivResources(totalToPay, shared.Resources(sumTrust)) * (1 - shared.Resources(c.params.selfishness)) * 100
+	}
+	targetResources := shared.Resources(2-c.params.riskFactor) * (c.criticalThreshold)
 	if c.getLocalResources()-toPay <= targetResources {
 		toPay = shared.Resources(math.Max(float64(c.getLocalResources()-targetResources), 0.0))
 	}
@@ -105,17 +135,25 @@ func (c *client) GetTaxContribution() shared.Resources {
 	c.clientPrint("Paying %v in tax", toPay)
 	variablesChanged := map[rules.VariableFieldName]rules.VariableValuePair{
 		rules.IslandTaxContribution: {
-			rules.IslandTaxContribution,
-			[]float64{float64(toPay)},
+			VariableName: rules.IslandTaxContribution,
+			Values:       []float64{float64(toPay)},
 		},
 		rules.ExpectedTaxContribution: {
-			rules.ExpectedTaxContribution,
-			c.LocalVariableCache[rules.ExpectedTaxContribution].Values,
+			VariableName: rules.ExpectedTaxContribution,
+			Values:       c.LocalVariableCache[rules.ExpectedTaxContribution].Values,
 		},
 	}
 	recommendedValues := c.dynamicAssistedResult(variablesChanged)
+	resolve := shared.Resources(recommendedValues[rules.IslandTaxContribution].Values[rules.SingleValueVariableEntry])
 	if c.params.complianceLevel > 80 {
-		return shared.Resources(recommendedValues[rules.IslandAllocation].Values[rules.SingleValueVariableEntry])
+		return resolve
+	}
+	if toPay != resolve {
+		rulesInPlay := c.ServerReadHandle.GetGameState().RulesInfo.CurrentRulesInPlay
+		affectedRules, success := rules.PickUpRulesByVariable(rules.IslandTaxContribution, rulesInPlay, c.LocalVariableCache)
+		if success {
+			c.oldBrokenRules = append(c.oldBrokenRules, affectedRules...)
+		}
 	}
 	return toPay
 
@@ -138,13 +176,14 @@ func (c *client) ReceiveCommunication(sender shared.ClientID, data map[shared.Co
 	for contentType, content := range data {
 		switch contentType {
 		case shared.IIGOTaxDecision:
-			c.iigoInfo.taxationAmount = shared.Resources(content.IntegerData)
+			c.iigoInfo.taxationAmount = content.IIGOValueData.Amount
 		case shared.IIGOAllocationDecision:
-			c.iigoInfo.commonPoolAllocation = shared.Resources(content.IntegerData)
+			c.iigoInfo.commonPoolAllocation = content.IIGOValueData.Amount
 		case shared.RuleName:
-			currentRuleID := content.TextData
+
 			// Rule voting
 			if _, ok := data[shared.RuleVoteResult]; ok {
+				currentRuleID := content.RuleMatrixData.RuleName
 				if _, ok := c.iigoInfo.ruleVotingResults[currentRuleID]; ok {
 					c.iigoInfo.ruleVotingResults[currentRuleID].resultAnnounced = true
 					c.iigoInfo.ruleVotingResults[currentRuleID].result = data[shared.RuleVoteResult].BooleanData
@@ -153,9 +192,9 @@ func (c *client) ReceiveCommunication(sender shared.ClientID, data map[shared.Co
 				}
 			}
 			// Rule sanctions
-			if _, ok := data[shared.RuleSanctionPenalty]; ok {
-				// c.clientPrint("Received sanction info: %+v", data)
-				c.iigoInfo.sanctions.rulePenalties[currentRuleID] = shared.IIGOSanctionsScore(data[shared.RuleSanctionPenalty].IntegerData)
+			if _, ok := data[shared.IIGOSanctionScore]; ok {
+				currentRuleID := content.TextData
+				c.iigoInfo.sanctions.rulePenalties[currentRuleID] = shared.IIGOSanctionsScore(data[shared.IIGOSanctionScore].IntegerData)
 			}
 		case shared.RoleMonitored:
 			c.iigoInfo.monitoringDeclared[content.IIGORoleData] = true
@@ -165,12 +204,13 @@ func (c *client) ReceiveCommunication(sender shared.ClientID, data map[shared.Co
 		case shared.IIGOSanctionTier:
 			c.iigoInfo.sanctions.tierInfo[shared.IIGOSanctionsTier(content.IntegerData)] = shared.IIGOSanctionsScore(data[shared.RuleSanctionPenalty].IntegerData)
 		case shared.SanctionAmount:
+			c.clientPrint("Got our sanction :( %+v", content)
 			c.iigoInfo.sanctions.ourSanction = shared.IIGOSanctionsScore(content.IntegerData)
 		}
 	}
 }
 
-func (c *client) GetVoteForRule(matrix rules.RuleMatrix) bool {
+func (c *client) VoteForRule(matrix rules.RuleMatrix) shared.RuleVoteType {
 
 	newRulesInPlay := make(map[string]rules.RuleMatrix)
 
@@ -189,17 +229,18 @@ func (c *client) GetVoteForRule(matrix rules.RuleMatrix) bool {
 	}
 
 	// TODO: define postion -> list of variables and values associated with the rule (obtained from IIGO communications)
+	rulesInPlay := c.ServerReadHandle.GetGameState().RulesInfo.CurrentRulesInPlay
+	distancetoRulesInPlay := dynamics.CalculateDistanceFromRuleSpace(dynamics.CollapseRuleMap(rulesInPlay), c.locationService.TranslateToInputs(c.LocalVariableCache))
+	distancetoNewRulesInPlay := dynamics.CalculateDistanceFromRuleSpace(dynamics.CollapseRuleMap(newRulesInPlay), c.locationService.TranslateToInputs(c.LocalVariableCache))
 
-	// distancetoRulesInPlay = CalculateDistanceFromRuleSpace(rules.RulesInPlay, position)
-	// distancetoNewRulesInPlay = CalculateDistanceFromRuleSpace(newRulesInPlay, position)
-
-	// if distancetoRulesInPlay < distancetoNewRulesInPlay {
-	//  return false
-	// } else {
-	//  return true
-	// }
-
-	return true
+	c.ruleVotedOn = matrix.RuleName
+	if distancetoRulesInPlay < distancetoNewRulesInPlay {
+		c.iigoInfo.ruleVotingResults[c.ruleVotedOn] = &ruleVoteInfo{ourVote: shared.Reject}
+		return shared.Reject
+	} else {
+		c.iigoInfo.ruleVotingResults[c.ruleVotedOn] = &ruleVoteInfo{ourVote: shared.Approve}
+		return shared.Approve
+	}
 }
 
 func (c *client) RuleProposal() rules.RuleMatrix {
@@ -210,6 +251,12 @@ func (c *client) RuleProposal() rules.RuleMatrix {
 	c.localInputsCache = inputMap
 	shortestSoFar := -2.0
 	selectedRule := ""
+	if c.params.intelligence {
+		newMat, success := c.intelligentShift()
+		if success {
+			return newMat
+		}
+	}
 	for key, rule := range c.ServerReadHandle.GetGameState().RulesInfo.AvailableRules {
 		if _, ok := c.ServerReadHandle.GetGameState().RulesInfo.CurrentRulesInPlay[key]; !ok {
 			reqInputs := dynamics.SourceRequiredInputs(rule, inputMap)
@@ -241,12 +288,22 @@ func (c *client) RuleProposal() rules.RuleMatrix {
 	return c.ServerReadHandle.GetGameState().RulesInfo.AvailableRules[selectedRule]
 }
 
+func (c *client) intelligentShift() (rules.RuleMatrix, bool) {
+	if len(c.oldBrokenRules) == 0 {
+		return rules.RuleMatrix{}, false
+	}
+	luckyRule := c.oldBrokenRules[0]
+	inputMap := c.locationService.TranslateToInputs(c.LocalVariableCache)
+	rulesInPlay := c.ServerReadHandle.GetGameState().RulesInfo.CurrentRulesInPlay
+	return dynamics.Shift(rulesInPlay[luckyRule], inputMap)
+}
+
 // RequestAllocation gives how much island is taking from common pool
 func (c *client) RequestAllocation() shared.Resources {
 	ourAllocation := c.iigoInfo.commonPoolAllocation
 	currentState := c.BaseClient.ServerReadHandle.GetGameState()
 	escapeCritical := c.params.escapeCritcaIsland && currentState.ClientInfo.LifeStatus == shared.Critical
-	distCriticalThreshold := ((c.criticalStatePrediction.upperBound + c.criticalStatePrediction.lowerBound) / 2) - ourAllocation
+	distCriticalThreshold := c.criticalThreshold - ourAllocation
 
 	if escapeCritical && (ourAllocation < distCriticalThreshold) {
 		// Get enough to save ourselves
@@ -266,18 +323,27 @@ func (c *client) RequestAllocation() shared.Resources {
 
 	variablesChanged := map[rules.VariableFieldName]rules.VariableValuePair{
 		rules.IslandAllocation: {
-			rules.IslandAllocation,
-			[]float64{float64(ourAllocation)},
+			VariableName: rules.IslandAllocation,
+			Values:       []float64{float64(ourAllocation)},
 		},
 		rules.ExpectedAllocation: {
-			rules.ExpectedAllocation,
-			c.LocalVariableCache[rules.ExpectedAllocation].Values,
+			VariableName: rules.ExpectedAllocation,
+			Values:       c.LocalVariableCache[rules.ExpectedAllocation].Values,
 		},
 	}
 
 	recommendedValues := c.dynamicAssistedResult(variablesChanged)
+	resolve := shared.Resources(recommendedValues[rules.IslandAllocation].Values[rules.SingleValueVariableEntry])
 	if c.params.complianceLevel > 80 {
-		return shared.Resources(recommendedValues[rules.IslandAllocation].Values[rules.SingleValueVariableEntry])
+		return resolve
+	}
+	if ourAllocation != resolve {
+		rulesInPlay := c.ServerReadHandle.GetGameState().RulesInfo.CurrentRulesInPlay
+
+		affectedRules, success := rules.PickUpRulesByVariable(rules.IslandAllocation, rulesInPlay, c.LocalVariableCache)
+		if success {
+			c.oldBrokenRules = append(c.oldBrokenRules, affectedRules...)
+		}
 	}
 	return ourAllocation
 }
@@ -290,9 +356,9 @@ func (c *client) CommonPoolResourceRequest() shared.Resources {
 	currentState := c.BaseClient.ServerReadHandle.GetGameState()
 	ourResources := currentState.ClientInfo.Resources
 	escapeCritical := c.params.escapeCritcaIsland && currentState.ClientInfo.LifeStatus == shared.Critical
-	distCriticalThreshold := ((c.criticalStatePrediction.upperBound + c.criticalStatePrediction.lowerBound) / 2) - ourResources
+	distCriticalThreshold := c.criticalThreshold - ourResources
 
-	request = shared.Resources(c.params.minimumRequest)
+	request = c.ServerReadHandle.GetGameConfig().CostOfLiving
 	if escapeCritical {
 		if request < distCriticalThreshold {
 			request = distCriticalThreshold
@@ -312,18 +378,27 @@ func (c *client) GetSanctionPayment() shared.Resources {
 		if available {
 			variablesChanged := map[rules.VariableFieldName]rules.VariableValuePair{
 				rules.SanctionPaid: {
-					rules.SanctionPaid,
-					idealVal,
+					VariableName: rules.SanctionPaid,
+					Values:       idealVal,
 				},
 				rules.SanctionExpected: {
-					rules.SanctionExpected,
-					c.LocalVariableCache[rules.SanctionExpected].Values,
+					VariableName: rules.SanctionExpected,
+					Values:       c.LocalVariableCache[rules.SanctionExpected].Values,
 				},
 			}
 
 			recommendedValues := c.dynamicAssistedResult(variablesChanged)
+			resolve := shared.Resources(recommendedValues[rules.SanctionPaid].Values[rules.SingleValueVariableEntry])
 			if c.params.complianceLevel > 80 {
-				return shared.Resources(recommendedValues[rules.SanctionPaid].Values[rules.SingleValueVariableEntry])
+				return resolve
+			}
+			if shared.Resources(idealVal[rules.SingleValueVariableEntry]) != resolve {
+				rulesInPlay := c.ServerReadHandle.GetGameState().RulesInfo.CurrentRulesInPlay
+
+				affectedRules, success := rules.PickUpRulesByVariable(rules.SanctionPaid, rulesInPlay, c.LocalVariableCache)
+				if success {
+					c.oldBrokenRules = append(c.oldBrokenRules, affectedRules...)
+				}
 			}
 			return shared.Resources(idealVal[rules.SingleValueVariableEntry])
 		}
