@@ -1,347 +1,237 @@
 package team4
 
 import (
-	"math/rand"
-	"sort"
+	"math"
 
 	"github.com/SOMAS2020/SOMAS2020/internal/common/baseclient"
-	"github.com/SOMAS2020/SOMAS2020/internal/common/config"
-
 	"github.com/SOMAS2020/SOMAS2020/internal/common/rules"
 	"github.com/SOMAS2020/SOMAS2020/internal/common/shared"
 )
 
 type president struct {
+	// Base implementation
 	*baseclient.BasePresident
-	parent *client
-	config.ClientConfig
+	// Our client
+	c *client
 }
 
-type IslandRequestPair struct {
-	Key   shared.ClientID
-	Value shared.Resources
-}
-
-func rankByAllocationSize(allocationRequests map[shared.ClientID]shared.Resources) IslandRequestPairList {
-	pl := make(IslandRequestPairList, len(allocationRequests))
-	i := 0
-	for k, v := range allocationRequests {
-		pl[i] = IslandRequestPair{k, v}
-		i++
+// CallSpeakerElection is called by the executive to decide on power-transfer
+// COMPULSORY: decide when to call an election following relevant rulesInPlay if you wish
+func (p *president) CallSpeakerElection(monitoring shared.MonitorResult, turnsInPower int, allIslands []shared.ClientID) shared.ElectionSettings {
+	// example implementation calls an election if monitoring was performed and the result was negative
+	// or if the number of turnsInPower exceeds 3
+	if p.c.params.adv != nil {
+		ret, done := p.c.params.adv.CallSpeakerElection(monitoring, turnsInPower, allIslands)
+		if done {
+			return ret
+		}
 	}
-	sort.Sort(sort.Reverse(pl))
-	return pl
+
+	return p.BasePresident.CallSpeakerElection(monitoring, turnsInPower, allIslands)
 }
 
-// IslandRequestPairList implements sort.Interface for []IslandRequestPair
-type IslandRequestPairList []IslandRequestPair
+func (p *president) DecideNextSpeaker(winner shared.ClientID) shared.ClientID {
+	if p.c.params.adv != nil {
+		ret, done := p.c.params.adv.DecideNextSpeaker(winner)
+		if done {
+			return ret
+		}
+	}
 
-func (p IslandRequestPairList) Len() int           { return len(p) }
-func (p IslandRequestPairList) Swap(i, j int)      { p[i], p[j] = p[j], p[i] }
-func (p IslandRequestPairList) Less(i, j int) bool { return p[i].Value < p[j].Value }
+	p.c.clientPrint("choosing speaker")
+	// Naively choose group 0
+	return mostTrusted(p.c.trustScore)
+
+}
+
+// Computes average request, excluding top and bottom
+func findAvgNoTails(resourceRequest map[shared.ClientID]shared.Resources) shared.Resources {
+	var sum shared.Resources
+	minClient := shared.TeamIDs[0]
+	maxClient := shared.TeamIDs[0]
+
+	// Find min and max requests
+	for island, request := range resourceRequest {
+		if request < resourceRequest[minClient] {
+			minClient = island
+		}
+		if request > resourceRequest[maxClient] {
+			maxClient = island
+		}
+	}
+
+	// Compute average ignoring highest and lowest
+	for island, request := range resourceRequest {
+		if island != minClient || island != maxClient {
+			sum += request
+		}
+	}
+
+	return shared.Resources(int(sum) / len(resourceRequest))
+}
 
 // EvaluateAllocationRequests sets allowed resource allocation based on each islands requests
 func (p *president) EvaluateAllocationRequests(resourceRequest map[shared.ClientID]shared.Resources, availCommonPool shared.Resources) shared.PresidentReturnContent {
-	_, budgetRuleInPay := p.GameState.RulesInfo.CurrentRulesInPlay["president_over_budget"]
-	actionOverBudget := p.parent.getRoleBudget(shared.President)-
-		p.parent.getIIGOConfig().ReplyAllocationRequestsActionCost < 0
+	p.c.clientPrint("Evaluating allocations...")
+	var avgResource, avgRequest shared.Resources
+	var allocSum, commonPoolThreshold, sumRequest float64
 
-	if budgetRuleInPay && actionOverBudget {
-		return shared.PresidentReturnContent{
-			ContentType: shared.PresidentAllocation,
-			ActionTaken: false,
-		}
+	// Make sure resource skew is greater than 1
+	resourceSkew := math.Max(float64(p.c.params.resourcesSkew), 1)
+
+	resources := make(map[shared.ClientID]shared.Resources)
+	allocations := make(map[shared.ClientID]float64)
+	allocWeights := make(map[shared.ClientID]float64)
+	finalAllocations := make(map[shared.ClientID]shared.Resources)
+
+	for island, req := range resourceRequest {
+		sumRequest += float64(req)
+		resources[island] = shared.Resources(float64(p.c.declaredResources[island]) * math.Pow(resourceSkew, ((100-p.c.trustScore[island])/100)))
 	}
 
-	//Separate and sort allocations
-	criticalRequests := make(map[shared.ClientID]shared.Resources)
-	for islandID, request := range resourceRequest {
-		if p.parent.ServerReadHandle.GetGameState().ClientLifeStatuses[islandID] == shared.Critical {
-			criticalRequests[islandID] = request
-		}
-	}
-	sortedCriticalIslands := rankByAllocationSize(criticalRequests)
+	p.c.clientPrint("Resource requests: %+v\n", resourceRequest)
+	p.c.clientPrint("Their resource estimation: %+v\n", p.c.declaredResources)
+	p.c.clientPrint("Our estimation: %+v\n", resources)
+	p.c.clientPrint("Trust Scores: %+v\n", p.c.trustScore)
 
-	nonCriticalRequests := make(map[shared.ClientID]shared.Resources)
-	for islandID, request := range resourceRequest {
-		if p.parent.ServerReadHandle.GetGameState().ClientLifeStatuses[islandID] == shared.Alive {
-			nonCriticalRequests[islandID] = request
-		}
-	}
-	sortedNonCriticalRequests := rankByAllocationSize(nonCriticalRequests)
+	avgRequest = findAvgNoTails(resourceRequest)
+	avgResource = findAvgNoTails(resources)
 
-	finalAllocation := make(map[shared.ClientID]shared.Resources)
-
-	//Limit resources to be distributed from the CP in a linear manner
-	disasterPrediction := p.parent.obs.iifoObs.finalDisasterPrediction
-	resourceThreshold := shared.Resources(0)
-	if p.parent.getSeason() != 1 && disasterPrediction.Confidence >= 0.5 {
-		if disasterPrediction.TimeLeft != 0 {
-			resourceThreshold = shared.Resources(
-				float64(p.parent.getTurn()) * float64(p.parent.getMinimumThreshold()) /
-					(float64(disasterPrediction.TimeLeft) + float64(p.parent.getTurn())))
-		} else if disasterPrediction.TimeLeft == 0 {
-			resourceThreshold = p.parent.getMinimumThreshold()
-		}
-	}
-	remainingResources := p.parent.getCommonPool() - resourceThreshold
-
-	//Allocations for critical islands
-	for i := 0; i < len(sortedCriticalIslands); i++ {
-		limitedAllocation := p.allocationLimiter(sortedCriticalIslands[i])
-		if remainingResources-limitedAllocation >= 0 {
-			finalAllocation[sortedCriticalIslands[i].Key] = limitedAllocation
-			remainingResources -= limitedAllocation
+	for island, resource := range resources {
+		allocations[island] = float64(avgRequest) + p.c.params.equity*(float64(avgResource-resource)+float64(resourceRequest[island]-avgRequest))
+		// p.c.clientPrint("Allocation for island %v: %f", island, allocations[island])
+		if island == p.c.GetID() {
+			allocations[island] += math.Max(float64(resourceRequest[island])-allocations[island]*p.c.params.selfishness, 0)
 		} else {
-			finalAllocation[sortedCriticalIslands[i].Key] = shared.Resources(0)
+			allocations[island] = math.Min(float64(resourceRequest[island]), allocations[island]) // to prevent overallocating
+			allocations[island] = math.Max(allocations[island], 0)
 		}
 	}
 
-	//Allocations for non-critical islands
-	for i := 0; i < len(sortedNonCriticalRequests); i++ {
-		limitedAllocation := p.allocationLimiter(sortedNonCriticalRequests[i])
-		if remainingResources-limitedAllocation >= 0 {
-			finalAllocation[sortedNonCriticalRequests[i].Key] = limitedAllocation
-			remainingResources -= limitedAllocation
-		} else {
-			finalAllocation[sortedNonCriticalRequests[i].Key] = shared.Resources(0)
+	// Collect weights
+	for _, alloc := range allocations {
+		allocSum += alloc
+	}
+	// Normalise
+	for island, alloc := range allocations {
+		allocWeights[island] = alloc / allocSum
+	}
+	// p.c.clientPrint("Allocation wieghts: %+v\n", allocWeights)
+
+	commonPoolThreshold = math.Min(float64(availCommonPool)*(1.0-p.c.params.riskFactor), sumRequest)
+	if p.c.params.saveCriticalIsland {
+		for island := range resourceRequest {
+			if resources[island] < p.c.criticalThreshold {
+				finalAllocations[island] = shared.Resources(math.Max((allocWeights[island] * commonPoolThreshold), float64(p.c.criticalThreshold-resources[island])))
+			} else {
+				finalAllocations[island] = 0
+			}
 		}
 	}
 
+	for island := range resourceRequest {
+		if finalAllocations[island] == 0 {
+			if sumRequest < commonPoolThreshold {
+				finalAllocations[island] = shared.Resources(math.Max(allocWeights[island]*float64(sumRequest), 0))
+			} else {
+				finalAllocations[island] = shared.Resources(math.Max(allocWeights[island]*commonPoolThreshold, 0))
+			}
+		}
+	}
+
+	p.c.clientPrint("Final allocations: %+v\n", finalAllocations)
+
+	// Curently always evaluate, would there be a time when we don't want to?
 	return shared.PresidentReturnContent{
 		ContentType: shared.PresidentAllocation,
-		ResourceMap: finalAllocation,
+		ResourceMap: finalAllocations,
 		ActionTaken: true,
 	}
 }
 
-func (p *president) allocationLimiter(request IslandRequestPair) shared.Resources {
-	ret := shared.Resources(0)
-	if request.Value*5 >= 5*p.parent.getCostOfLiving() {
-		ret = 5 * p.parent.getCostOfLiving()
+func (p *president) SetTaxationAmount(islandsResources map[shared.ClientID]shared.ResourcesReport) shared.PresidentReturnContent {
+
+	if p.c.params.adv != nil {
+		val, done := p.c.params.adv.SetTaxationAmount(islandsResources)
+		if done {
+			return val
+		}
 	}
-	//weigh by trust
-	ret = shared.Resources(float64(ret) * 2 * p.parent.getTrust(request.Key))
-	return ret
+
+	//decide if we want to run SetTaxationAmount
+	p.c.declaredResources = make(map[shared.ClientID]shared.Resources)
+	for island, report := range islandsResources {
+		if report.Reported {
+			p.c.declaredResources[island] = report.ReportedAmount
+		} else {
+			p.c.declaredResources[island] = shared.Resources(p.c.ServerReadHandle.GetGameConfig().IIGOClientConfig.AssumedResourcesNoReport)
+		}
+	}
+	gameState := p.c.BaseClient.ServerReadHandle.GetGameState()
+	// Aim to have 100 in common pool after iigo run
+	resourcesRequired := math.Max((float64(p.c.getIIGOCost())+100.0)-float64(gameState.CommonPool), 0)
+	p.c.clientPrint("Resources required in common pool %f", resourcesRequired)
+
+	if len(p.c.globalDisasterPredictions) > int(p.c.ServerReadHandle.GetGameState().Turn) {
+		disaster := p.c.globalDisasterPredictions[int(p.c.ServerReadHandle.GetGameState().Turn)]
+		resourcesRequired += disaster.Magnitude - safeDivFloat(float64(gameState.CommonPool), float64(disaster.TimeLeft+1))
+	}
+
+	length := math.Max(float64(len(p.c.declaredResources)), 1.0)
+	AveTax := resourcesRequired / length
+	var adjustedResources []float64
+	adjustedResourcesMap := make(map[shared.ClientID]shared.Resources)
+	for island, resource := range p.c.declaredResources {
+		adjustedResource := resource * shared.Resources(math.Pow(p.c.params.resourcesSkew, (100-p.c.trustScore[island])/100))
+		adjustedResources = append(adjustedResources, float64(adjustedResource))
+		adjustedResourcesMap[island] = adjustedResource
+	}
+
+	AveAdjustedResources := getAverage(adjustedResources)
+	taxationMap := make(map[shared.ClientID]shared.Resources)
+	for island, resources := range adjustedResourcesMap {
+		taxation := shared.Resources(AveTax) + shared.Resources(p.c.params.equity)*(resources-shared.Resources(AveAdjustedResources))
+		if island == p.c.BaseClient.GetID() {
+			taxation -= shared.Resources(p.c.params.selfishness) * taxation
+		}
+		taxation = shared.Resources(math.Max(math.Round(float64(taxation)), 0.0))
+		taxationMap[island] = taxation
+	}
+	p.c.clientPrint("tax amounts : %v\n", taxationMap)
+	return shared.PresidentReturnContent{
+		ContentType: shared.PresidentTaxation,
+		ResourceMap: taxationMap,
+		ActionTaken: true,
+	}
 }
 
 // PickRuleToVote chooses a rule proposal from all the proposals
 func (p *president) PickRuleToVote(rulesProposals []rules.RuleMatrix) shared.PresidentReturnContent {
-	_, budgetRuleInPay := p.GameState.RulesInfo.CurrentRulesInPlay["president_over_budget"]
-	actionOverBudget := p.parent.getRoleBudget(shared.President)-
-		p.parent.getIIGOConfig().GetRuleForSpeakerActionCost < 0
 
-	if budgetRuleInPay && actionOverBudget {
-		return shared.PresidentReturnContent{
-			ContentType: shared.PresidentRuleProposal,
-			ActionTaken: false,
-		}
-	}
+	// Convert to map
+	proposals := rmListToMap(rulesProposals)
 
-	// DefaultContentType: No rules were proposed by the islands
-	proposedRuleMatrix := rules.RuleMatrix{}
-	actionTaken := false
+	compliantProposal := p.c.generalRuleSelection(proposals)
 
-	// if some rules were proposed
-	//TODO: Pick rules close to ideals
-	if len(rulesProposals) != 0 {
-		proposedRuleMatrix = rulesProposals[rand.Intn(len(rulesProposals))]
-		actionTaken = true
-	}
-
-	return shared.PresidentReturnContent{
+	ret := shared.PresidentReturnContent{
 		ContentType:        shared.PresidentRuleProposal,
-		ProposedRuleMatrix: proposedRuleMatrix,
-		ActionTaken:        actionTaken,
+		ProposedRuleMatrix: compliantProposal,
+		ActionTaken:        true,
 	}
+
+	/*if p.c.params.complianceLevel > 0.5 {
+		return ret
+	}
+
+	ret.ProposedRuleMatrix = p.c.RuleProposal()*/
+
+	return ret
 }
 
-// SetTaxationAmount sets taxation amount for all of the living islands
-// islandsResources: map of all the living islands and their reported resources
-func (p *president) SetTaxationAmount(islandsResources map[shared.ClientID]shared.ResourcesReport) shared.PresidentReturnContent {
-	_, budgetRuleInPay := p.GameState.RulesInfo.CurrentRulesInPlay["president_over_budget"]
-	actionOverBudget := p.parent.getRoleBudget(shared.President)-
-		p.parent.getIIGOConfig().BroadcastTaxationActionCost < 0
-
-	if budgetRuleInPay && actionOverBudget {
-		return shared.PresidentReturnContent{
-			ContentType: shared.PresidentTaxation,
-			ActionTaken: false,
-		}
+func rmListToMap(lst []rules.RuleMatrix) map[string]rules.RuleMatrix {
+	ret := make(map[string]rules.RuleMatrix)
+	for _, rule := range lst {
+		ret[rule.RuleName] = rule
 	}
-
-	taxAmountMap := make(map[shared.ClientID]shared.Resources)
-
-	for clientID, clientReport := range islandsResources {
-		weAreRichThreshold := p.generateWeAreRichThreshold()
-		if p.parent.getCommonPool() > weAreRichThreshold {
-			//Excuse everyone if its not season one and there are a lot of resources
-			taxAmountMap[clientID] = shared.Resources(0)
-		} else if p.parent.ServerReadHandle.GetGameState().ClientLifeStatuses[clientID] == shared.Critical {
-			//Excuse if the client is critical
-			taxAmountMap[clientID] = shared.Resources(0)
-		} else if clientReport.Reported {
-			//Excuse if the reports have to be true and the island is poor
-			//TODO: remove magik numbers
-			_, reportTruthfulnessRuleInPay := p.parent.ServerReadHandle.GetGameState().RulesInfo.CurrentRulesInPlay["island_must_report_actual_private_resource"]
-			if reportTruthfulnessRuleInPay && clientReport.ReportedAmount*3 <= p.parent.getCostOfLiving() {
-				taxAmountMap[clientID] = shared.Resources(0)
-			} else if clientReport.ReportedAmount*1.5 <= p.parent.getCostOfLiving() {
-				taxAmountMap[clientID] = shared.Resources(0)
-			}
-			taxAmountMap[clientID] = p.generateTaxAmount(clientID, clientReport.ReportedAmount)
-		} else {
-			taxAmountMap[clientID] = 15 //flat tax rate
-		}
-
-		//Excuse ourselves if we are not fair
-		if clientID == shared.Team4 {
-			taxAmountMap[clientID] = shared.Resources(float64(taxAmountMap[clientID]) * p.parent.internalParam.fairness)
-		}
-	}
-
-	return shared.PresidentReturnContent{
-		ContentType: shared.PresidentTaxation,
-		ResourceMap: taxAmountMap,
-		ActionTaken: true,
-	}
-}
-
-func (p *president) generateWeAreRichThreshold() shared.Resources {
-	disasterPrediction := p.parent.obs.iifoObs.finalDisasterPrediction
-	if p.parent.getSeason() == 1 {
-		return p.parent.getMinimumThreshold()
-	} else {
-		return shared.Resources(disasterPrediction.Magnitude * disasterPrediction.Confidence)
-	}
-}
-
-func (p *president) generateTaxAmount(clientID shared.ClientID, clientReport shared.Resources) shared.Resources {
-	if p.parent.getSeason() == 1 {
-		//Static tax for when there is little information
-		return 0.2 * clientReport
-	}
-	disasterPrediction := p.parent.obs.iifoObs.finalDisasterPrediction
-	var averageTax shared.Resources
-	if disasterPrediction.TimeLeft == 0 {
-		averageTax = shared.Resources((disasterPrediction.Magnitude - float64(p.parent.getCommonPool())) / p.numIslandsAlive())
-	} else {
-		averageTax = shared.Resources((disasterPrediction.Magnitude - float64(p.parent.getCommonPool())) /
-			(p.numIslandsAlive()) * float64(disasterPrediction.TimeLeft))
-	}
-	return averageTax
-
-}
-
-// PaySpeaker pays the speaker a salary.
-func (p *president) PaySpeaker() shared.PresidentReturnContent {
-	SpeakerSalaryRule, ok := p.GameState.RulesInfo.CurrentRulesInPlay["salary_cycle_speaker"]
-	var SpeakerSalary shared.Resources = 0
-	if ok {
-		SpeakerSalary = shared.Resources(SpeakerSalaryRule.ApplicableMatrix.At(0, 1))
-	}
-	return shared.PresidentReturnContent{
-		ContentType:   shared.PresidentSpeakerSalary,
-		SpeakerSalary: SpeakerSalary,
-		ActionTaken:   true,
-	}
-}
-
-// CallSpeakerElection is called by the executive to decide on power-transfer
-func (p *president) CallSpeakerElection(monitoring shared.MonitorResult, turnsInPower int, allIslands []shared.ClientID) shared.ElectionSettings {
-	//Compliance with budget rule
-	_, budgetRuleInPay := p.GameState.RulesInfo.CurrentRulesInPlay["president_over_budget"]
-	actionOverBudget := p.parent.getRoleBudget(shared.President)-p.parent.getIIGOConfig().AppointNextSpeakerActionCost < 0
-
-	if budgetRuleInPay && actionOverBudget {
-		return shared.ElectionSettings{
-			VotingMethod:  shared.InstantRunoff,
-			IslandsToVote: allIslands,
-			HoldElection:  false,
-		}
-	}
-
-	//Compliance with election rule
-	_, electionRuleInPay := p.GameState.RulesInfo.CurrentRulesInPlay["roles_must_hold_election"]
-	speakerOverTerm := p.parent.getTurnsInPower(shared.Speaker) >
-		p.parent.getTermLength(shared.Speaker)
-	if electionRuleInPay {
-		if speakerOverTerm {
-			return shared.ElectionSettings{
-				VotingMethod:  shared.InstantRunoff,
-				IslandsToVote: allIslands,
-				HoldElection:  true,
-			}
-		}
-		return shared.ElectionSettings{
-			VotingMethod:  shared.InstantRunoff,
-			IslandsToVote: allIslands,
-			HoldElection:  false,
-		}
-	}
-
-	//If we get this far there are no rules that say whether we should hold an election
-	//Hold an election if they broke some rules
-	if monitoring.Result {
-		//If we trust the judge
-		if p.parent.getTrust(p.parent.ServerReadHandle.GetGameState().JudgeID) > 0.4 {
-			return shared.ElectionSettings{
-				VotingMethod:  shared.InstantRunoff,
-				IslandsToVote: allIslands,
-				HoldElection:  true,
-			}
-		}
-	}
-
-	//If we dont trust the Speaker
-	if p.parent.getTrust(p.parent.ServerReadHandle.GetGameState().SpeakerID) < 0.4 {
-		return shared.ElectionSettings{
-			VotingMethod:  shared.InstantRunoff,
-			IslandsToVote: allIslands,
-			HoldElection:  true,
-		}
-	}
-	return shared.ElectionSettings{
-		VotingMethod:  shared.InstantRunoff,
-		IslandsToVote: allIslands,
-		HoldElection:  false,
-	}
-
-}
-
-// DecideNextSpeaker returns the ID of chosen next Speaker
-func (p *president) DecideNextSpeaker(winner shared.ClientID) shared.ClientID {
-	//No manipulate. Our agent trust democracy
-	_, resultRuleInPay := p.parent.ServerReadHandle.GetGameState().RulesInfo.CurrentRulesInPlay["must_appoint_elected_island"]
-	if !resultRuleInPay {
-		if p.parent.getTrust(winner) < 0.3 {
-			//Assign at random if we dont like the result
-			return p.selectRandomAliveIsland(winner)
-		}
-		return winner
-	}
-	return winner
-}
-
-func (p *president) numIslandsAlive() float64 {
-	ret := 0
-	for _, alive := range p.parent.ServerReadHandle.GetGameState().ClientLifeStatuses {
-		if alive == shared.Alive {
-			ret++
-		}
-	}
-	return float64(ret)
-}
-
-func (p *president) selectRandomAliveIsland(winner shared.ClientID) shared.ClientID {
-	var islands []shared.ClientID
-	for islandID, status := range p.parent.ServerReadHandle.GetGameState().ClientLifeStatuses {
-		if status != shared.Dead {
-			islands = append(islands, islandID)
-		}
-	}
-	if len(islands) > 0 {
-		return islands[rand.Intn(int(p.numIslandsAlive()))]
-	}
-	return winner
+	return ret
 }

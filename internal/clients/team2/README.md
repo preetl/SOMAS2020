@@ -1,16 +1,19 @@
-# Team 2: 
+# Team 3: PittStop
 
 ### Core Responsibilities
-Overall structure of the game(design) and messaging between clients (infra)
+Design and infrastructure of Rules and Inter Island Governmental Organisation (IIGO)
 
 ### Team Members
 
 | Rep | Name      | Shortcode | Github ID |
 | - | --------- | --------- | --------- |
-|   Design| Yannis Panagis | yp717 | yp717 |
-| Infra | Eirik Albrektsen | ea5117 | Eirikalb |
-|| Carla Arus | ca2217 | carlarus99 |
-|| Augusta Munn | ahm116 | ahm116 |
-|| Hamish Campbell | hc2316 | Hamish989 |
-|| Edward Turner | ent17 | eddt123 |
-|| Hardik Agarwal| ha6017|ha6017|
+| Design | Ezgi Ozyilkan | eo2117 | ezgimez |
+| Infra | Preet Lalli | pl1516 | preetl |
+| Infra  | Neelesh Ravichandran | nr1817 | Neelesh99 |
+| | Tharusha Amarasinghe | ta2617 | tharuraht |
+| | Victor Badoual | vb3917 | victorbadoual |
+| | Noe Guisset | nbg17 | kubitz |
+| | Nidhi Jaju| nj2317 | nidhijaju |
+| | Ramon Jutaviriya | rj917 | ramon15749 |
+| | Kunal Katarya | kk3415 | kunjzk  |
+| | Agrim Manchanda | am9717 | agrimmanchanda|

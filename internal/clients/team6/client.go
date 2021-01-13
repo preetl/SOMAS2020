@@ -2,35 +2,14 @@
 package team6
 
 import (
-	"math"
-
+	"github.com/SOMAS2020/SOMAS2020/internal/clients/team6/adv"
+	"github.com/SOMAS2020/SOMAS2020/internal/clients/team6/dynamics"
 	"github.com/SOMAS2020/SOMAS2020/internal/common/baseclient"
-	"github.com/SOMAS2020/SOMAS2020/internal/common/disasters"
 	"github.com/SOMAS2020/SOMAS2020/internal/common/rules"
 	"github.com/SOMAS2020/SOMAS2020/internal/common/shared"
 )
 
-const (
-	id = shared.Team6
-)
-
-type client struct {
-	*baseclient.BaseClient
-
-	friendship            Friendship
-	trustRank             TrustRank
-	giftsSentHistory      GiftsSentHistory
-	giftsReceivedHistory  GiftsReceivedHistory
-	giftsRequestedHistory GiftsRequestedHistory
-	disastersHistory      DisastersHistory
-	disasterPredictions   DisasterPredictions
-	forageHistory         ForageHistory
-	taxDemanded           shared.Resources
-	sanctionDemanded      shared.Resources
-	allocationAllowed     shared.Resources
-
-	clientConfig ClientConfig
-}
+const printTeam6Logs = false
 
 // DefaultClient creates the client that will be used for most simulations. All
 // other personalities are considered alternatives. To give a different
@@ -42,131 +21,146 @@ func DefaultClient(id shared.ClientID) baseclient.Client {
 	return NewClient(id)
 }
 
-// NewClient creates a client objects for our island
-func NewClient(clientID shared.ClientID) baseclient.Client {
-	return &client{
-		BaseClient:   baseclient.NewClient(clientID),
-		clientConfig: getClientConfig(),
-	}
+type client struct {
+	*baseclient.BaseClient
+	ourSpeaker   speaker
+	ourJudge     judge
+	ourPresident president
+
+	// ## Gifting ##
+
+	acceptedGifts        map[shared.ClientID]int
+	requestedGiftAmounts map[shared.ClientID]shared.GiftRequest
+	receivedResponses    []shared.GiftResponse
+	sentGiftHistory      map[shared.ClientID]shared.Resources
+	giftOpinions         map[shared.ClientID]int
+
+	// ## Trust ##
+
+	theirTrustScore  map[shared.ClientID]float64
+	trustScore       map[shared.ClientID]float64
+	trustMapAgg      map[shared.ClientID][]float64
+	theirTrustMapAgg map[shared.ClientID][]float64
+
+	// ## Role performance ##
+
+	judgePerformance     map[shared.ClientID]int
+	speakerPerformance   map[shared.ClientID]int
+	presidentPerformance map[shared.ClientID]int
+
+	// ## IIGO ##
+	ruleVotedOn string
+
+	// ## Game state & History ##
+	// Minimum value for island to avoid critical
+	criticalThreshold shared.Resources
+
+	// declaredResources is a map of all declared island resources
+	declaredResources map[shared.ClientID]shared.Resources
+	//disasterPredictions gives a list of predictions by island for each turn
+	disasterPredictions []map[shared.ClientID]shared.DisasterPrediction
+	// Final disaster prediction obtained by our prediction and other islands' prediction weighted by trust and confidence
+	globalDisasterPredictions []shared.DisasterPrediction
+	pastDisastersList         baseclient.PastDisastersList
+
+	// ## Compliance ##
+
+	timeSinceCaught uint
+	numTimeCaught   uint
+	compliance      float64
+
+	// allVotes stores the votes of each island for/against each rule
+	allVotes map[string]map[shared.ClientID]bool
+
+	// params is list of island wide function parameters
+	params islandParams
+
+	locationService locator
+	// iigoInfo caches information regarding iigo in the current turn
+	iigoInfo iigoCommunicationInfo
+
+	// Last broken rules
+	oldBrokenRules []string
+
+	localVariableCache map[rules.VariableFieldName]rules.VariableValuePair
+
+	localInputsCache map[rules.VariableFieldName]dynamics.Input
+	// last sanction score cache to determine wheter or not we have been caugth in the last turn
+	lastSanction shared.IIGOSanctionsScore
+
+	forageData map[shared.ForageType][]ForageData
+
+	minimumResourcesWeWant shared.Resources
+
+	initialResourcesAtStartOfGame shared.Resources
+
+	account dynamics.Account
 }
 
-func (c *client) Initialise(serverReadHandle baseclient.ServerReadHandle) {
-	c.ServerReadHandle = serverReadHandle
-	c.LocalVariableCache = rules.CopyVariableMap(serverReadHandle.GetGameState().RulesInfo.VariableMap)
-
-	c.friendship = Friendship{}
-	c.trustRank = TrustRank{}
-	c.giftsSentHistory = GiftsSentHistory{}
-	c.giftsReceivedHistory = GiftsReceivedHistory{}
-	c.giftsRequestedHistory = GiftsRequestedHistory{}
-	c.disastersHistory = DisastersHistory{}
-	c.disasterPredictions = DisasterPredictions{}
-	c.forageHistory = ForageHistory{}
-	c.taxDemanded = 0.0
-	c.sanctionDemanded = 0.0
-	c.allocationAllowed = 0.0
-
-	for _, team := range shared.TeamIDs {
-		if team == c.GetID() {
-			c.friendship[team] = c.clientConfig.maxFriendship
-			c.trustRank[team] = 1
-
-			continue
-		}
-
-		c.friendship[team] = 50
-		c.trustRank[team] = 0.5
-	}
-
-	c.updateConfig()
+type islandParams struct {
+	equity                  float64
+	complianceLevel         float64
+	resourcesSkew           float64
+	saveCriticalIsland      bool
+	selfishness             float64
+	riskFactor              float64
+	friendliness            float64
+	sensitivity             float64
+	giftInflationPercentage float64
+	advType                 adv.Spec
+	adv                     adv.Adv
+	controlLoop             bool
+	//minimumInvestment			float64	// When fish foraging is implemented
 }
 
-func (c *client) StartOfTurn() {
-	defer c.Logf("There are %v islands left in this game", c.getNumOfAliveIslands())
-
-	for _, team := range shared.TeamIDs[:] {
-		if team == c.GetID() {
-			continue
-		}
-		if c.giftsReceivedHistory[team] == 0 && c.ServerReadHandle.GetGameState().Turn != 1 {
-			c.lowerFriendshipLevel(team, 99*c.clientConfig.friendshipChangingRate)
-		}
-	}
-
-	c.updateConfig()
+type ruleVoteInfo struct {
+	// ourVote needs to be updated accordingly
+	ourVote         shared.RuleVoteType
+	resultAnnounced bool
+	// true -> yes, false -> no
+	result bool
 }
 
-// updateConfig will be called at the start of each turn to set the newest config
-func (c *client) updateConfig() {
-	defer c.Logf("Configuration status: %v", c.clientConfig)
-
-	minThreshold := c.ServerReadHandle.GetGameConfig().MinimumResourceThreshold
-	costOfLiving := c.ServerReadHandle.GetGameConfig().CostOfLiving
-
-	updatedConfig := ClientConfig{
-		minFriendship:          c.clientConfig.minFriendship,
-		maxFriendship:          c.clientConfig.maxFriendship,
-		friendshipChangingRate: c.clientConfig.friendshipChangingRate,
-		selfishThreshold:       minThreshold + 3.0*costOfLiving + c.ServerReadHandle.GetGameState().CommonPool/12.0,
-		normalThreshold:        minThreshold + 12.0*costOfLiving + c.ServerReadHandle.GetGameState().CommonPool/6.0,
-		multiplier:             c.clientConfig.multiplier,
-	}
-
-	c.clientConfig = ClientConfig(updatedConfig)
+type ForageData struct {
+	amountContributed shared.Resources
+	amountReturned    shared.Resources
+	turn              uint
+	caught            uint
 }
 
-// updateFriendship will be called every time a gift is exchanged; neg for sending, pos for receiving
-func (c *client) updateFriendship(giftAmount shared.Resources, team shared.ClientID) {
-	defer c.Logf("Friendship status: %v", c.friendship)
+type iigoCommunicationInfo struct {
+	// Retrieved fully from communications
+	// commonPoolAllocation gives resources allocated by president from requests
+	commonPoolAllocation shared.Resources
+	// taxationAmount gives tax amount decided by president
+	taxationAmount shared.Resources
+	// monitoringOutcomes stores the outcome of the monitoring of an island.
+	// key is the role being monitored.
+	// true -> correct performance, false -> incorrect performance.
+	monitoringOutcomes map[shared.Role]bool
+	// monitoringDeclared stores as key the role being monitored and whether it was actually monitored.
+	monitoringDeclared map[shared.Role]bool
+	//Role IDs at the start of the turn
+	startOfTurnPresidentID shared.ClientID
+	startOfTurnJudgeID     shared.ClientID
+	startOfTurnSpeakerID   shared.ClientID
 
-	friendshipChangingRate := c.clientConfig.friendshipChangingRate
-	receivedSum := c.giftsReceivedHistory[team]
-	sentSum := c.giftsSentHistory[team]
-	requestedSum := c.giftsReceivedHistory[team]
+	// Struct containing sanction information
+	sanctions *sanctionInfo
 
-	if sentSum+requestedSum+receivedSum == 0 {
-		return
-	}
+	// Below need to be at least partially updated by our functions
 
-	if receivedSum >= sentSum && giftAmount > 0 {
-		c.raiseFriendshipLevel(team, friendshipChangingRate*FriendshipLevel(receivedSum-sentSum+giftAmount))
-	} else if receivedSum < sentSum && giftAmount < 0 {
-		c.lowerFriendshipLevel(team, friendshipChangingRate*FriendshipLevel(sentSum-receivedSum-giftAmount))
-	}
-
+	// ruleVotingResults is a map of rules and the corresponding info
+	ruleVotingResults map[string]*ruleVoteInfo
 }
 
-func (c *client) DisasterNotification(dR disasters.DisasterReport, effects disasters.DisasterEffects) {
-	defer c.Logf("Trust rank status: %v", c.trustRank)
-
-	currTurn := c.ServerReadHandle.GetGameState().Turn
-
-	disasterhappening := baseclient.DisasterInfo{
-		CoordinateX: dR.X,
-		CoordinateY: dR.Y,
-		Magnitude:   dR.Magnitude,
-		Turn:        currTurn,
-	}
-
-	ourDiff := math.Abs(c.disasterPredictions[c.GetID()].Magnitude - disasterhappening.Magnitude)
-	theirDiff := float64(0)
-
-	for team, prediction := range c.disasterPredictions {
-		theirDiff = math.Abs(prediction.Magnitude - disasterhappening.Magnitude)
-
-		if ourDiff != 0 {
-			c.trustRank[team] += (ourDiff - theirDiff) / ourDiff
-		} else {
-			c.trustRank[team] = c.trustRank[team] / float64(2)
-		}
-
-		// sets the caps of trust ranks from 0 to 1
-		if c.trustRank[team] < 0 {
-			c.trustRank[team] = 0
-		} else if c.trustRank[team] > 1 {
-			c.trustRank[team] = 1
-		}
-	}
-
-	c.disastersHistory = append(c.disastersHistory, disasterhappening)
+type sanctionInfo struct {
+	// tierInfo provides tiers and sanction score required to get to that tier
+	tierInfo map[shared.IIGOSanctionsTier]shared.IIGOSanctionsScore
+	// rulePenalties provides sanction score given for breaking each rule
+	rulePenalties map[string]shared.IIGOSanctionsScore
+	// islandSanctions stores sanction tier of each island (but not score)
+	islandSanctions map[shared.ClientID]shared.IIGOSanctionsTier
+	// ourSanction is the sanction score for our island
+	ourSanction shared.IIGOSanctionsScore
 }

@@ -1,15 +1,19 @@
-# Team 6: PittDance
+# Team 3: PittStop
 
 ### Core Responsibilities
-Design and implement voting rules. 
+Design and infrastructure of Rules and Inter Island Governmental Organisation (IIGO)
 
 ### Team Members
 
 | Rep | Name      | Shortcode | Github ID |
 | - | --------- | --------- | --------- |
-| Design | Yiqiang Huang | yh2520 | walkeronwater |
-| Design | Chatchanan Varojpipath | cv520 | Tae1541 |
-| Infra  | Ning Zhang | nz120 | Diregie-J |
-| | Irfan Kustandy | ik1020 | ikust98 |
-| | Gefei Shi | gs1620 | SZECR7 |
-| | Junhao Zhang | jz2820 | Regnigh |
+| Design | Ezgi Ozyilkan | eo2117 | ezgimez |
+| Infra | Preet Lalli | pl1516 | preetl |
+| Infra  | Neelesh Ravichandran | nr1817 | Neelesh99 |
+| | Tharusha Amarasinghe | ta2617 | tharuraht |
+| | Victor Badoual | vb3917 | victorbadoual |
+| | Noe Guisset | nbg17 | kubitz |
+| | Nidhi Jaju| nj2317 | nidhijaju |
+| | Ramon Jutaviriya | rj917 | ramon15749 |
+| | Kunal Katarya | kk3415 | kunjzk  |
+| | Agrim Manchanda | am9717 | agrimmanchanda|

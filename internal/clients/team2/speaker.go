@@ -6,38 +6,87 @@ import (
 	"github.com/SOMAS2020/SOMAS2020/internal/common/shared"
 )
 
-type Speaker struct {
+type speaker struct {
+	// Base implementation
 	*baseclient.BaseSpeaker
+	// Our client
 	c *client
 }
 
-// DecideVote calls a vote on the rule decided on during DecideAgenda
-// In the first Num turns or if the last sanction is far away, count all the votes
-func (s *Speaker) DecideVote(ruleMatrix rules.RuleMatrix, aliveClients []shared.ClientID) shared.SpeakerReturnContent {
+// Override functions here, see president.go for examples
+
+func (s *speaker) PayJudge() shared.SpeakerReturnContent {
+	// Use the base implementation
+	return s.BaseSpeaker.PayJudge()
+}
+
+func (s *speaker) DecideAgenda(ruleMat rules.RuleMatrix) shared.SpeakerReturnContent {
+	return s.BaseSpeaker.DecideAgenda(ruleMat)
+}
+
+func (s *speaker) DecideVote(ruleMatrix rules.RuleMatrix, aliveClients []shared.ClientID) shared.SpeakerReturnContent {
 	var chosenClients []shared.ClientID
-	chosenClients = append(chosenClients, s.c.GetID())
-
 	for _, islandID := range aliveClients {
-		// do not add our own island twice
-		if islandID == s.c.GetID() {
-			continue
-		}
-
-		if lastSanctionTurn, ok := s.c.islandSanctions[islandID]; ok {
-			if s.c.gameState().Turn <= 10 || lastSanctionTurn.Turn <= s.c.gameState().Turn-10 {
-				chosenClients = append(chosenClients, islandID)
-			}
-		} else {
+		if s.c.iigoInfo.sanctions.islandSanctions[islandID] != shared.NoSanction {
 			chosenClients = append(chosenClients, islandID)
 		}
-
 	}
+	/*if s.c.shouldICheat() {
+		for _, islandID := range aliveClients {
+			if s.c.trustScore[islandID] > 35 {
+				chosenClients = append(chosenClients, islandID)
+			}
+		}
+	}*/
 
-	// chosen client is never null - sneaky fix
 	return shared.SpeakerReturnContent{
 		ContentType:          shared.SpeakerVote,
 		ParticipatingIslands: chosenClients,
 		RuleMatrix:           ruleMatrix,
 		ActionTaken:          true,
 	}
+
+}
+
+func (s *speaker) DecideAnnouncement(ruleMatrix rules.RuleMatrix, result bool) shared.SpeakerReturnContent {
+
+	/*if s.c.shouldICheat() {
+		res := s.c.iigoInfo.ruleVotingResults[ruleMatrix.RuleName].ourVote
+		if res == shared.Approve {
+			result = true
+		} else {
+			result = false
+		}
+	}*/
+
+	return shared.SpeakerReturnContent{
+		ContentType:  shared.SpeakerAnnouncement,
+		RuleMatrix:   ruleMatrix,
+		VotingResult: result,
+		ActionTaken:  true,
+	}
+
+}
+
+func (s *speaker) CallJudgeElection(monitoring shared.MonitorResult, turnsInPower int, allIslands []shared.ClientID) shared.ElectionSettings {
+	if s.c.params.adv != nil {
+		ret, done := s.c.params.adv.CallJudgeElection(monitoring, turnsInPower, allIslands)
+		if done {
+			return ret
+		}
+	}
+
+	return s.BaseSpeaker.CallJudgeElection(monitoring, turnsInPower, allIslands)
+}
+
+// DecideNextJudge returns the ID of chosen next Judge
+// OPTIONAL: override to manipulate the result of the election
+func (s *speaker) DecideNextJudge(winner shared.ClientID) shared.ClientID {
+	if s.c.params.adv != nil {
+		ret, done := s.c.params.adv.DecideNextJudge(winner)
+		if done {
+			return ret
+		}
+	}
+	return winner
 }

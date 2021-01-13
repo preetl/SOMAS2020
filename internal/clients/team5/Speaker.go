@@ -2,108 +2,91 @@ package team5
 
 import (
 	"github.com/SOMAS2020/SOMAS2020/internal/common/baseclient"
-	"github.com/SOMAS2020/SOMAS2020/internal/common/roles"
 	"github.com/SOMAS2020/SOMAS2020/internal/common/rules"
 	"github.com/SOMAS2020/SOMAS2020/internal/common/shared"
 )
 
 type speaker struct {
+	// Base implementation
 	*baseclient.BaseSpeaker
+	// Our client
 	c *client
 }
 
-func (c *client) GetClientSpeakerPointer() roles.Speaker {
-	c.Logf("Team 5 became speaker, drop the mic")
-	return &speaker{c: c, BaseSpeaker: &baseclient.BaseSpeaker{GameState: c.ServerReadHandle.GetGameState()}}
-}
+// Override functions here, see president.go for examples
 
-// Pay Judge based on the status of our own wealth
-// If we are not doing verywell, pay Judge less so we have more in the CP to take from
 func (s *speaker) PayJudge() shared.SpeakerReturnContent {
-	JudgeSalaryRule, ok := s.GameState.RulesInfo.CurrentRulesInPlay["salary_cycle_judge"]
-	var JudgeSalary shared.Resources = 0
-	if ok {
-		JudgeSalary = shared.Resources(JudgeSalaryRule.ApplicableMatrix.At(0, 1))
-	}
-	if s.c.wealth() == jeffBezos {
-		return shared.SpeakerReturnContent{
-			ContentType: shared.SpeakerJudgeSalary,
-			JudgeSalary: JudgeSalary,
-			ActionTaken: true,
-		}
-	} else if s.c.wealth() == middleClass {
-		JudgeSalary = JudgeSalary * 0.8
-	} else {
-		JudgeSalary = JudgeSalary * 0.5
-	}
-
-	return shared.SpeakerReturnContent{
-		ContentType: shared.SpeakerJudgeSalary,
-		JudgeSalary: JudgeSalary,
-		ActionTaken: true,
-	}
+	// Use the base implementation
+	return s.BaseSpeaker.PayJudge()
 }
 
-//DecideAgenda the interface implementation and example of a well behaved Speaker
-//who sets the vote to be voted on to be the rule the President provided
-func (s *speaker) DecideAgenda(ruleMatrix rules.RuleMatrix) shared.SpeakerReturnContent {
-	return shared.SpeakerReturnContent{
-		ContentType: shared.SpeakerAgenda,
-		RuleMatrix:  ruleMatrix,
-		ActionTaken: true,
-	}
+func (s *speaker) DecideAgenda(ruleMat rules.RuleMatrix) shared.SpeakerReturnContent {
+	return s.BaseSpeaker.DecideAgenda(ruleMat)
 }
 
-//DecideVote is the interface implementation and example of a well behaved Speaker
-//who calls a vote on the proposed rule and asks all available islands to vote.
-//Return an empty string or empty []shared.ClientID for no vote to occur
 func (s *speaker) DecideVote(ruleMatrix rules.RuleMatrix, aliveClients []shared.ClientID) shared.SpeakerReturnContent {
-	//TODO: disregard islands with sanctions
+	var chosenClients []shared.ClientID
+	for _, islandID := range aliveClients {
+		if s.c.iigoInfo.sanctions.islandSanctions[islandID] != shared.NoSanction {
+			chosenClients = append(chosenClients, islandID)
+		}
+	}
+	/*if s.c.shouldICheat() {
+		for _, islandID := range aliveClients {
+			if s.c.trustScore[islandID] > 35 {
+				chosenClients = append(chosenClients, islandID)
+			}
+		}
+	}*/
+
 	return shared.SpeakerReturnContent{
 		ContentType:          shared.SpeakerVote,
-		ParticipatingIslands: aliveClients,
+		ParticipatingIslands: chosenClients,
 		RuleMatrix:           ruleMatrix,
 		ActionTaken:          true,
 	}
+
 }
 
-//DecideAnnouncement is the interface implementation and example of a well behaved Speaker
-//A well behaved speaker announces what had been voted on and the corresponding result
-//Return "", _ for no announcement to occur
 func (s *speaker) DecideAnnouncement(ruleMatrix rules.RuleMatrix, result bool) shared.SpeakerReturnContent {
+
+	/*if s.c.shouldICheat() {
+		res := s.c.iigoInfo.ruleVotingResults[ruleMatrix.RuleName].ourVote
+		if res == shared.Approve {
+			result = true
+		} else {
+			result = false
+		}
+	}*/
+
 	return shared.SpeakerReturnContent{
 		ContentType:  shared.SpeakerAnnouncement,
 		RuleMatrix:   ruleMatrix,
 		VotingResult: result,
 		ActionTaken:  true,
 	}
+
 }
 
-// CallJudgeElection is called by the legislature to decide on power-transfer
-// COMPULSORY: decide when to call an election following relevant rulesInPlay if you wish
 func (s *speaker) CallJudgeElection(monitoring shared.MonitorResult, turnsInPower int, allIslands []shared.ClientID) shared.ElectionSettings {
-	// example implementation calls an election if monitoring was performed and the result was negative
-	// or if the number of turnsInPower exceeds 3
-	var electionsettings = shared.ElectionSettings{
-		VotingMethod:  shared.BordaCount,
-		IslandsToVote: allIslands,
-		HoldElection:  false,
+	if s.c.params.adv != nil {
+		ret, done := s.c.params.adv.CallJudgeElection(monitoring, turnsInPower, allIslands)
+		if done {
+			return ret
+		}
 	}
-	if monitoring.Performed && !monitoring.Result {
-		electionsettings.HoldElection = true
-	}
-	if turnsInPower >= 2 {
-		electionsettings.HoldElection = true
-	}
-	return electionsettings
+
+	return s.BaseSpeaker.CallJudgeElection(monitoring, turnsInPower, allIslands)
 }
 
-// if the real winner is on our bad side, then we choose our best friend
+// DecideNextJudge returns the ID of chosen next Judge
+// OPTIONAL: override to manipulate the result of the election
 func (s *speaker) DecideNextJudge(winner shared.ClientID) shared.ClientID {
-	aliveTeams := s.c.getAliveTeams(false) //not including us
-	if s.c.opinions[winner].getScore() < 0 {
-		ballot := s.c.VoteForElection(shared.President, aliveTeams)
-		winner = ballot[0] //choose the first one in Borda Vote
+	if s.c.params.adv != nil {
+		ret, done := s.c.params.adv.DecideNextJudge(winner)
+		if done {
+			return ret
+		}
 	}
 	return winner
 }

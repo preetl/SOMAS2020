@@ -2,16 +2,14 @@
 package team1
 
 import (
-	"fmt"
-	"math/rand"
-
+	"github.com/SOMAS2020/SOMAS2020/internal/clients/team1/adv"
+	"github.com/SOMAS2020/SOMAS2020/internal/clients/team1/dynamics"
 	"github.com/SOMAS2020/SOMAS2020/internal/common/baseclient"
-	"github.com/SOMAS2020/SOMAS2020/internal/common/config"
-	"github.com/SOMAS2020/SOMAS2020/internal/common/disasters"
-	"github.com/SOMAS2020/SOMAS2020/internal/common/gamestate"
 	"github.com/SOMAS2020/SOMAS2020/internal/common/rules"
 	"github.com/SOMAS2020/SOMAS2020/internal/common/shared"
 )
+
+const printTeam1Logs = false
 
 // DefaultClient creates the client that will be used for most simulations. All
 // other personalities are considered alternatives. To give a different
@@ -20,207 +18,149 @@ import (
 // someone on the simulation team that you would like it to be included in
 // testing
 func DefaultClient(id shared.ClientID) baseclient.Client {
-	return &client{
-		BaseClient:    baseclient.NewClient(id),
-		BasePresident: &baseclient.BasePresident{},
-		config: team1Config{
-			anxietyThreshold:               50,
-			randomForageTurns:              0,
-			flipForageScale:                0.3,
-			forageContributionCapPercent:   0.2,
-			forageContributionNoisePercent: 0.01,
-			evadeTaxes:                     false,
-			kickstartTaxPercent:            0,
-			desperateStealAmount:           30,
-			maxOpinion:                     10,
-			soloDeerHuntContribution:       40,
-		},
-
-		forageHistory:     ForageHistory{},
-		reportedResources: map[shared.ClientID]bool{},
-		teamOpinions:      map[shared.ClientID]Opinion{},
-		receivedOffer:     map[shared.ClientID]shared.Resources{},
-		trustTeams:        map[shared.ClientID]float64{},
-	}
+	return NewClient(id)
 }
 
-type EmotionalState int
-type Opinion int
-
-const (
-	Normal EmotionalState = iota
-	Anxious
-	Desperate
-)
-
-func (st EmotionalState) String() string {
-	strings := [...]string{"Normal", "Anxious", "Desperate"}
-	if st >= 0 && int(st) < len(strings) {
-		return strings[st]
-	}
-	return fmt.Sprintf("UNKNOWN EmotionalState '%v'", int(st))
-}
-
-type team1Config struct {
-	// If resources go below this limit, go into "desperation" mode
-	anxietyThreshold shared.Resources
-
-	//** Foraging **//
-
-	// At the start of the game forage randomly for this many turns. If true,
-	// pay some initial tax to help get the first IIGO running
-	randomForageTurns uint
-
-	// flipForageScale scales the amount contributed by flipForage
-	flipForageScale float64
-
-	// forageContributionCapPercent is the maximum percent of current resources we
-	// will use for foraging
-	forageContributionCapPercent float64
-
-	// desperateStealAmount is the max randomness we will add to our foraging
-	// amount as a percentage of current resources
-	forageContributionNoisePercent float64
-
-	// soloDeerHuntContribution is the amount of resources that will be used to
-	// hunt if no one hunted last turn
-	soloDeerHuntContribution shared.Resources
-
-	//** Taxes **//
-
-	// If true, ignore requests for taxes
-	evadeTaxes bool
-
-	// If true, pay some initial tax to help get the first IIGO running
-	kickstartTaxPercent shared.Resources
-
-	//** Allocation **//
-
-	// commonPoolResourceRequestScale scales the request made to the commonPool.
-	// The basis is the cost of living
-	resourceRequestScale float64
-
-	// desperateStealAmount is the amount the agent will steal from the commonPool
-	desperateStealAmount shared.Resources
-
-	//** Opinions **//
-
-	// maxOpinion is the boundary where we either give resources without questioning
-	// or we refuse to give them resources.
-	maxOpinion Opinion
-}
-
-// client is Lucy.
 type client struct {
 	*baseclient.BaseClient
-	*baseclient.BasePresident
+	ourSpeaker   speaker
+	ourJudge     judge
+	ourPresident president
 
-	forageHistory        ForageHistory
-	expectedForageReward shared.Resources
+	// ## Gifting ##
 
-	reportedResources map[shared.ClientID]bool
+	acceptedGifts        map[shared.ClientID]int
+	requestedGiftAmounts map[shared.ClientID]shared.GiftRequest
+	receivedResponses    []shared.GiftResponse
+	sentGiftHistory      map[shared.ClientID]shared.Resources
+	giftOpinions         map[shared.ClientID]int
 
-	// IITO/Gifts
-	teamOpinions  map[shared.ClientID]Opinion
-	receivedOffer map[shared.ClientID]shared.Resources
+	// ## Trust ##
 
-	// allocation is the president's response to your last common pool resource request
-	allocation shared.Resources
+	theirTrustScore  map[shared.ClientID]float64
+	trustScore       map[shared.ClientID]float64
+	trustMapAgg      map[shared.ClientID][]float64
+	theirTrustMapAgg map[shared.ClientID][]float64
 
-	// Disaster
-	disasterInfo             disaster
-	othersDisasterPrediction shared.ReceivedDisasterPredictionsDict
-	// The higher the score, the more trustworthy they are
-	trustTeams map[shared.ClientID]float64
+	// ## Role performance ##
 
-	// Foraging
-	forageType shared.ForageType
+	judgePerformance     map[shared.ClientID]int
+	speakerPerformance   map[shared.ClientID]int
+	presidentPerformance map[shared.ClientID]int
 
-	config team1Config
+	// ## IIGO ##
+	ruleVotedOn string
+
+	// ## Game state & History ##
+	// Minimum value for island to avoid critical
+	criticalThreshold shared.Resources
+
+	// declaredResources is a map of all declared island resources
+	declaredResources map[shared.ClientID]shared.Resources
+	//disasterPredictions gives a list of predictions by island for each turn
+	disasterPredictions []map[shared.ClientID]shared.DisasterPrediction
+	// Final disaster prediction obtained by our prediction and other islands' prediction weighted by trust and confidence
+	globalDisasterPredictions []shared.DisasterPrediction
+	pastDisastersList         baseclient.PastDisastersList
+
+	// ## Compliance ##
+
+	timeSinceCaught uint
+	numTimeCaught   uint
+	compliance      float64
+
+	// allVotes stores the votes of each island for/against each rule
+	allVotes map[string]map[shared.ClientID]bool
+
+	// params is list of island wide function parameters
+	params islandParams
+
+	locationService locator
+	// iigoInfo caches information regarding iigo in the current turn
+	iigoInfo iigoCommunicationInfo
+
+	// Last broken rules
+	oldBrokenRules []string
+
+	localVariableCache map[rules.VariableFieldName]rules.VariableValuePair
+
+	localInputsCache map[rules.VariableFieldName]dynamics.Input
+	// last sanction score cache to determine wheter or not we have been caugth in the last turn
+	lastSanction shared.IIGOSanctionsScore
+
+	forageData map[shared.ForageType][]ForageData
+
+	minimumResourcesWeWant shared.Resources
+
+	initialResourcesAtStartOfGame shared.Resources
+
+	account dynamics.Account
 }
 
-func (c client) emotionalState() EmotionalState {
-	ci := c.gameState().ClientInfo
-	switch {
-	case ci.LifeStatus == shared.Critical:
-		return Desperate
-	case ci.Resources < c.config.anxietyThreshold:
-		return Anxious
-	default:
-		return Normal
-	}
+type islandParams struct {
+	equity                  float64
+	complianceLevel         float64
+	resourcesSkew           float64
+	saveCriticalIsland      bool
+	selfishness             float64
+	riskFactor              float64
+	friendliness            float64
+	sensitivity             float64
+	giftInflationPercentage float64
+	advType                 adv.Spec
+	adv                     adv.Adv
+	controlLoop             bool
+	//minimumInvestment			float64	// When fish foraging is implemented
 }
 
-func (c *client) StartOfTurn() {
-	c.Logf("Emotional state: %v", c.emotionalState())
-	c.Logf("Resources: %v", c.gameState().ClientInfo.Resources)
-
-	// Initialise President with gamestate
-	c.BasePresident.GameState = c.gameState()
-	c.LocalVariableCache = map[rules.VariableFieldName]rules.VariableValuePair{}
-	// This should only happen at the start of the game.
-	if c.gameState().Turn == 1 {
-		c.disasterInfo.meanDisaster = disasters.DisasterReport{}
-		c.forageType = shared.DeerForageType
-		if c.gameConfig().DisasterConfig.DisasterPeriod.Valid {
-			c.disasterInfo.estimatedDDay = c.gameConfig().DisasterConfig.DisasterPeriod.Value
-		} else {
-			c.disasterInfo.estimatedDDay = uint(rand.Intn(10))
-		}
-
-		c.trustTeams = make(map[shared.ClientID]float64)
-		c.othersDisasterPrediction = make(shared.ReceivedDisasterPredictionsDict)
-	}
-
-	// if opinionTeams is empty. Initialise it.
-	if len(c.teamOpinions) <= 0 {
-		for _, clientID := range shared.TeamIDs {
-			c.teamOpinions[clientID] = 0
-		}
-	}
-
-	// Reset the map
-	c.receivedOffer = nil
-	if c.receivedOffer == nil {
-		c.receivedOffer = make(map[shared.ClientID]shared.Resources)
-	}
-
-	// Reset alive list
-	if len(c.aliveClients()) == 0 {
-		c.Logf("I'm all alone :c")
-	}
+type ruleVoteInfo struct {
+	// ourVote needs to be updated accordingly
+	ourVote         shared.RuleVoteType
+	resultAnnounced bool
+	// true -> yes, false -> no
+	result bool
 }
 
-/********************/
-/***    Helpers     */
-/********************/
-
-func (c *client) forageHistorySize() uint {
-	length := uint(0)
-	for _, lst := range c.forageHistory {
-		for _, outcome := range lst {
-			if outcome.participant == c.GetID() {
-				length++
-			}
-		}
-	}
-	return length
+type ForageData struct {
+	amountContributed shared.Resources
+	amountReturned    shared.Resources
+	turn              uint
+	caught            uint
 }
 
-func (c *client) gameState() gamestate.ClientGameState {
-	return c.BaseClient.ServerReadHandle.GetGameState()
+type iigoCommunicationInfo struct {
+	// Retrieved fully from communications
+	// commonPoolAllocation gives resources allocated by president from requests
+	commonPoolAllocation shared.Resources
+	// taxationAmount gives tax amount decided by president
+	taxationAmount shared.Resources
+	// monitoringOutcomes stores the outcome of the monitoring of an island.
+	// key is the role being monitored.
+	// true -> correct performance, false -> incorrect performance.
+	monitoringOutcomes map[shared.Role]bool
+	// monitoringDeclared stores as key the role being monitored and whether it was actually monitored.
+	monitoringDeclared map[shared.Role]bool
+	//Role IDs at the start of the turn
+	startOfTurnPresidentID shared.ClientID
+	startOfTurnJudgeID     shared.ClientID
+	startOfTurnSpeakerID   shared.ClientID
+
+	// Struct containing sanction information
+	sanctions *sanctionInfo
+
+	// Below need to be at least partially updated by our functions
+
+	// ruleVotingResults is a map of rules and the corresponding info
+	ruleVotingResults map[string]*ruleVoteInfo
 }
 
-func (c *client) gameConfig() config.ClientConfig {
-	return c.BaseClient.ServerReadHandle.GetGameConfig()
-}
-
-func (c *client) aliveClients() []shared.ClientID {
-	result := []shared.ClientID{}
-	for clientID, status := range c.gameState().ClientLifeStatuses {
-		if status != shared.Dead && clientID != c.GetID() {
-			result = append(result, clientID)
-		}
-	}
-	return result
+type sanctionInfo struct {
+	// tierInfo provides tiers and sanction score required to get to that tier
+	tierInfo map[shared.IIGOSanctionsTier]shared.IIGOSanctionsScore
+	// rulePenalties provides sanction score given for breaking each rule
+	rulePenalties map[string]shared.IIGOSanctionsScore
+	// islandSanctions stores sanction tier of each island (but not score)
+	islandSanctions map[shared.ClientID]shared.IIGOSanctionsTier
+	// ourSanction is the sanction score for our island
+	ourSanction shared.IIGOSanctionsScore
 }
