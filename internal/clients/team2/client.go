@@ -1,169 +1,15 @@
-// Package team2 contains code for team 2's client implementation
+// Package team3 contains code for team 3's client implementation
 package team2
 
 import (
+	"github.com/SOMAS2020/SOMAS2020/internal/clients/team3/adv"
+	"github.com/SOMAS2020/SOMAS2020/internal/clients/team3/dynamics"
 	"github.com/SOMAS2020/SOMAS2020/internal/common/baseclient"
-	"github.com/SOMAS2020/SOMAS2020/internal/common/disasters"
 	"github.com/SOMAS2020/SOMAS2020/internal/common/rules"
 	"github.com/SOMAS2020/SOMAS2020/internal/common/shared"
 )
 
-type AgentStrategy uint
-
-const (
-	Selfish AgentStrategy = iota
-	FairSharer
-	Altruist
-)
-
-type IslandEmpathies map[shared.ClientID]AgentStrategy
-
-type ExpectationReality struct {
-	exp  int
-	real int
-}
-
-type Situation string
-
-const (
-	PresidentOp Situation = "President"
-	JudgeOp     Situation = "Judge"
-	RoleOpinion Situation = "RoleOpinion"
-	Disaster    Situation = "Disaster"
-	Gifts       Situation = "Gifts"
-)
-
-type Opinion struct {
-	Histories    map[Situation][]int
-	Performances map[Situation]ExpectationReality
-}
-
-type ForageInfo struct {
-	DecisionMade      shared.ForageDecision
-	ResourcesObtained shared.Resources
-}
-
-type GiftInfo struct {
-	requested shared.GiftRequest
-	gifted    shared.GiftOffer
-	reason    shared.AcceptReason
-}
-
-type GiftExchange struct {
-	IslandRequest map[uint]GiftInfo
-	OurRequest    map[uint]GiftInfo
-}
-
-type DisasterOccurrence struct {
-	Turn   uint
-	Report disasters.DisasterReport
-}
-
-type PredictionInfo struct {
-	Prediction shared.DisasterPrediction
-	Turn       uint
-}
-
-type IslandSanctionInfo struct {
-	Turn   uint
-	Tier   int
-	Amount int
-}
-
-type CommonPoolInfo struct {
-	tax             shared.Resources
-	requestedToPres shared.Resources
-	allocatedByPres shared.Resources
-	takenFromCP     shared.Resources
-}
-
-// A set of constants that define tuning parameters
-type clientConfig struct {
-	TuningParamK                     float64
-	VarianceCapTimeRemaining         float64
-	TuningParamG                     float64
-	VarianceCapMagnitude             float64
-	BaseResourcesToGiveDivisor       shared.Resources
-	InitialThresholdProportionGuess  float64
-	TimeLeftIncreaseDisProtection    uint
-	DisasterSoonProtectionMultiplier float64
-	DefaultContribution              shared.Resources
-	SelfishStartTurns                uint
-	SwitchToSelfishFactor            float64
-	SwitchToAltruistFactor           float64
-	FairShareFactorOfAvToGive        float64
-	AltruistFactorOfAvToGive         float64
-	ConfidenceRetrospectFactor       float64
-	ForageDecisionThreshold          float64
-	PatientTurns                     uint
-	SlightRiskForageDivisor          shared.Resources
-	HelpCritOthersDivisor            shared.Resources
-	InitialDisasterTurnGuess         uint
-	CombinedDisasterPred             shared.DisasterPrediction
-	InitialCommonPoolThresholdGuess  shared.Resources
-	TargetRequestGift                shared.Resources
-	MaxGiftOffersMultiplier          shared.Resources
-	AltruistMultiplier               shared.Resources
-	FreeRiderMultipler               shared.Resources
-	FairSharerMultipler              shared.Resources
-}
-
-type OpinionHist map[shared.ClientID]Opinion
-type PredictionsHist map[shared.ClientID][]PredictionInfo
-type ForagingReturnsHist map[shared.ClientID][]ForageInfo
-type GiftHist map[shared.ClientID]GiftExchange
-type CommonPoolHistory map[uint]shared.Resources
-type ResourcesLevelHistory map[uint]shared.Resources
-type DisasterHistory []DisasterOccurrence
-type IslandSanctions map[shared.ClientID]IslandSanctionInfo
-type TierLevels map[int]int
-type SanctionHist map[shared.ClientID][]IslandSanctionInfo
-type PresCommonPoolHist map[shared.ClientID]map[uint]CommonPoolInfo
-
-// DisasterVulnerabilityDict is a map from island ID to an islands DVP
-type DisasterVulnerabilityDict map[shared.ClientID]float64
-
-type StrategyHistory map[uint]AgentStrategy
-
-type client struct {
-	*baseclient.BaseClient
-
-	// TODO: naming convention on history objects is inconsistent
-	islandEmpathies      IslandEmpathies
-	commonPoolHistory    CommonPoolHistory
-	resourceLevelHistory ResourcesLevelHistory
-	opinionHist          OpinionHist
-	predictionHist       PredictionsHist
-	foragingReturnsHist  ForagingReturnsHist
-	giftHist             GiftHist
-	disasterHistory      DisasterHistory
-	sanctionHist         SanctionHist
-	presCommonPoolHist   PresCommonPoolHist
-	strategyHistory      StrategyHistory
-
-	currStrategy  AgentStrategy
-	currPresident President
-	currJudge     Judge
-	currSpeaker   Speaker
-
-	islandDVPs DisasterVulnerabilityDict
-
-	// Define a global variable that holds the last prediction we shared
-	AgentDisasterPred    shared.DisasterPredictionInfo
-	CombinedDisasterPred shared.DisasterPrediction
-
-	taxAmount            shared.Resources
-	commonPoolAllocation shared.Resources
-	islandSanctions      IslandSanctions
-	tierLevels           TierLevels
-
-	config clientConfig
-
-	declaredResources map[shared.ClientID]shared.Resources
-
-	lastForageType   shared.ForageType
-	lastForageAmount shared.Resources
-}
+const printTeam3Logs = false
 
 // DefaultClient creates the client that will be used for most simulations. All
 // other personalities are considered alternatives. To give a different
@@ -172,82 +18,149 @@ type client struct {
 // someone on the simulation team that you would like it to be included in
 // testing
 func DefaultClient(id shared.ClientID) baseclient.Client {
-	return NewClient(id);
+	return NewClient(id)
 }
 
-func NewClient(clientID shared.ClientID) baseclient.Client {
-	return &client{
-		BaseClient:           baseclient.NewClient(clientID),
-		commonPoolHistory:    CommonPoolHistory{},
-		resourceLevelHistory: ResourcesLevelHistory{},
-		strategyHistory:      StrategyHistory{},
-		opinionHist:          OpinionHist{},
-		predictionHist:       PredictionsHist{},
-		foragingReturnsHist:  ForagingReturnsHist{},
-		giftHist:             GiftHist{},
-		islandEmpathies:      IslandEmpathies{},
-		sanctionHist:         SanctionHist{},
-		tierLevels:           TierLevels{},
-		islandSanctions:      IslandSanctions{},
-		presCommonPoolHist:   PresCommonPoolHist{},
-		disasterHistory:      DisasterHistory{},
-		config: clientConfig{
-			TuningParamK:                     1.0,
-			PatientTurns:                     2,
-			VarianceCapTimeRemaining:         10000,
-			TuningParamG:                     1.0,
-			VarianceCapMagnitude:             10000,
-			BaseResourcesToGiveDivisor:       4.0,
-			InitialThresholdProportionGuess:  0.3,
-			TimeLeftIncreaseDisProtection:    3.0,
-			DisasterSoonProtectionMultiplier: 1.2,
-			DefaultContribution:              20,
-			SelfishStartTurns:                3,
-			SwitchToSelfishFactor:            0.3,
-			SwitchToAltruistFactor:           0.9,
-			FairShareFactorOfAvToGive:        1.0,
-			AltruistFactorOfAvToGive:         2.0,
-			ConfidenceRetrospectFactor:       0.5,
-			ForageDecisionThreshold:          0.6,
-			SlightRiskForageDivisor:          2.0,
-			HelpCritOthersDivisor:            2.0,
-			InitialDisasterTurnGuess:         7.0,
-			InitialCommonPoolThresholdGuess:  100, // this value is meaningless for now
-			TargetRequestGift:                1.5,
-			MaxGiftOffersMultiplier:          0.5,
-			AltruistMultiplier:               7.2,
-			FreeRiderMultipler:               4.8,
-			FairSharerMultipler:              6.4,
-		},
-	}
+type client struct {
+	*baseclient.BaseClient
+	ourSpeaker   speaker
+	ourJudge     judge
+	ourPresident president
+
+	// ## Gifting ##
+
+	acceptedGifts        map[shared.ClientID]int
+	requestedGiftAmounts map[shared.ClientID]shared.GiftRequest
+	receivedResponses    []shared.GiftResponse
+	sentGiftHistory      map[shared.ClientID]shared.Resources
+	giftOpinions         map[shared.ClientID]int
+
+	// ## Trust ##
+
+	theirTrustScore  map[shared.ClientID]float64
+	trustScore       map[shared.ClientID]float64
+	trustMapAgg      map[shared.ClientID][]float64
+	theirTrustMapAgg map[shared.ClientID][]float64
+
+	// ## Role performance ##
+
+	judgePerformance     map[shared.ClientID]float64
+	speakerPerformance   map[shared.ClientID]float64
+	presidentPerformance map[shared.ClientID]float64
+
+	// ## IIGO ##
+	ruleVotedOn string
+
+	// ## Game state & History ##
+	// Minimum value for island to avoid critical
+	criticalThreshold shared.Resources
+
+	// declaredResources is a map of all declared island resources
+	declaredResources map[shared.ClientID]shared.Resources
+	//disasterPredictions gives a list of predictions by island for each turn
+	disasterPredictions []map[shared.ClientID]shared.DisasterPrediction
+	// Final disaster prediction obtained by our prediction and other islands' prediction weighted by trust and confidence
+	globalDisasterPredictions []shared.DisasterPrediction
+	pastDisastersList         baseclient.PastDisastersList
+
+	// ## Compliance ##
+
+	timeSinceCaught uint
+	numTimeCaught   uint
+	compliance      float64
+
+	// allVotes stores the votes of each island for/against each rule
+	allVotes map[string]map[shared.ClientID]bool
+
+	// params is list of island wide function parameters
+	params islandParams
+
+	locationService locator
+	// iigoInfo caches information regarding iigo in the current turn
+	iigoInfo iigoCommunicationInfo
+
+	// Last broken rules
+	oldBrokenRules []string
+
+	localVariableCache map[rules.VariableFieldName]rules.VariableValuePair
+
+	localInputsCache map[rules.VariableFieldName]dynamics.Input
+	// last sanction score cache to determine wheter or not we have been caugth in the last turn
+	lastSanction shared.IIGOSanctionsScore
+
+	forageData map[shared.ForageType][]ForageData
+
+	minimumResourcesWeWant shared.Resources
+
+	initialResourcesAtStartOfGame shared.Resources
+
+	account dynamics.Account
 }
 
-func (c *client) Initialise(serverReadHandle baseclient.ServerReadHandle) {
-	c.ServerReadHandle = serverReadHandle
-	c.LocalVariableCache = rules.CopyVariableMap(c.gameState().RulesInfo.VariableMap)
+type islandParams struct {
+	equity                  float64
+	complianceLevel         float64
+	resourcesSkew           float64
+	saveCriticalIsland      bool
+	selfishness             float64
+	riskFactor              float64
+	friendliness            float64
+	sensitivity             float64
+	giftInflationPercentage float64
+	advType                 adv.Spec
+	adv                     adv.Adv
+	controlLoop             bool
+	//minimumInvestment			float64	// When fish foraging is implemented
+}
 
-	// We should probably initialise out empathy level
-	for clientID := range c.gameState().ClientLifeStatuses {
-		c.giftHist[clientID] = GiftExchange{
-			IslandRequest: map[uint]GiftInfo{},
-			OurRequest:    map[uint]GiftInfo{},
-		}
-	}
+type ruleVoteInfo struct {
+	// ourVote needs to be updated accordingly
+	ourVote         shared.RuleVoteType
+	resultAnnounced bool
+	// true -> yes, false -> no
+	result bool
+}
 
-	// Set the initial strategy to selfish (can put anything here)
-	c.currStrategy = Selfish
+type ForageData struct {
+	amountContributed shared.Resources
+	amountReturned    shared.Resources
+	turn              uint
+	caught            uint
+}
 
-	// Initialise Disaster Prediction variables
-	c.CombinedDisasterPred = shared.DisasterPrediction{}
-	c.AgentDisasterPred = shared.DisasterPredictionInfo{}
-	c.strategyHistory = StrategyHistory{}
+type iigoCommunicationInfo struct {
+	// Retrieved fully from communications
+	// commonPoolAllocation gives resources allocated by president from requests
+	commonPoolAllocation shared.Resources
+	// taxationAmount gives tax amount decided by president
+	taxationAmount shared.Resources
+	// monitoringOutcomes stores the outcome of the monitoring of an island.
+	// key is the role being monitored.
+	// true -> correct performance, false -> incorrect performance.
+	monitoringOutcomes map[shared.Role]bool
+	// monitoringDeclared stores as key the role being monitored and whether it was actually monitored.
+	monitoringDeclared map[shared.Role]bool
+	//Role IDs at the start of the turn
+	startOfTurnPresidentID shared.ClientID
+	startOfTurnJudgeID     shared.ClientID
+	startOfTurnSpeakerID   shared.ClientID
 
-	// Compute DVP for each Island based on Geography
-	c.islandDVPs = DisasterVulnerabilityDict{}
-	c.getIslandDVPs(c.gameState().Geography)
+	// Struct containing sanction information
+	sanctions *sanctionInfo
 
-	// Initialise Roles
-	c.currSpeaker = Speaker{c: c}
-	c.currJudge = Judge{c: c}
-	c.currPresident = President{c: c}
+	// Below need to be at least partially updated by our functions
+
+	// ruleVotingResults is a map of rules and the corresponding info
+	ruleVotingResults map[string]*ruleVoteInfo
+}
+
+type sanctionInfo struct {
+	// tierInfo provides tiers and sanction score required to get to that tier
+	tierInfo map[shared.IIGOSanctionsTier]shared.IIGOSanctionsScore
+	// rulePenalties provides sanction score given for breaking each rule
+	rulePenalties map[string]shared.IIGOSanctionsScore
+	// islandSanctions stores sanction tier of each island (but not score)
+	islandSanctions map[shared.ClientID]shared.IIGOSanctionsTier
+	// ourSanction is the sanction score for our island
+	ourSanction shared.IIGOSanctionsScore
 }

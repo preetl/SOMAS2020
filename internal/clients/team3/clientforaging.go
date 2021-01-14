@@ -2,6 +2,8 @@ package team3
 
 import (
 	"math"
+	"math/rand"
+
 	// "github.com/SOMAS2020/SOMAS2020/internal/common/baseclient"
 	// "github.com/SOMAS2020/SOMAS2020/internal/common/roles"
 	// "github.com/SOMAS2020/SOMAS2020/internal/common/rules"
@@ -78,11 +80,18 @@ func (c *client) DecideForage() (shared.ForageDecision, error) {
 
 	finalForagingInvestment := foragingInvestment * coef
 
-	if c.getLocalResources() < c.minimumResourcesWeWant || c.computeRecentExpectedROI(forageType) < 100 {
+	if (c.getLocalResources() < c.minimumResourcesWeWant || c.computeRecentExpectedROI(forageType) < 100) && c.computeRecentExpectedROI(forageType) != 0 {
 		finalForagingInvestment = 0.01
 	}
 
 	c.Logf("coef: %v, sumOfCaught: %v, numberOfHunter: %v, decay: %v", coef, sumOfCaught, numberOfHunters, decay)
+
+	if c.ServerReadHandle.GetGameState().Turn < 5 {
+		return shared.ForageDecision{
+			Type: forageType,
+			Contribution: shared.Resources(rand.Intn(15)),
+		}, nil
+	}
 
 	return shared.ForageDecision{
 		Type:         forageType,
@@ -95,7 +104,7 @@ func (c *client) computeRecentExpectedROI(forageType shared.ForageType) float64 
 	var numberOfROI uint
 
 	for _, forage := range c.forageData[forageType] {
-		if uint(forage.turn) == c.ServerReadHandle.GetGameState().Turn-1 || uint(forage.turn) == c.ServerReadHandle.GetGameState().Turn-2 {
+		if uint(forage.turn) == c.ServerReadHandle.GetGameState().Turn-1 {
 			if forage.amountContributed != 0 {
 				sumOfROI += float64((forage.amountReturned / forage.amountContributed) * 100)
 				numberOfROI++

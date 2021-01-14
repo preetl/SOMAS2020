@@ -1,0 +1,1216 @@
+2021/01/13 21:56:50 [SERVER]: start runTurn
+2021/01/13 21:56:50 [SERVER]: TURN: 1, Season: 1
+2021/01/13 21:56:50 [SERVER]: start startOfTurn
+2021/01/13 21:56:50 [Team1]: [TEAM3]: Trust Score Map: map[Team2:50 Team3:50 Team4:50 Team5:50 Team6:50]
+2021/01/13 21:56:50 [Team1]: Our Status: {Resources:50 LifeStatus:Alive CriticalConsecutiveTurnsCounter:0}
+2021/01/13 21:56:50 [Team2]: [TEAM3]: Trust Score Map: map[Team1:50 Team3:50 Team4:50 Team5:50 Team6:50]
+2021/01/13 21:56:50 [Team2]: Our Status: {Resources:50 LifeStatus:Alive CriticalConsecutiveTurnsCounter:0}
+2021/01/13 21:56:50 [Team3]: [TEAM3]: Trust Score Map: map[Team1:50 Team2:50 Team4:50 Team5:50 Team6:50]
+2021/01/13 21:56:50 [Team3]: Our Status: {Resources:50 LifeStatus:Alive CriticalConsecutiveTurnsCounter:0}
+2021/01/13 21:56:50 [Team4]: [TEAM3]: Trust Score Map: map[Team1:50 Team2:50 Team3:50 Team5:50 Team6:50]
+2021/01/13 21:56:50 [Team4]: Our Status: {Resources:50 LifeStatus:Alive CriticalConsecutiveTurnsCounter:0}
+2021/01/13 21:56:50 [Team5]: [TEAM3]: Trust Score Map: map[Team1:50 Team2:50 Team3:50 Team4:50 Team6:50]
+2021/01/13 21:56:50 [Team5]: Our Status: {Resources:50 LifeStatus:Alive CriticalConsecutiveTurnsCounter:0}
+2021/01/13 21:56:50 [Team6]: [TEAM3]: Trust Score Map: map[Team1:50 Team2:50 Team3:50 Team4:50 Team5:50]
+2021/01/13 21:56:50 [Team6]: Our Status: {Resources:50 LifeStatus:Alive CriticalConsecutiveTurnsCounter:0}
+2021/01/13 21:56:50 [SERVER]: finish startOfTurn
+2021/01/13 21:56:50 [SERVER]: start runOrgs
+2021/01/13 21:56:50 [SERVER]: start runIIGO
+2021/01/13 21:56:50 [SERVER]: President Team3, Speaker Team1, Judge Team5
+2021/01/13 21:56:50 [SERVER]: Common pool resources insufficient for executiveBranch broadcastTaxation
+2021/01/13 21:56:50 [SERVER]: finish runIIGO
+2021/01/13 21:56:50 [SERVER]: start runIIFO
+2021/01/13 21:56:50 [SERVER]: start runPredictionSession
+2021/01/13 21:56:50 [Team5]: Final Prediction: [{1 1 1 0 41.666666666666664}]
+2021/01/13 21:56:50 [Team6]: Final Prediction: [{1 1 1 0 41.666666666666664}]
+2021/01/13 21:56:50 [Team1]: Final Prediction: [{1 1 1 0 41.666666666666664}]
+2021/01/13 21:56:50 [Team2]: Final Prediction: [{1 1 1 0 41.666666666666664}]
+2021/01/13 21:56:50 [Team3]: Final Prediction: [{1 1 1 0 41.666666666666664}]
+2021/01/13 21:56:50 [Team4]: Final Prediction: [{1 1 1 0 41.666666666666664}]
+2021/01/13 21:56:50 [SERVER]: finish runPredictionSession
+2021/01/13 21:56:50 [SERVER]: Run Forage Predictions
+2021/01/13 21:56:50 [SERVER]: Getting Forage Information
+2021/01/13 21:56:50 [SERVER]: Distributing Forage Information
+2021/01/13 21:56:50 [SERVER]: Finish Running Forage Predictions
+2021/01/13 21:56:50 [SERVER]: finish runIIFO
+2021/01/13 21:56:50 [SERVER]: start runIITO
+2021/01/13 21:56:50 [SERVER]: start runGiftSession
+2021/01/13 21:56:50 [SERVER]: [IITO]: Gifts to Team5 from Team6: 6.25
+2021/01/13 21:56:50 [SERVER]: [IITO]: Gifts to Team3 from Team1: 6.25
+2021/01/13 21:56:50 [SERVER]: [IITO]: Gifts to Team1 from Team2: 6.25
+2021/01/13 21:56:50 [SERVER]: [IITO]: Gifts to Team5 from Team3: 6.25
+2021/01/13 21:56:50 [SERVER]: [IITO]: Gifts to Team5 from Team4: 6.25
+2021/01/13 21:56:50 [SERVER]: [IITO]: Gifts to Team1 from Team5: 6.25
+2021/01/13 21:56:50 [SERVER]: finish runGiftSession
+2021/01/13 21:56:50 [SERVER]: start runIntendedContributionSession
+2021/01/13 21:56:50 [SERVER]: finish runIntendedContributionSession
+2021/01/13 21:56:50 [SERVER]: finish runIITO
+2021/01/13 21:56:50 [SERVER]: finish runOrgs
+2021/01/13 21:56:50 [SERVER]: start endOfTurn
+2021/01/13 21:56:50 [SERVER]: start runIIGOAllocations
+2021/01/13 21:56:50 [SERVER]: finish runIIGOAllocations
+2021/01/13 21:56:50 [SERVER]: start runForage
+2021/01/13 21:56:50 [Team6]: coef: 0.1, sumOfCaught: 0, numberOfHunter: 0, decay: 0
+2021/01/13 21:56:50 [Team1]: coef: 0.1, sumOfCaught: 0, numberOfHunter: 0, decay: 0
+2021/01/13 21:56:50 [Team2]: coef: 0.1, sumOfCaught: 0, numberOfHunter: 0, decay: 0
+2021/01/13 21:56:50 [Team3]: coef: 0.1, sumOfCaught: 0, numberOfHunter: 0, decay: 0
+2021/01/13 21:56:50 [Team4]: coef: 0.1, sumOfCaught: 0, numberOfHunter: 0, decay: 0
+2021/01/13 21:56:50 [Team5]: coef: 0.1, sumOfCaught: 0, numberOfHunter: 0, decay: 0
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team5 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Took 0.01 from Team5 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team6 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Took 0.01 from Team6 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team1 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Took 0.01 from Team1 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team2 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Took 0.01 from Team2 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team3 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Took 0.01 from Team3 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team4 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Took 0.01 from Team4 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: start runDeerHunt
+2021/01/13 21:56:50 [SERVER]: Trying to give 0 to Team5 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Gave 0 to Team5 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Trying to give 0 to Team6 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Gave 0 to Team6 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Trying to give 0 to Team1 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Gave 0 to Team1 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Trying to give 0 to Team2 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Gave 0 to Team2 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Trying to give 0 to Team3 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Gave 0 to Team3 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Trying to give 0 to Team4 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Gave 0 to Team4 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Deer hunt report: {"ForageType":"DeerForageType","InputResources":0.060000000000000005,"ParticipantContributions":{"Team1":0.01,"Team2":0.01,"Team3":0.01,"Team4":0.01,"Team5":0.01,"Team6":0.01},"NumberCaught":0,"TotalUtility":0,"CatchSizes":[],"Turn":1}
+2021/01/13 21:56:50 [SERVER]: Updating deer population after 0 deer hunted
+2021/01/13 21:56:50 [SERVER]: [DEERPOPULATION]: P(t): 20.00. 	Population after 0 deer hunted: 20, 	population at end of turn (after regeneration): 20
+2021/01/13 21:56:50 [SERVER]: finish runDeerHunt
+2021/01/13 21:56:50 [SERVER]: finish runForage
+2021/01/13 21:56:50 [SERVER]: start runIIFOEndOfTurn
+2021/01/13 21:56:50 [SERVER]: finish runIIFOEndOfTurn
+2021/01/13 21:56:50 [SERVER]: start runIITOEndOfTurn
+2021/01/13 21:56:50 [SERVER]: Trying to take 6.281249999999999 from Team6 (reason: TAKE: [IITO]: Team5 received gift from Team6: 6.281249999999999)
+2021/01/13 21:56:50 [SERVER]: Took 6.281249999999999 from Team6 (reason: TAKE: [IITO]: Team5 received gift from Team6: 6.281249999999999)
+2021/01/13 21:56:50 [SERVER]: Trying to give 6.281249999999999 to Team5 (reason: GIVE: [IITO]: Team5 received gift from Team6: 6.281249999999999)
+2021/01/13 21:56:50 [SERVER]: Gave 6.281249999999999 to Team5 (reason: GIVE: [IITO]: Team5 received gift from Team6: 6.281249999999999)
+2021/01/13 21:56:50 [Team5]: Requested: 13.589078407944248 and received: 6.281249999999999
+2021/01/13 21:56:50 [SERVER]: Trying to take 6.281249999999999 from Team1 (reason: TAKE: [IITO]: Team3 received gift from Team1: 6.281249999999999)
+2021/01/13 21:56:50 [SERVER]: Took 6.281249999999999 from Team1 (reason: TAKE: [IITO]: Team3 received gift from Team1: 6.281249999999999)
+2021/01/13 21:56:50 [SERVER]: Trying to give 6.281249999999999 to Team3 (reason: GIVE: [IITO]: Team3 received gift from Team1: 6.281249999999999)
+2021/01/13 21:56:50 [SERVER]: Gave 6.281249999999999 to Team3 (reason: GIVE: [IITO]: Team3 received gift from Team1: 6.281249999999999)
+2021/01/13 21:56:50 [Team3]: Requested: 13.589078407944248 and received: 6.281249999999999
+2021/01/13 21:56:50 [SERVER]: Trying to take 6.281249999999999 from Team2 (reason: TAKE: [IITO]: Team1 received gift from Team2: 6.281249999999999)
+2021/01/13 21:56:50 [SERVER]: Took 6.281249999999999 from Team2 (reason: TAKE: [IITO]: Team1 received gift from Team2: 6.281249999999999)
+2021/01/13 21:56:50 [SERVER]: Trying to give 6.281249999999999 to Team1 (reason: GIVE: [IITO]: Team1 received gift from Team2: 6.281249999999999)
+2021/01/13 21:56:50 [SERVER]: Gave 6.281249999999999 to Team1 (reason: GIVE: [IITO]: Team1 received gift from Team2: 6.281249999999999)
+2021/01/13 21:56:50 [Team1]: Requested: 13.589078407944248 and received: 6.281249999999999
+2021/01/13 21:56:50 [SERVER]: Trying to take 6.281249999999999 from Team3 (reason: TAKE: [IITO]: Team5 received gift from Team3: 6.281249999999999)
+2021/01/13 21:56:50 [SERVER]: Took 6.281249999999999 from Team3 (reason: TAKE: [IITO]: Team5 received gift from Team3: 6.281249999999999)
+2021/01/13 21:56:50 [SERVER]: Trying to give 6.281249999999999 to Team5 (reason: GIVE: [IITO]: Team5 received gift from Team3: 6.281249999999999)
+2021/01/13 21:56:50 [SERVER]: Gave 6.281249999999999 to Team5 (reason: GIVE: [IITO]: Team5 received gift from Team3: 6.281249999999999)
+2021/01/13 21:56:50 [Team5]: Requested: 13.589078407944248 and received: 6.281249999999999
+2021/01/13 21:56:50 [SERVER]: Trying to take 6.281249999999999 from Team4 (reason: TAKE: [IITO]: Team5 received gift from Team4: 6.281249999999999)
+2021/01/13 21:56:50 [SERVER]: Took 6.281249999999999 from Team4 (reason: TAKE: [IITO]: Team5 received gift from Team4: 6.281249999999999)
+2021/01/13 21:56:50 [SERVER]: Trying to give 6.281249999999999 to Team5 (reason: GIVE: [IITO]: Team5 received gift from Team4: 6.281249999999999)
+2021/01/13 21:56:50 [SERVER]: Gave 6.281249999999999 to Team5 (reason: GIVE: [IITO]: Team5 received gift from Team4: 6.281249999999999)
+2021/01/13 21:56:50 [Team5]: Requested: 13.589078407944248 and received: 6.281249999999999
+2021/01/13 21:56:50 [SERVER]: Trying to take 6.281249999999999 from Team5 (reason: TAKE: [IITO]: Team1 received gift from Team5: 6.281249999999999)
+2021/01/13 21:56:50 [SERVER]: Took 6.281249999999999 from Team5 (reason: TAKE: [IITO]: Team1 received gift from Team5: 6.281249999999999)
+2021/01/13 21:56:50 [SERVER]: Trying to give 6.281249999999999 to Team1 (reason: GIVE: [IITO]: Team1 received gift from Team5: 6.281249999999999)
+2021/01/13 21:56:50 [SERVER]: Gave 6.281249999999999 to Team1 (reason: GIVE: [IITO]: Team1 received gift from Team5: 6.281249999999999)
+2021/01/13 21:56:50 [Team1]: Requested: 13.589078407944248 and received: 6.281249999999999
+2021/01/13 21:56:50 [SERVER]: finish runIITOEndOfTurn
+2021/01/13 21:56:50 [SERVER]: start runIIGOTaxCommonPool
+2021/01/13 21:56:50 [SERVER]: Trying to take 3 from Team2 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Took 3 from Team2 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team2 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team2 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Trying to take 2.7 from Team3 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Took 2.7 from Team3 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team3 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team3 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Trying to take 2.43 from Team4 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Took 2.43 from Team4 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team4 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team4 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Trying to take 2.187 from Team5 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Took 2.187 from Team5 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team5 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team5 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Trying to take 1.9683 from Team6 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Took 1.9683 from Team6 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team6 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team6 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Trying to take 1.7714699999999999 from Team1 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Took 1.7714699999999999 from Team1 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team1 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team1 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: finish runIIGOTaxCommonPool
+2021/01/13 21:56:50 [SERVER]: start probeDisaster
+2021/01/13 21:56:50 [SERVER]: No disaster reported. No disaster effects.
+2021/01/13 21:56:50 [SERVER]: finish probeDisaster
+2021/01/13 21:56:50 [SERVER]: start incrementTurnAndSeason
+2021/01/13 21:56:50 [SERVER]: finish incrementTurnAndSeason
+2021/01/13 21:56:50 [SERVER]: start deductCostOfLiving
+2021/01/13 21:56:50 [SERVER]: finish deductCostOfLiving
+2021/01/13 21:56:50 [SERVER]: start updateIslandLivingStatus
+2021/01/13 21:56:50 [SERVER]: finish updateIslandLivingStatus
+2021/01/13 21:56:50 [SERVER]: finish endOfTurn
+2021/01/13 21:56:50 [SERVER]: finish runTurn
+2021/01/13 21:56:50 [SERVER]: start runTurn
+2021/01/13 21:56:50 [SERVER]: TURN: 2, Season: 1
+2021/01/13 21:56:50 [SERVER]: start startOfTurn
+2021/01/13 21:56:50 [Team1]: [TEAM3]: Trust Score Map: map[Team2:41.46156568158885 Team3:50 Team4:50 Team5:41.46156568158885 Team6:50]
+2021/01/13 21:56:50 [Team1]: Our Status: {Resources:44.49978 LifeStatus:Alive CriticalConsecutiveTurnsCounter:0}
+2021/01/13 21:56:50 [Team2]: [TEAM3]: Trust Score Map: map[Team1:50 Team3:50 Team4:50 Team5:50 Team6:50]
+2021/01/13 21:56:50 [Team2]: Our Status: {Resources:30.708750000000002 LifeStatus:Alive CriticalConsecutiveTurnsCounter:0}
+2021/01/13 21:56:50 [Team3]: [TEAM3]: Trust Score Map: map[Team1:41.46156568158885 Team2:50 Team4:50 Team5:50 Team6:50]
+2021/01/13 21:56:50 [Team3]: Our Status: {Resources:37.29 LifeStatus:Alive CriticalConsecutiveTurnsCounter:0}
+2021/01/13 21:56:50 [Team4]: [TEAM3]: Trust Score Map: map[Team1:50 Team2:50 Team3:50 Team5:50 Team6:50]
+2021/01/13 21:56:50 [Team4]: Our Status: {Resources:31.278750000000002 LifeStatus:Alive CriticalConsecutiveTurnsCounter:0}
+2021/01/13 21:56:50 [Team5]: [TEAM3]: Trust Score Map: map[Team1:50 Team2:50 Team3:41.46156568158885 Team4:41.46156568158885 Team6:41.46156568158885]
+2021/01/13 21:56:50 [Team5]: Our Status: {Resources:50.3655 LifeStatus:Alive CriticalConsecutiveTurnsCounter:0}
+2021/01/13 21:56:50 [Team6]: [TEAM3]: Trust Score Map: map[Team1:50 Team2:50 Team3:50 Team4:50 Team5:50]
+2021/01/13 21:56:50 [Team6]: Our Status: {Resources:31.740450000000003 LifeStatus:Alive CriticalConsecutiveTurnsCounter:0}
+2021/01/13 21:56:50 [SERVER]: finish startOfTurn
+2021/01/13 21:56:50 [SERVER]: start runOrgs
+2021/01/13 21:56:50 [SERVER]: start runIIGO
+2021/01/13 21:56:50 [SERVER]: President Team3, Speaker Team1, Judge Team5
+2021/01/13 21:56:50 [SERVER]: [EXECUTIVE]: Tax: map[Team1:29 Team2:8 Team3:7 Team4:9 Team5:35 Team6:9]
+2021/01/13 21:56:50 [SERVER]: [EXECUTIVE]: Resource Allocation: map[Team1:0 Team2:1.9429484779441943 Team3:1.382146041930301 Team4:1.8855400346122073 Team5:0 Team6:1.839039195513298]
+2021/01/13 21:56:50 [SERVER]: Common pool resources insufficient for legislativeBranch setVotingResult
+2021/01/13 21:56:50 [SERVER]: finish runIIGO
+2021/01/13 21:56:50 [SERVER]: start runIIFO
+2021/01/13 21:56:50 [SERVER]: start runPredictionSession
+2021/01/13 21:56:50 [Team2]: Final Prediction: [{1 1 1 0 41.666666666666664}]
+2021/01/13 21:56:50 [Team3]: Final Prediction: [{1 1 1 0 40.24359428026481}]
+2021/01/13 21:56:50 [Team4]: Final Prediction: [{1 1 1 0 41.666666666666664}]
+2021/01/13 21:56:50 [Team5]: Final Prediction: [{1 1 1 0 37.3974495074611}]
+2021/01/13 21:56:50 [Team6]: Final Prediction: [{1 1 1 0 41.666666666666664}]
+2021/01/13 21:56:50 [Team1]: Final Prediction: [{1 1 1 0 38.82052189386295}]
+2021/01/13 21:56:50 [SERVER]: finish runPredictionSession
+2021/01/13 21:56:50 [SERVER]: Run Forage Predictions
+2021/01/13 21:56:50 [SERVER]: Getting Forage Information
+2021/01/13 21:56:50 [SERVER]: Distributing Forage Information
+2021/01/13 21:56:50 [SERVER]: Finish Running Forage Predictions
+2021/01/13 21:56:50 [SERVER]: finish runIIFO
+2021/01/13 21:56:50 [SERVER]: start runIITO
+2021/01/13 21:56:50 [SERVER]: start runGiftSession
+2021/01/13 21:56:50 [SERVER]: [IITO]: Gifts to Team2 from Team4: 3.9098437500000003
+2021/01/13 21:56:50 [SERVER]: [IITO]: Gifts to Team2 from Team5: 4.8354129281414355
+2021/01/13 21:56:50 [SERVER]: [IITO]: Gifts to Team1 from Team5: 1.4602745718585637
+2021/01/13 21:56:50 [SERVER]: [IITO]: Gifts to Team4 from Team6: 3.9675562500000003
+2021/01/13 21:56:50 [SERVER]: [IITO]: Gifts to Team3 from Team1: 3.3744268062590868
+2021/01/13 21:56:50 [SERVER]: [IITO]: Gifts to Team4 from Team1: 2.1880456937409134
+2021/01/13 21:56:50 [SERVER]: [IITO]: Gifts to Team1 from Team2: 1.4602745718585637
+2021/01/13 21:56:50 [SERVER]: [IITO]: Gifts to Team3 from Team2: 2.3783191781414366
+2021/01/13 21:56:50 [SERVER]: [IITO]: Gifts to Team2 from Team3: 4.66125
+2021/01/13 21:56:50 [SERVER]: finish runGiftSession
+2021/01/13 21:56:50 [SERVER]: start runIntendedContributionSession
+2021/01/13 21:56:50 [SERVER]: finish runIntendedContributionSession
+2021/01/13 21:56:50 [SERVER]: finish runIITO
+2021/01/13 21:56:50 [SERVER]: finish runOrgs
+2021/01/13 21:56:50 [SERVER]: start endOfTurn
+2021/01/13 21:56:50 [SERVER]: start runIIGOAllocations
+2021/01/13 21:56:50 [SERVER]: finish runIIGOAllocations
+2021/01/13 21:56:50 [SERVER]: start runForage
+2021/01/13 21:56:50 [Team5]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team5]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team5]: coef: 0.1184375, sumOfCaught: 0, numberOfHunter: 6, decay: 3
+2021/01/13 21:56:50 [Team6]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team6]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team6]: coef: 0.1184375, sumOfCaught: 0, numberOfHunter: 6, decay: 3
+2021/01/13 21:56:50 [Team1]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team1]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team1]: coef: 0.1184375, sumOfCaught: 0, numberOfHunter: 6, decay: 3
+2021/01/13 21:56:50 [Team2]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team2]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team2]: coef: 0.1184375, sumOfCaught: 0, numberOfHunter: 6, decay: 3
+2021/01/13 21:56:50 [Team3]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team3]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team3]: coef: 0.1184375, sumOfCaught: 0, numberOfHunter: 6, decay: 3
+2021/01/13 21:56:50 [Team4]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team4]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team4]: coef: 0.1184375, sumOfCaught: 0, numberOfHunter: 6, decay: 3
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team2 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Took 0.01 from Team2 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team3 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Took 0.01 from Team3 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team4 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Took 0.01 from Team4 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team5 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Took 0.01 from Team5 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team6 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Took 0.01 from Team6 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team1 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Took 0.01 from Team1 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: start runDeerHunt
+2021/01/13 21:56:50 [SERVER]: Trying to give 0 to Team6 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Gave 0 to Team6 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Trying to give 0 to Team1 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Gave 0 to Team1 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Trying to give 0 to Team2 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Gave 0 to Team2 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Trying to give 0 to Team3 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Gave 0 to Team3 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Trying to give 0 to Team4 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Gave 0 to Team4 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Trying to give 0 to Team5 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Gave 0 to Team5 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Deer hunt report: {"ForageType":"DeerForageType","InputResources":0.060000000000000005,"ParticipantContributions":{"Team1":0.01,"Team2":0.01,"Team3":0.01,"Team4":0.01,"Team5":0.01,"Team6":0.01},"NumberCaught":0,"TotalUtility":0,"CatchSizes":[],"Turn":2}
+2021/01/13 21:56:50 [SERVER]: Updating deer population after 0 deer hunted
+2021/01/13 21:56:50 [SERVER]: [DEERPOPULATION]: P(t): 20.00. 	Population after 0 deer hunted: 20, 	population at end of turn (after regeneration): 20
+2021/01/13 21:56:50 [SERVER]: finish runDeerHunt
+2021/01/13 21:56:50 [SERVER]: finish runForage
+2021/01/13 21:56:50 [SERVER]: start runIIFOEndOfTurn
+2021/01/13 21:56:50 [SERVER]: finish runIIFOEndOfTurn
+2021/01/13 21:56:50 [SERVER]: start runIITOEndOfTurn
+2021/01/13 21:56:50 [SERVER]: Trying to take 3.98739403125 from Team6 (reason: TAKE: [IITO]: Team4 received gift from Team6: 3.98739403125)
+2021/01/13 21:56:50 [SERVER]: Took 3.98739403125 from Team6 (reason: TAKE: [IITO]: Team4 received gift from Team6: 3.98739403125)
+2021/01/13 21:56:50 [SERVER]: Trying to give 3.98739403125 to Team4 (reason: GIVE: [IITO]: Team4 received gift from Team6: 3.98739403125)
+2021/01/13 21:56:50 [SERVER]: Gave 3.98739403125 to Team4 (reason: GIVE: [IITO]: Team4 received gift from Team6: 3.98739403125)
+2021/01/13 21:56:50 [Team4]: Requested: 10.176181365789049 and received: 3.98739403125
+2021/01/13 21:56:50 [SERVER]: Trying to take 3.391298940290382 from Team1 (reason: TAKE: [IITO]: Team3 received gift from Team1: 3.391298940290382)
+2021/01/13 21:56:50 [SERVER]: Took 3.391298940290382 from Team1 (reason: TAKE: [IITO]: Team3 received gift from Team1: 3.391298940290382)
+2021/01/13 21:56:50 [SERVER]: Trying to give 3.391298940290382 to Team3 (reason: GIVE: [IITO]: Team3 received gift from Team1: 3.391298940290382)
+2021/01/13 21:56:50 [SERVER]: Gave 3.391298940290382 to Team3 (reason: GIVE: [IITO]: Team3 received gift from Team1: 3.391298940290382)
+2021/01/13 21:56:50 [Team3]: Requested: 6.748853612518174 and received: 3.391298940290382
+2021/01/13 21:56:50 [SERVER]: Trying to take 2.1989859222096175 from Team1 (reason: TAKE: [IITO]: Team4 received gift from Team1: 2.1989859222096175)
+2021/01/13 21:56:50 [SERVER]: Took 2.1989859222096175 from Team1 (reason: TAKE: [IITO]: Team4 received gift from Team1: 2.1989859222096175)
+2021/01/13 21:56:50 [SERVER]: Trying to give 2.1989859222096175 to Team4 (reason: GIVE: [IITO]: Team4 received gift from Team1: 2.1989859222096175)
+2021/01/13 21:56:50 [SERVER]: Gave 2.1989859222096175 to Team4 (reason: GIVE: [IITO]: Team4 received gift from Team1: 2.1989859222096175)
+2021/01/13 21:56:50 [Team4]: Requested: 10.176181365789049 and received: 2.1989859222096175
+2021/01/13 21:56:50 [SERVER]: Trying to take 1.4675759447178562 from Team2 (reason: TAKE: [IITO]: Team1 received gift from Team2: 1.4675759447178562)
+2021/01/13 21:56:50 [SERVER]: Took 1.4675759447178562 from Team2 (reason: TAKE: [IITO]: Team1 received gift from Team2: 1.4675759447178562)
+2021/01/13 21:56:50 [SERVER]: Trying to give 1.4675759447178562 to Team1 (reason: GIVE: [IITO]: Team1 received gift from Team2: 1.4675759447178562)
+2021/01/13 21:56:50 [SERVER]: Gave 1.4675759447178562 to Team1 (reason: GIVE: [IITO]: Team1 received gift from Team2: 1.4675759447178562)
+2021/01/13 21:56:50 [Team1]: Requested: 2.920549143717128 and received: 1.4675759447178562
+2021/01/13 21:56:50 [SERVER]: Trying to take 2.3902107740321434 from Team2 (reason: TAKE: [IITO]: Team3 received gift from Team2: 2.3902107740321434)
+2021/01/13 21:56:50 [SERVER]: Took 2.3902107740321434 from Team2 (reason: TAKE: [IITO]: Team3 received gift from Team2: 2.3902107740321434)
+2021/01/13 21:56:50 [SERVER]: Trying to give 2.3902107740321434 to Team3 (reason: GIVE: [IITO]: Team3 received gift from Team2: 2.3902107740321434)
+2021/01/13 21:56:50 [SERVER]: Gave 2.3902107740321434 to Team3 (reason: GIVE: [IITO]: Team3 received gift from Team2: 2.3902107740321434)
+2021/01/13 21:56:50 [Team3]: Requested: 6.908687462598857 and received: 2.3902107740321434
+2021/01/13 21:56:50 [SERVER]: Trying to take 4.684556249999999 from Team3 (reason: TAKE: [IITO]: Team2 received gift from Team3: 4.684556249999999)
+2021/01/13 21:56:50 [SERVER]: Took 4.684556249999999 from Team3 (reason: TAKE: [IITO]: Team2 received gift from Team3: 4.684556249999999)
+2021/01/13 21:56:50 [SERVER]: Trying to give 4.684556249999999 to Team2 (reason: GIVE: [IITO]: Team2 received gift from Team3: 4.684556249999999)
+2021/01/13 21:56:50 [SERVER]: Gave 4.684556249999999 to Team2 (reason: GIVE: [IITO]: Team2 received gift from Team3: 4.684556249999999)
+2021/01/13 21:56:50 [Team2]: Requested: 10.486012353490178 and received: 4.684556249999999
+2021/01/13 21:56:50 [SERVER]: Trying to take 3.9293929687499998 from Team4 (reason: TAKE: [IITO]: Team2 received gift from Team4: 3.9293929687499998)
+2021/01/13 21:56:50 [SERVER]: Took 3.9293929687499998 from Team4 (reason: TAKE: [IITO]: Team2 received gift from Team4: 3.9293929687499998)
+2021/01/13 21:56:50 [SERVER]: Trying to give 3.9293929687499998 to Team2 (reason: GIVE: [IITO]: Team2 received gift from Team4: 3.9293929687499998)
+2021/01/13 21:56:50 [SERVER]: Gave 3.9293929687499998 to Team2 (reason: GIVE: [IITO]: Team2 received gift from Team4: 3.9293929687499998)
+2021/01/13 21:56:50 [Team2]: Requested: 10.486012353490178 and received: 3.9293929687499998
+2021/01/13 21:56:50 [SERVER]: Trying to take 1.4675759447178562 from Team5 (reason: TAKE: [IITO]: Team1 received gift from Team5: 1.4675759447178562)
+2021/01/13 21:56:50 [SERVER]: Took 1.4675759447178562 from Team5 (reason: TAKE: [IITO]: Team1 received gift from Team5: 1.4675759447178562)
+2021/01/13 21:56:50 [SERVER]: Trying to give 1.4675759447178562 to Team1 (reason: GIVE: [IITO]: Team1 received gift from Team5: 1.4675759447178562)
+2021/01/13 21:56:50 [SERVER]: Gave 1.4675759447178562 to Team1 (reason: GIVE: [IITO]: Team1 received gift from Team5: 1.4675759447178562)
+2021/01/13 21:56:50 [Team1]: Requested: 2.920549143717128 and received: 1.4675759447178562
+2021/01/13 21:56:50 [SERVER]: Trying to take 4.859589992782142 from Team5 (reason: TAKE: [IITO]: Team2 received gift from Team5: 4.859589992782142)
+2021/01/13 21:56:50 [SERVER]: Took 4.859589992782142 from Team5 (reason: TAKE: [IITO]: Team2 received gift from Team5: 4.859589992782142)
+2021/01/13 21:56:50 [SERVER]: Trying to give 4.859589992782142 to Team2 (reason: GIVE: [IITO]: Team2 received gift from Team5: 4.859589992782142)
+2021/01/13 21:56:50 [SERVER]: Gave 4.859589992782142 to Team2 (reason: GIVE: [IITO]: Team2 received gift from Team5: 4.859589992782142)
+2021/01/13 21:56:50 [Team2]: Requested: 10.486012353490178 and received: 4.859589992782142
+2021/01/13 21:56:50 [SERVER]: finish runIITOEndOfTurn
+2021/01/13 21:56:50 [SERVER]: start runIIGOTaxCommonPool
+2021/01/13 21:56:50 [SERVER]: Trying to take 29 from Team1 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Took 29 from Team1 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team1 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team1 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Trying to take 8 from Team2 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Took 8 from Team2 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team2 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team2 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Trying to take 7 from Team3 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Took 7 from Team3 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team3 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team3 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Trying to take 9 from Team4 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Took 9 from Team4 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team4 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team4 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Trying to take 35 from Team5 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Took 35 from Team5 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team5 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team5 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Trying to take 9 from Team6 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Took 9 from Team6 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team6 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team6 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: finish runIIGOTaxCommonPool
+2021/01/13 21:56:50 [SERVER]: start probeDisaster
+2021/01/13 21:56:50 [SERVER]: No disaster reported. No disaster effects.
+2021/01/13 21:56:50 [SERVER]: finish probeDisaster
+2021/01/13 21:56:50 [SERVER]: start incrementTurnAndSeason
+2021/01/13 21:56:50 [SERVER]: finish incrementTurnAndSeason
+2021/01/13 21:56:50 [SERVER]: start deductCostOfLiving
+2021/01/13 21:56:50 [SERVER]: finish deductCostOfLiving
+2021/01/13 21:56:50 [SERVER]: start updateIslandLivingStatus
+2021/01/13 21:56:50 [SERVER]: finish updateIslandLivingStatus
+2021/01/13 21:56:50 [SERVER]: finish endOfTurn
+2021/01/13 21:56:50 [SERVER]: finish runTurn
+2021/01/13 21:56:50 [SERVER]: start runTurn
+2021/01/13 21:56:50 [SERVER]: TURN: 3, Season: 1
+2021/01/13 21:56:50 [SERVER]: start startOfTurn
+2021/01/13 21:56:50 [Team1]: [TEAM3]: Trust Score Map: map[Team2:31.752160321388708 Team3:50 Team4:50 Team5:31.752160321388708 Team6:50]
+2021/01/13 21:56:50 [Team1]: Our Status: {Resources:2.83464702693572 LifeStatus:Critical CriticalConsecutiveTurnsCounter:0}
+2021/01/13 21:56:50 [Team2]: [TEAM3]: Trust Score Map: map[Team1:50 Team3:41.160291220698035 Team4:41.31132387694804 Team5:41.12528447214161 Team6:50]
+2021/01/13 21:56:50 [Team2]: Our Status: {Resources:22.31450249278214 LifeStatus:Alive CriticalConsecutiveTurnsCounter:0}
+2021/01/13 21:56:50 [Team3]: [TEAM3]: Trust Score Map: map[Team1:32.13307661603441 Team2:40.903695337713344 Team4:50 Team5:50 Team6:50]
+2021/01/13 21:56:50 [Team3]: Our Status: {Resources:21.376953464322526 LifeStatus:Alive CriticalConsecutiveTurnsCounter:0}
+2021/01/13 21:56:50 [Team4]: [TEAM3]: Trust Score Map: map[Team1:41.595439088715885 Team2:50 Team3:50 Team5:50 Team6:41.23775746690781]
+2021/01/13 21:56:50 [Team4]: Our Status: {Resources:14.525736984709617 LifeStatus:Alive CriticalConsecutiveTurnsCounter:0}
+2021/01/13 21:56:50 [Team5]: [TEAM3]: Trust Score Map: map[Team1:50 Team2:50 Team3:41.46156568158885 Team4:41.46156568158885 Team6:41.46156568158885]
+2021/01/13 21:56:50 [Team5]: Our Status: {Resources:0 LifeStatus:Critical CriticalConsecutiveTurnsCounter:0}
+2021/01/13 21:56:50 [Team6]: [TEAM3]: Trust Score Map: map[Team1:50 Team2:50 Team3:50 Team4:50 Team5:50]
+2021/01/13 21:56:50 [Team6]: Our Status: {Resources:8.74305596875 LifeStatus:Alive CriticalConsecutiveTurnsCounter:0}
+2021/01/13 21:56:50 [SERVER]: finish startOfTurn
+2021/01/13 21:56:50 [SERVER]: start runOrgs
+2021/01/13 21:56:50 [SERVER]: start runIIGO
+2021/01/13 21:56:50 [SERVER]: President Team3, Speaker Team1, Judge Team5
+2021/01/13 21:56:50 [SERVER]: [EXECUTIVE]: Tax: map[Team1:0 Team2:20 Team3:6 Team4:8 Team5:0 Team6:1]
+2021/01/13 21:56:50 [SERVER]: [EXECUTIVE]: Resource Allocation: map[Team1:17.838860577084194 Team2:4.2895246872471695 Team3:11.147371218663388 Team4:11.590694452905765 Team5:19.888978130803128 Team6:14.91924468329636]
+2021/01/13 21:56:50 [SERVER]: [LEGISLATURE]: Rule: check_allocation_rule , voted in by islands: false , result heeded by speaker: false
+2021/01/13 21:56:50 [SERVER]: [MONITORING]: Rule: rule_chosen_from_proposal_list , broken by: Team3 President
+2021/01/13 21:56:50 [SERVER]: [MONITORING]: Rule: rule_chosen_from_proposal_list , broken by: Team3 President
+2021/01/13 21:56:50 [SERVER]: [MONITORING]: Monitoring of Team3 result false 
+2021/01/13 21:56:50 [SERVER]: [MONITORING]: Monitoring of Team5 result true 
+2021/01/13 21:56:50 [SERVER]: [MONITORING]: Rule: islands_allowed_to_vote_rule , broken by: Team1 Speaker
+2021/01/13 21:56:50 [SERVER]: [MONITORING]: Monitoring of Team1 result false 
+2021/01/13 21:56:50 [SERVER]: [ELECTION]: Votes: [[Team1 Team3 Team4 Team6 Team2 Team5] [Team2 Team1 Team6 Team4 Team3 Team5] [Team3 Team4 Team5 Team6 Team2 Team1] [Team4 Team2 Team3 Team5 Team1 Team6] [Team5 Team1 Team2 Team3 Team4 Team6] [Team6 Team1 Team2 Team3 Team4 Team5]]
+2021/01/13 21:56:50 [SERVER]: [LEGISLATURE]: Result of election for new Judge: Team1
+2021/01/13 21:56:50 [SERVER]: [ELECTION]: Votes: [[Team1 Team3 Team4 Team6 Team2 Team5] [Team2 Team1 Team6 Team4 Team3 Team5] [Team3 Team6 Team4 Team5 Team2 Team1] [Team4 Team2 Team3 Team5 Team1 Team6] [Team5 Team1 Team2 Team3 Team4 Team6] [Team6 Team2 Team3 Team4 Team5 Team1]]
+2021/01/13 21:56:50 [SERVER]: [EXECUTIVE]: Result of election for new Speaker: Team4
+2021/01/13 21:56:50 [SERVER]: [ELECTION]: Votes: [[Team1 Team3 Team6] [Team3 Team6 Team1] [Team6 Team1 Team3] [Team6 Team1 Team3] [Team6 Team1 Team3] [Team6 Team1 Team3]]
+2021/01/13 21:56:50 [SERVER]: [JUDICIARY]: Result of election for new President: Team1
+2021/01/13 21:56:50 [SERVER]: finish runIIGO
+2021/01/13 21:56:50 [SERVER]: start runIIFO
+2021/01/13 21:56:50 [SERVER]: start runPredictionSession
+2021/01/13 21:56:50 [Team2]: Final Prediction: [{1 1 1 0 37.26614992829794}]
+2021/01/13 21:56:50 [Team3]: Final Prediction: [{1 1 1 0 37.17279532562463}]
+2021/01/13 21:56:50 [Team4]: Final Prediction: [{1 1 1 0 38.80553275927061}]
+2021/01/13 21:56:50 [Team5]: Final Prediction: [{1 1 1 0 37.39744950746109}]
+2021/01/13 21:56:50 [Team6]: Final Prediction: [{1 1 1 0 41.666666666666664}]
+2021/01/13 21:56:50 [Team1]: Final Prediction: [{1 1 1 0 35.5840534404629}]
+2021/01/13 21:56:50 [SERVER]: finish runPredictionSession
+2021/01/13 21:56:50 [SERVER]: Run Forage Predictions
+2021/01/13 21:56:50 [SERVER]: Getting Forage Information
+2021/01/13 21:56:50 [SERVER]: Distributing Forage Information
+2021/01/13 21:56:50 [SERVER]: Finish Running Forage Predictions
+2021/01/13 21:56:50 [SERVER]: finish runIIFO
+2021/01/13 21:56:50 [SERVER]: start runIITO
+2021/01/13 21:56:50 [SERVER]: start runGiftSession
+2021/01/13 21:56:50 [SERVER]: [IITO]: Gifts to Team1 from Team2: 2.7893128115977674
+2021/01/13 21:56:50 [SERVER]: [IITO]: Gifts to Team5 from Team3: 3.9221191830403157
+2021/01/13 21:56:50 [SERVER]: [IITO]: Gifts to Team2 from Team4: 1.8157171230887021
+2021/01/13 21:56:50 [SERVER]: [IITO]: Gifts to Team1 from Team6: 1.09288199609375
+2021/01/13 21:56:50 [SERVER]: finish runGiftSession
+2021/01/13 21:56:50 [SERVER]: start runIntendedContributionSession
+2021/01/13 21:56:50 [SERVER]: finish runIntendedContributionSession
+2021/01/13 21:56:50 [SERVER]: finish runIITO
+2021/01/13 21:56:50 [SERVER]: finish runOrgs
+2021/01/13 21:56:50 [SERVER]: start endOfTurn
+2021/01/13 21:56:50 [SERVER]: start runIIGOAllocations
+2021/01/13 21:56:50 [SERVER]: Trying to give 27.68549750721786 to Team2 (reason: allocation)
+2021/01/13 21:56:50 [SERVER]: Gave 27.68549750721786 to Team2 (reason: allocation)
+2021/01/13 21:56:50 [SERVER]: finish runIIGOAllocations
+2021/01/13 21:56:50 [SERVER]: start runForage
+2021/01/13 21:56:50 [Team1]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team1]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team1]: coef: 0.111875, sumOfCaught: 0, numberOfHunter: 12, decay: 6
+2021/01/13 21:56:50 [Team2]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team2]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team2]: coef: 0.111875, sumOfCaught: 0, numberOfHunter: 12, decay: 6
+2021/01/13 21:56:50 [Team3]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team3]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team3]: coef: 0.111875, sumOfCaught: 0, numberOfHunter: 12, decay: 6
+2021/01/13 21:56:50 [Team4]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team4]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team4]: coef: 0.111875, sumOfCaught: 0, numberOfHunter: 12, decay: 6
+2021/01/13 21:56:50 [Team5]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team5]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team5]: coef: 0.111875, sumOfCaught: 0, numberOfHunter: 12, decay: 6
+2021/01/13 21:56:50 [Team6]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team6]: coef: 0.111875, sumOfCaught: 0, numberOfHunter: 12, decay: 6
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team1 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Took 0.01 from Team1 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team2 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Took 0.01 from Team2 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team3 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Took 0.01 from Team3 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team4 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Took 0.01 from Team4 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team5 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Took 0.01 from Team5 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team6 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Took 0.01 from Team6 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: start runDeerHunt
+2021/01/13 21:56:50 [SERVER]: Trying to give 0 to Team3 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Gave 0 to Team3 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Trying to give 0 to Team4 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Gave 0 to Team4 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Trying to give 0 to Team5 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Gave 0 to Team5 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Trying to give 0 to Team6 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Gave 0 to Team6 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Trying to give 0 to Team1 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Gave 0 to Team1 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Trying to give 0 to Team2 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Gave 0 to Team2 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Deer hunt report: {"ForageType":"DeerForageType","InputResources":0.060000000000000005,"ParticipantContributions":{"Team1":0.01,"Team2":0.01,"Team3":0.01,"Team4":0.01,"Team5":0.01,"Team6":0.01},"NumberCaught":0,"TotalUtility":0,"CatchSizes":[],"Turn":3}
+2021/01/13 21:56:50 [SERVER]: Updating deer population after 0 deer hunted
+2021/01/13 21:56:50 [SERVER]: [DEERPOPULATION]: P(t): 20.00. 	Population after 0 deer hunted: 20, 	population at end of turn (after regeneration): 20
+2021/01/13 21:56:50 [SERVER]: finish runDeerHunt
+2021/01/13 21:56:50 [SERVER]: finish runForage
+2021/01/13 21:56:50 [SERVER]: start runIIFOEndOfTurn
+2021/01/13 21:56:50 [SERVER]: finish runIIFOEndOfTurn
+2021/01/13 21:56:50 [SERVER]: start runIITOEndOfTurn
+2021/01/13 21:56:50 [SERVER]: Trying to take 2.803259375655756 from Team2 (reason: TAKE: [IITO]: Team1 received gift from Team2: 2.803259375655756)
+2021/01/13 21:56:50 [SERVER]: Took 2.803259375655756 from Team2 (reason: TAKE: [IITO]: Team1 received gift from Team2: 2.803259375655756)
+2021/01/13 21:56:50 [SERVER]: Trying to give 2.803259375655756 to Team1 (reason: GIVE: [IITO]: Team1 received gift from Team2: 2.803259375655756)
+2021/01/13 21:56:50 [SERVER]: Gave 2.803259375655756 to Team1 (reason: GIVE: [IITO]: Team1 received gift from Team2: 2.803259375655756)
+2021/01/13 21:56:50 [Team1]: Requested: 28.63056549107305 and received: 2.803259375655756
+2021/01/13 21:56:50 [SERVER]: Trying to take 3.941729778955517 from Team3 (reason: TAKE: [IITO]: Team5 received gift from Team3: 3.941729778955517)
+2021/01/13 21:56:50 [SERVER]: Took 3.941729778955517 from Team3 (reason: TAKE: [IITO]: Team5 received gift from Team3: 3.941729778955517)
+2021/01/13 21:56:50 [SERVER]: Trying to give 3.941729778955517 to Team5 (reason: GIVE: [IITO]: Team5 received gift from Team3: 3.941729778955517)
+2021/01/13 21:56:50 [SERVER]: Gave 3.941729778955517 to Team5 (reason: GIVE: [IITO]: Team5 received gift from Team3: 3.941729778955517)
+2021/01/13 21:56:50 [Team5]: Requested: 31.859261742808055 and received: 3.941729778955517
+2021/01/13 21:56:50 [SERVER]: Trying to take 1.8247957087041455 from Team4 (reason: TAKE: [IITO]: Team2 received gift from Team4: 1.8247957087041455)
+2021/01/13 21:56:50 [SERVER]: Took 1.8247957087041455 from Team4 (reason: TAKE: [IITO]: Team2 received gift from Team4: 1.8247957087041455)
+2021/01/13 21:56:50 [SERVER]: Trying to give 1.8247957087041455 to Team2 (reason: GIVE: [IITO]: Team2 received gift from Team4: 1.8247957087041455)
+2021/01/13 21:56:50 [SERVER]: Gave 1.8247957087041455 to Team2 (reason: GIVE: [IITO]: Team2 received gift from Team4: 1.8247957087041455)
+2021/01/13 21:56:50 [Team2]: Requested: 22.040983812242114 and received: 1.8247957087041455
+2021/01/13 21:56:50 [SERVER]: Trying to take 1.0983464060742185 from Team6 (reason: TAKE: [IITO]: Team1 received gift from Team6: 1.0983464060742185)
+2021/01/13 21:56:50 [SERVER]: Took 1.0983464060742185 from Team6 (reason: TAKE: [IITO]: Team1 received gift from Team6: 1.0983464060742185)
+2021/01/13 21:56:50 [SERVER]: Trying to give 1.0983464060742185 to Team1 (reason: GIVE: [IITO]: Team1 received gift from Team6: 1.0983464060742185)
+2021/01/13 21:56:50 [SERVER]: Gave 1.0983464060742185 to Team1 (reason: GIVE: [IITO]: Team1 received gift from Team6: 1.0983464060742185)
+2021/01/13 21:56:50 [Team1]: Requested: 30.30257373659366 and received: 1.0983464060742185
+2021/01/13 21:56:50 [SERVER]: finish runIITOEndOfTurn
+2021/01/13 21:56:50 [SERVER]: start runIIGOTaxCommonPool
+2021/01/13 21:56:50 [SERVER]: Trying to take 20 from Team2 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Took 20 from Team2 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team2 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team2 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Trying to take 6 from Team3 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Took 6 from Team3 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team3 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team3 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Trying to take 8 from Team4 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Took 8 from Team4 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team4 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team4 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team5 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team5 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team5 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team5 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Trying to take 1 from Team6 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Took 1 from Team6 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team6 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team6 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team1 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team1 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team1 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team1 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: finish runIIGOTaxCommonPool
+2021/01/13 21:56:50 [SERVER]: start probeDisaster
+2021/01/13 21:56:50 [SERVER]: No disaster reported. No disaster effects.
+2021/01/13 21:56:50 [SERVER]: finish probeDisaster
+2021/01/13 21:56:50 [SERVER]: start incrementTurnAndSeason
+2021/01/13 21:56:50 [SERVER]: finish incrementTurnAndSeason
+2021/01/13 21:56:50 [SERVER]: start deductCostOfLiving
+2021/01/13 21:56:50 [SERVER]: finish deductCostOfLiving
+2021/01/13 21:56:50 [SERVER]: start updateIslandLivingStatus
+2021/01/13 21:56:50 [SERVER]: finish updateIslandLivingStatus
+2021/01/13 21:56:50 [SERVER]: finish endOfTurn
+2021/01/13 21:56:50 [SERVER]: finish runTurn
+2021/01/13 21:56:50 [SERVER]: start runTurn
+2021/01/13 21:56:50 [SERVER]: TURN: 4, Season: 1
+2021/01/13 21:56:50 [SERVER]: start startOfTurn
+2021/01/13 21:56:50 [Team1]: [TEAM3]: Trust Score Map: map[Team2:26.917621544472166 Team3:50 Team4:50 Team5:31.752160321388708 Team6:45.840845466103886]
+2021/01/13 21:56:50 [Team1]: Our Status: {Resources:6.726252808665695 LifeStatus:Alive CriticalConsecutiveTurnsCounter:0}
+2021/01/13 21:56:50 [Team2]: [TEAM3]: Trust Score Map: map[Team1:50 Team3:41.160291220698035 Team4:35.35456149765563 Team5:41.12528447214161 Team6:50]
+2021/01/13 21:56:50 [Team2]: Our Status: {Resources:19.01153633304839 LifeStatus:Alive CriticalConsecutiveTurnsCounter:0}
+2021/01/13 21:56:50 [Team3]: [TEAM3]: Trust Score Map: map[Team1:32.13307661603441 Team2:40.903695337713344 Team4:50 Team5:50 Team6:50]
+2021/01/13 21:56:50 [Team3]: Our Status: {Resources:11.425223685367008 LifeStatus:Alive CriticalConsecutiveTurnsCounter:0}
+2021/01/13 21:56:50 [Team4]: [TEAM3]: Trust Score Map: map[Team1:41.595439088715885 Team2:50 Team3:50 Team5:50 Team6:41.23775746690781]
+2021/01/13 21:56:50 [Team4]: Our Status: {Resources:0 LifeStatus:Critical CriticalConsecutiveTurnsCounter:0}
+2021/01/13 21:56:50 [Team5]: [TEAM3]: Trust Score Map: map[Team1:50 Team2:50 Team3:37.04507207435936 Team4:41.46156568158885 Team6:41.46156568158885]
+2021/01/13 21:56:50 [Team5]: Our Status: {Resources:3.9317297789555177 LifeStatus:Critical CriticalConsecutiveTurnsCounter:1}
+2021/01/13 21:56:50 [Team6]: [TEAM3]: Trust Score Map: map[Team1:50 Team2:50 Team3:50 Team4:50 Team5:50]
+2021/01/13 21:56:50 [Team6]: Our Status: {Resources:0 LifeStatus:Critical CriticalConsecutiveTurnsCounter:0}
+2021/01/13 21:56:50 [SERVER]: finish startOfTurn
+2021/01/13 21:56:50 [SERVER]: start runOrgs
+2021/01/13 21:56:50 [SERVER]: start runIIGO
+2021/01/13 21:56:50 [SERVER]: President Team1, Speaker Team4, Judge Team1
+2021/01/13 21:56:50 [SERVER]: [JUDICIARY]: Rule: check_allocation_rule, broken by: Team2
+2021/01/13 21:56:50 [SERVER]: [JUDICIARY]: Rule: check_allocation_rule, broken by: Team2
+2021/01/13 21:56:50 [SERVER]: [EXECUTIVE]: Tax: map[Team1:4 Team2:32 Team3:19 Team4:4 Team5:10 Team6:4]
+2021/01/13 21:56:50 [SERVER]: [EXECUTIVE]: Resource Allocation: map[Team1:8.147891452704512 Team2:1.751015586006948 Team3:4.943302434213664 Team4:7.572467466896192 Team5:7.087719024466863 Team6:7.572467466896192]
+2021/01/13 21:56:50 [SERVER]: [LEGISLATURE]: Rule vote with islands [Team2] allowed to vote
+2021/01/13 21:56:50 [SERVER]: [RULE VOTE]: Votes: [Approve]
+2021/01/13 21:56:50 [SERVER]: Error updating rules with result: Rule 'check_allocation_rule' is not mutable
+2021/01/13 21:56:50 [SERVER]: [LEGISLATURE]: Rule: check_allocation_rule , voted in by islands: true , result heeded by speaker: true
+2021/01/13 21:56:50 [SERVER]: Cannot pay IIGO salary
+2021/01/13 21:56:50 [SERVER]: finish runIIGO
+2021/01/13 21:56:50 [SERVER]: start runIIFO
+2021/01/13 21:56:50 [SERVER]: start runPredictionSession
+2021/01/13 21:56:50 [Team3]: Final Prediction: [{1 1 1 0 37.17279532562463}]
+2021/01/13 21:56:50 [Team4]: Final Prediction: [{1 1 1 0 38.80553275927061}]
+2021/01/13 21:56:50 [Team5]: Final Prediction: [{1 1 1 0 36.66136723958951}]
+2021/01/13 21:56:50 [Team6]: Final Prediction: [{1 1 1 0 41.666666666666664}]
+2021/01/13 21:56:50 [Team1]: Final Prediction: [{1 1 1 0 34.08510455532746}]
+2021/01/13 21:56:50 [Team2]: Final Prediction: [{1 1 1 0 36.273356198415875}]
+2021/01/13 21:56:50 [SERVER]: finish runPredictionSession
+2021/01/13 21:56:50 [SERVER]: Run Forage Predictions
+2021/01/13 21:56:50 [SERVER]: Getting Forage Information
+2021/01/13 21:56:50 [SERVER]: Distributing Forage Information
+2021/01/13 21:56:50 [SERVER]: Finish Running Forage Predictions
+2021/01/13 21:56:50 [SERVER]: finish runIIFO
+2021/01/13 21:56:50 [SERVER]: start runIITO
+2021/01/13 21:56:50 [SERVER]: start runGiftSession
+2021/01/13 21:56:50 [SERVER]: [IITO]: Gifts to Team1 from Team2: 2.3764420416310488
+2021/01/13 21:56:50 [SERVER]: [IITO]: Gifts to Team4 from Team3: 1.428152960670876
+2021/01/13 21:56:50 [SERVER]: [IITO]: Gifts to Team3 from Team1: 3.340781601083212
+2021/01/13 21:56:50 [SERVER]: finish runGiftSession
+2021/01/13 21:56:50 [SERVER]: start runIntendedContributionSession
+2021/01/13 21:56:50 [SERVER]: finish runIntendedContributionSession
+2021/01/13 21:56:50 [SERVER]: finish runIITO
+2021/01/13 21:56:50 [SERVER]: finish runOrgs
+2021/01/13 21:56:50 [SERVER]: start endOfTurn
+2021/01/13 21:56:50 [SERVER]: start runIIGOAllocations
+2021/01/13 21:56:50 [SERVER]: finish runIIGOAllocations
+2021/01/13 21:56:50 [SERVER]: start runForage
+2021/01/13 21:56:50 [Team1]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team1]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team1]: coef: 0.111875, sumOfCaught: 0, numberOfHunter: 12, decay: 6
+2021/01/13 21:56:50 [Team2]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team2]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team2]: coef: 0.111875, sumOfCaught: 0, numberOfHunter: 12, decay: 6
+2021/01/13 21:56:50 [Team3]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team3]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team3]: coef: 0.111875, sumOfCaught: 0, numberOfHunter: 12, decay: 6
+2021/01/13 21:56:50 [Team4]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team4]: coef: 0.111875, sumOfCaught: 0, numberOfHunter: 12, decay: 6
+2021/01/13 21:56:50 [Team5]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team5]: coef: 0.111875, sumOfCaught: 0, numberOfHunter: 12, decay: 6
+2021/01/13 21:56:50 [Team6]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team6]: coef: 0.111875, sumOfCaught: 0, numberOfHunter: 12, decay: 6
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team1 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Took 0.01 from Team1 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team2 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Took 0.01 from Team2 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team3 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Took 0.01 from Team3 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team4 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Team4 did not have enough resources to participate in foraging
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team5 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Took 0.01 from Team5 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team6 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Team6 did not have enough resources to participate in foraging
+2021/01/13 21:56:50 [SERVER]: start runDeerHunt
+2021/01/13 21:56:50 [SERVER]: Trying to give 0 to Team1 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Gave 0 to Team1 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Trying to give 0 to Team2 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Gave 0 to Team2 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Trying to give 0 to Team3 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Gave 0 to Team3 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Trying to give 0 to Team5 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Gave 0 to Team5 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Deer hunt report: {"ForageType":"DeerForageType","InputResources":0.04,"ParticipantContributions":{"Team1":0.01,"Team2":0.01,"Team3":0.01,"Team5":0.01},"NumberCaught":0,"TotalUtility":0,"CatchSizes":[],"Turn":4}
+2021/01/13 21:56:50 [SERVER]: Updating deer population after 0 deer hunted
+2021/01/13 21:56:50 [SERVER]: [DEERPOPULATION]: P(t): 20.00. 	Population after 0 deer hunted: 20, 	population at end of turn (after regeneration): 20
+2021/01/13 21:56:50 [SERVER]: finish runDeerHunt
+2021/01/13 21:56:50 [SERVER]: finish runForage
+2021/01/13 21:56:50 [SERVER]: start runIIFOEndOfTurn
+2021/01/13 21:56:50 [SERVER]: finish runIIFOEndOfTurn
+2021/01/13 21:56:50 [SERVER]: start runIITOEndOfTurn
+2021/01/13 21:56:50 [SERVER]: Trying to take 1.4352937254742302 from Team3 (reason: TAKE: [IITO]: Team4 received gift from Team3: 1.4352937254742302)
+2021/01/13 21:56:50 [SERVER]: Took 1.4352937254742302 from Team3 (reason: TAKE: [IITO]: Team4 received gift from Team3: 1.4352937254742302)
+2021/01/13 21:56:50 [SERVER]: Trying to give 1.4352937254742302 to Team4 (reason: GIVE: [IITO]: Team4 received gift from Team3: 1.4352937254742302)
+2021/01/13 21:56:50 [SERVER]: Gave 1.4352937254742302 to Team4 (reason: GIVE: [IITO]: Team4 received gift from Team3: 1.4352937254742302)
+2021/01/13 21:56:50 [Team4]: Requested: 54.35631363177699 and received: 1.4352937254742302
+2021/01/13 21:56:50 [SERVER]: Trying to take 3.3574855090886278 from Team1 (reason: TAKE: [IITO]: Team3 received gift from Team1: 3.3574855090886278)
+2021/01/13 21:56:50 [SERVER]: Took 3.3574855090886278 from Team1 (reason: TAKE: [IITO]: Team3 received gift from Team1: 3.3574855090886278)
+2021/01/13 21:56:50 [SERVER]: Trying to give 3.3574855090886278 to Team3 (reason: GIVE: [IITO]: Team3 received gift from Team1: 3.3574855090886278)
+2021/01/13 21:56:50 [SERVER]: Gave 3.3574855090886278 to Team3 (reason: GIVE: [IITO]: Team3 received gift from Team1: 3.3574855090886278)
+2021/01/13 21:56:50 [Team3]: Requested: 39.680870964442946 and received: 3.3574855090886278
+2021/01/13 21:56:50 [SERVER]: Trying to take 2.3883242518392036 from Team2 (reason: TAKE: [IITO]: Team1 received gift from Team2: 2.3883242518392036)
+2021/01/13 21:56:50 [SERVER]: Took 2.3883242518392036 from Team2 (reason: TAKE: [IITO]: Team1 received gift from Team2: 2.3883242518392036)
+2021/01/13 21:56:50 [SERVER]: Trying to give 2.3883242518392036 to Team1 (reason: GIVE: [IITO]: Team1 received gift from Team2: 2.3883242518392036)
+2021/01/13 21:56:50 [SERVER]: Gave 2.3883242518392036 to Team1 (reason: GIVE: [IITO]: Team1 received gift from Team2: 2.3883242518392036)
+2021/01/13 21:56:50 [Team1]: Requested: 23.41691280551703 and received: 2.3883242518392036
+2021/01/13 21:56:50 [SERVER]: finish runIITOEndOfTurn
+2021/01/13 21:56:50 [SERVER]: start runIIGOTaxCommonPool
+2021/01/13 21:56:50 [SERVER]: Trying to take 10 from Team5 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Error getting tax from Team5: Client Team5 did not have enough resources. Requested 10, only had 3.921729778955518
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team5 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team5 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Trying to take 4 from Team6 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Error getting tax from Team6: Client Team6 did not have enough resources. Requested 4, only had 0
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team6 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team6 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Trying to take 4 from Team1 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Took 4 from Team1 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team1 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team1 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Trying to take 32 from Team2 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Error getting tax from Team2: Client Team2 did not have enough resources. Requested 32, only had 16.613212081209184
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team2 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team2 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Trying to take 19 from Team3 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Error getting tax from Team3: Client Team3 did not have enough resources. Requested 19, only had 13.337415468981407
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team3 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team3 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Trying to take 4 from Team4 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Error getting tax from Team4: Client Team4 did not have enough resources. Requested 4, only had 1.4352937254742302
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team4 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team4 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: finish runIIGOTaxCommonPool
+2021/01/13 21:56:50 [SERVER]: start probeDisaster
+2021/01/13 21:56:50 [SERVER]: No disaster reported. No disaster effects.
+2021/01/13 21:56:50 [SERVER]: finish probeDisaster
+2021/01/13 21:56:50 [SERVER]: start incrementTurnAndSeason
+2021/01/13 21:56:50 [SERVER]: finish incrementTurnAndSeason
+2021/01/13 21:56:50 [SERVER]: start deductCostOfLiving
+2021/01/13 21:56:50 [SERVER]: finish deductCostOfLiving
+2021/01/13 21:56:50 [SERVER]: start updateIslandLivingStatus
+2021/01/13 21:56:50 [SERVER]: finish updateIslandLivingStatus
+2021/01/13 21:56:50 [SERVER]: finish endOfTurn
+2021/01/13 21:56:50 [SERVER]: finish runTurn
+2021/01/13 21:56:50 [SERVER]: start runTurn
+2021/01/13 21:56:50 [SERVER]: TURN: 5, Season: 1
+2021/01/13 21:56:50 [SERVER]: start startOfTurn
+2021/01/13 21:56:50 [Team2]: [TEAM3]: Trust Score Map: map[Team1:50 Team3:41.160291220698035 Team4:35.35456149765563 Team5:41.12528447214161 Team6:50]
+2021/01/13 21:56:50 [Team2]: Our Status: {Resources:6.613212081209184 LifeStatus:Alive CriticalConsecutiveTurnsCounter:0}
+2021/01/13 21:56:50 [Team3]: [TEAM3]: Trust Score Map: map[Team1:29.397753707105274 Team2:40.903695337713344 Team4:50 Team5:50 Team6:50]
+2021/01/13 21:56:50 [Team3]: Our Status: {Resources:3.3374154689814066 LifeStatus:Critical CriticalConsecutiveTurnsCounter:0}
+2021/01/13 21:56:50 [Team4]: [TEAM3]: Trust Score Map: map[Team1:41.595439088715885 Team2:50 Team3:50.58420398126055 Team5:50 Team6:41.23775746690781]
+2021/01/13 21:56:50 [Team4]: Our Status: {Resources:0 LifeStatus:Critical CriticalConsecutiveTurnsCounter:1}
+2021/01/13 21:56:50 [Team5]: [TEAM3]: Trust Score Map: map[Team1:50 Team2:50 Team3:37.04507207435936 Team4:41.46156568158885 Team6:41.46156568158885]
+2021/01/13 21:56:50 [Team5]: Our Status: {Resources:0 LifeStatus:Critical CriticalConsecutiveTurnsCounter:2}
+2021/01/13 21:56:50 [Team6]: [TEAM3]: Trust Score Map: map[Team1:50 Team2:50 Team3:50 Team4:50 Team5:50]
+2021/01/13 21:56:50 [Team6]: Our Status: {Resources:0 LifeStatus:Critical CriticalConsecutiveTurnsCounter:1}
+2021/01/13 21:56:50 [Team1]: [TEAM3]: Trust Score Map: map[Team2:21.123339255207732 Team3:50 Team4:50 Team5:31.752160321388708 Team6:45.840845466103886]
+2021/01/13 21:56:50 [Team1]: Our Status: {Resources:11.747091551416272 LifeStatus:Alive CriticalConsecutiveTurnsCounter:0}
+2021/01/13 21:56:50 [SERVER]: finish startOfTurn
+2021/01/13 21:56:50 [SERVER]: start runOrgs
+2021/01/13 21:56:50 [SERVER]: start runIIGO
+2021/01/13 21:56:50 [SERVER]: President Team1, Speaker Team4, Judge Team1
+2021/01/13 21:56:50 [SERVER]: [JUDICIARY]: Rule: check_taxation_rule, broken by: Team3
+2021/01/13 21:56:50 [SERVER]: [JUDICIARY]: Rule: check_taxation_rule, broken by: Team3
+2021/01/13 21:56:50 [SERVER]: [JUDICIARY]: Rule: check_taxation_rule, broken by: Team4
+2021/01/13 21:56:50 [SERVER]: [JUDICIARY]: Rule: check_taxation_rule, broken by: Team4
+2021/01/13 21:56:50 [SERVER]: [JUDICIARY]: Rule: check_taxation_rule, broken by: Team5
+2021/01/13 21:56:50 [SERVER]: [JUDICIARY]: Rule: check_taxation_rule, broken by: Team5
+2021/01/13 21:56:50 [SERVER]: [JUDICIARY]: Rule: check_taxation_rule, broken by: Team6
+2021/01/13 21:56:50 [SERVER]: [JUDICIARY]: Rule: check_taxation_rule, broken by: Team6
+2021/01/13 21:56:50 [SERVER]: [JUDICIARY]: Rule: check_taxation_rule, broken by: Team2
+2021/01/13 21:56:50 [SERVER]: [JUDICIARY]: Rule: check_taxation_rule, broken by: Team2
+2021/01/13 21:56:50 [SERVER]: [EXECUTIVE]: Tax: map[Team1:8 Team2:24 Team3:19 Team4:14 Team5:14 Team6:14]
+2021/01/13 21:56:50 [SERVER]: [EXECUTIVE]: Resource Allocation: map[Team1:0.8785865757638638 Team2:0.7682961103750522 Team3:0.9285495979384006 Team4:5 Team5:5 Team6:5]
+2021/01/13 21:56:50 [SERVER]: Common pool resources insufficient for legislativeBranch setRuleToVote
+2021/01/13 21:56:50 [SERVER]: finish runIIGO
+2021/01/13 21:56:50 [SERVER]: start runIIFO
+2021/01/13 21:56:50 [SERVER]: start runPredictionSession
+2021/01/13 21:56:50 [Team6]: Final Prediction: [{1 1 1 0 41.666666666666664}]
+2021/01/13 21:56:50 [Team1]: Final Prediction: [{1 1 1 0 33.11939084045005}]
+2021/01/13 21:56:50 [Team2]: Final Prediction: [{1 1 1 0 36.273356198415875}]
+2021/01/13 21:56:50 [Team3]: Final Prediction: [{1 1 1 0 36.716908174136435}]
+2021/01/13 21:56:50 [Team4]: Final Prediction: [{1 1 1 0 38.9029000894807}]
+2021/01/13 21:56:50 [Team5]: Final Prediction: [{1 1 1 0 36.66136723958951}]
+2021/01/13 21:56:50 [SERVER]: finish runPredictionSession
+2021/01/13 21:56:50 [SERVER]: Run Forage Predictions
+2021/01/13 21:56:50 [SERVER]: Getting Forage Information
+2021/01/13 21:56:50 [SERVER]: Distributing Forage Information
+2021/01/13 21:56:50 [SERVER]: Finish Running Forage Predictions
+2021/01/13 21:56:50 [SERVER]: finish runIIFO
+2021/01/13 21:56:50 [SERVER]: start runIITO
+2021/01/13 21:56:50 [SERVER]: start runGiftSession
+2021/01/13 21:56:50 [SERVER]: [IITO]: Gifts to Team4 from Team1: 1.468386443927034
+2021/01/13 21:56:50 [SERVER]: [IITO]: Gifts to Team6 from Team2: 0.826651510151148
+2021/01/13 21:56:50 [SERVER]: finish runGiftSession
+2021/01/13 21:56:50 [SERVER]: start runIntendedContributionSession
+2021/01/13 21:56:50 [SERVER]: finish runIntendedContributionSession
+2021/01/13 21:56:50 [SERVER]: finish runIITO
+2021/01/13 21:56:50 [SERVER]: finish runOrgs
+2021/01/13 21:56:50 [SERVER]: start endOfTurn
+2021/01/13 21:56:50 [SERVER]: start runIIGOAllocations
+2021/01/13 21:56:50 [SERVER]: finish runIIGOAllocations
+2021/01/13 21:56:50 [SERVER]: start runForage
+2021/01/13 21:56:50 [Team4]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team4]: coef: 0.11296875, sumOfCaught: 0, numberOfHunter: 11, decay: 5.5
+2021/01/13 21:56:50 [Team5]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team5]: coef: 0.111875, sumOfCaught: 0, numberOfHunter: 12, decay: 6
+2021/01/13 21:56:50 [Team6]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team6]: coef: 0.11296875, sumOfCaught: 0, numberOfHunter: 11, decay: 5.5
+2021/01/13 21:56:50 [Team1]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team1]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team1]: coef: 0.111875, sumOfCaught: 0, numberOfHunter: 12, decay: 6
+2021/01/13 21:56:50 [Team2]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team2]: coef: 0.111875, sumOfCaught: 0, numberOfHunter: 12, decay: 6
+2021/01/13 21:56:50 [Team3]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team3]: coef: 0.111875, sumOfCaught: 0, numberOfHunter: 12, decay: 6
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team2 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Took 0.01 from Team2 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team3 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Took 0.01 from Team3 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team4 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Team4 did not have enough resources to participate in foraging
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team5 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Team5 did not have enough resources to participate in foraging
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team6 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Team6 did not have enough resources to participate in foraging
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team1 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Took 0.01 from Team1 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: start runDeerHunt
+2021/01/13 21:56:50 [SERVER]: Trying to give 0 to Team2 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Gave 0 to Team2 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Trying to give 0 to Team3 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Gave 0 to Team3 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Trying to give 0 to Team1 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Gave 0 to Team1 (reason: Deer hunt return)
+2021/01/13 21:56:50 [SERVER]: Deer hunt report: {"ForageType":"DeerForageType","InputResources":0.03,"ParticipantContributions":{"Team1":0.01,"Team2":0.01,"Team3":0.01},"NumberCaught":0,"TotalUtility":0,"CatchSizes":[],"Turn":5}
+2021/01/13 21:56:50 [SERVER]: Updating deer population after 0 deer hunted
+2021/01/13 21:56:50 [SERVER]: [DEERPOPULATION]: P(t): 20.00. 	Population after 0 deer hunted: 20, 	population at end of turn (after regeneration): 20
+2021/01/13 21:56:50 [SERVER]: finish runDeerHunt
+2021/01/13 21:56:50 [SERVER]: finish runForage
+2021/01/13 21:56:50 [SERVER]: start runIIFOEndOfTurn
+2021/01/13 21:56:50 [SERVER]: finish runIIFOEndOfTurn
+2021/01/13 21:56:50 [SERVER]: start runIITOEndOfTurn
+2021/01/13 21:56:50 [SERVER]: Trying to take 1.475728376146669 from Team1 (reason: TAKE: [IITO]: Team4 received gift from Team1: 1.475728376146669)
+2021/01/13 21:56:50 [SERVER]: Took 1.475728376146669 from Team1 (reason: TAKE: [IITO]: Team4 received gift from Team1: 1.475728376146669)
+2021/01/13 21:56:50 [SERVER]: Trying to give 1.475728376146669 to Team4 (reason: GIVE: [IITO]: Team4 received gift from Team1: 1.475728376146669)
+2021/01/13 21:56:50 [SERVER]: Gave 1.475728376146669 to Team4 (reason: GIVE: [IITO]: Team4 received gift from Team1: 1.475728376146669)
+2021/01/13 21:56:50 [Team4]: Requested: 79.68025558576822 and received: 1.475728376146669
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.8307847677019037 from Team2 (reason: TAKE: [IITO]: Team6 received gift from Team2: 0.8307847677019037)
+2021/01/13 21:56:50 [SERVER]: Took 0.8307847677019037 from Team2 (reason: TAKE: [IITO]: Team6 received gift from Team2: 0.8307847677019037)
+2021/01/13 21:56:50 [SERVER]: Trying to give 0.8307847677019037 to Team6 (reason: GIVE: [IITO]: Team6 received gift from Team2: 0.8307847677019037)
+2021/01/13 21:56:50 [SERVER]: Gave 0.8307847677019037 to Team6 (reason: GIVE: [IITO]: Team6 received gift from Team2: 0.8307847677019037)
+2021/01/13 21:56:50 [Team6]: Requested: 81.53447044766548 and received: 0.8307847677019037
+2021/01/13 21:56:50 [SERVER]: finish runIITOEndOfTurn
+2021/01/13 21:56:50 [SERVER]: start runIIGOTaxCommonPool
+2021/01/13 21:56:50 [SERVER]: Trying to take 8 from Team1 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Took 8 from Team1 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team1 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team1 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Trying to take 24 from Team2 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Error getting tax from Team2: Client Team2 did not have enough resources. Requested 24, only had 5.772427313507281
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team2 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team2 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Trying to take 19 from Team3 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Error getting tax from Team3: Client Team3 did not have enough resources. Requested 19, only had 3.327415468981407
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team3 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team3 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Trying to take 14 from Team4 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Error getting tax from Team4: Client Team4 did not have enough resources. Requested 14, only had 1.475728376146669
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team4 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team4 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Trying to take 14 from Team5 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Error getting tax from Team5: Client Team5 did not have enough resources. Requested 14, only had 0
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team5 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team5 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Trying to take 14 from Team6 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Error getting tax from Team6: Client Team6 did not have enough resources. Requested 14, only had 0.8307847677019037
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team6 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team6 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: finish runIIGOTaxCommonPool
+2021/01/13 21:56:50 [SERVER]: start probeDisaster
+2021/01/13 21:56:50 [SERVER]: ALERT: Disaster of magnitude 0.181 recorded at co-ordinates (8.77, 7.98)
+
+------------------------ Disaster Effects ------------------------
+Team4: 	xy co-ords: (2.00, 0.00), 	absolute damage: 1.47 
+Team5: 	xy co-ords: (4.00, 0.00), 	absolute damage: 1.65 
+Team6: 	xy co-ords: (6.00, 0.00), 	absolute damage: 1.82 
+Team1: 	xy co-ords: (8.00, 0.00), 	absolute damage: 1.92 
+Team2: 	xy co-ords: (10.00, 0.00), 	absolute damage: 1.90 
+Team3: 	xy co-ords: (0.00, 0.00), 	absolute damage: 1.30 
+
+------------------------ Disaster Effects after CP Mitigation ------------------------
+Team2: proportional damage: 0.19, 	 damage after common pool mitigation: 0.32 
+Team3: proportional damage: 0.13, 	 damage after common pool mitigation: 0.22 
+Team4: proportional damage: 0.15, 	 damage after common pool mitigation: 0.25 
+Team5: proportional damage: 0.16, 	 damage after common pool mitigation: 0.28 
+Team6: proportional damage: 0.18, 	 damage after common pool mitigation: 0.31 
+Team1: proportional damage: 0.19, 	 damage after common pool mitigation: 0.32 
+2021/01/13 21:56:50 [SERVER]: finish probeDisaster
+2021/01/13 21:56:50 [SERVER]: start applyDisasterEffects
+2021/01/13 21:56:50 [SERVER]: [DISASTER]: Team4 reduced to 1.2290508553839141 resources due to disaster damage of 0.246677520762755
+2021/01/13 21:56:50 [SERVER]: [DISASTER]: Team5 reduced to 0 resources due to disaster damage of 0.2776713146045749
+2021/01/13 21:56:50 [SERVER]: [DISASTER]: Team6 reduced to 0.5251760191746082 resources due to disaster damage of 0.3056087485272955
+2021/01/13 21:56:50 [SERVER]: [DISASTER]: Team1 reduced to 1.939370604809631 resources due to disaster damage of 0.32199257045997154
+2021/01/13 21:56:50 [SERVER]: [DISASTER]: Team2 reduced to 5.4527328036785745 resources due to disaster damage of 0.31969450982870684
+2021/01/13 21:56:50 [SERVER]: [DISASTER]: Team3 reduced to 3.1097097223251553 resources due to disaster damage of 0.21770574665625145
+2021/01/13 21:56:50 [SERVER]: *** impact: 10.060622903621695, CP: 8.37127249278214, conf: {XMin:0 XMax:10 YMin:0 YMax:10 Period:5 SpatialPDFType:Uniform MagnitudeLambda:1 MagnitudeResourceMultiplier:85 CommonpoolThreshold:200 StochasticPeriod:false CommonpoolThresholdVisible:false PeriodVisible:true StochasticPeriodVisible:true}
+2021/01/13 21:56:50 [SERVER]: finish applyDisasterEffects
+2021/01/13 21:56:50 [SERVER]: start notifying clients of disaster
+2021/01/13 21:56:50 [SERVER]: finish notifying clients of disaster
+2021/01/13 21:56:50 [SERVER]: start incrementTurnAndSeason
+2021/01/13 21:56:50 [SERVER]: finish incrementTurnAndSeason
+2021/01/13 21:56:50 [SERVER]: start deductCostOfLiving
+2021/01/13 21:56:50 [SERVER]: finish deductCostOfLiving
+2021/01/13 21:56:50 [SERVER]: start updateIslandLivingStatus
+2021/01/13 21:56:50 [SERVER]: finish updateIslandLivingStatus
+2021/01/13 21:56:50 [SERVER]: finish endOfTurn
+2021/01/13 21:56:50 [SERVER]: finish runTurn
+2021/01/13 21:56:50 [SERVER]: start runTurn
+2021/01/13 21:56:50 [SERVER]: TURN: 6, Season: 2
+2021/01/13 21:56:50 [SERVER]: start startOfTurn
+2021/01/13 21:56:50 [Team6]: [TEAM3]: Trust Score Map: map[Team1:50 Team2:56.14073713599272 Team3:50 Team4:50 Team5:50]
+2021/01/13 21:56:50 [Team6]: Our Status: {Resources:0 LifeStatus:Critical CriticalConsecutiveTurnsCounter:2}
+2021/01/13 21:56:50 [Team1]: [TEAM3]: Trust Score Map: map[Team2:21.123339255207732 Team3:50 Team4:50 Team5:31.752160321388708 Team6:45.840845466103886]
+2021/01/13 21:56:50 [Team1]: Our Status: {Resources:0 LifeStatus:Critical CriticalConsecutiveTurnsCounter:0}
+2021/01/13 21:56:50 [Team2]: [TEAM3]: Trust Score Map: map[Team1:50 Team3:41.160291220698035 Team4:35.35456149765563 Team5:41.12528447214161 Team6:50]
+2021/01/13 21:56:50 [Team2]: Our Status: {Resources:0 LifeStatus:Critical CriticalConsecutiveTurnsCounter:0}
+2021/01/13 21:56:50 [Team3]: [TEAM3]: Trust Score Map: map[Team1:29.397753707105274 Team2:40.903695337713344 Team4:50 Team5:50 Team6:50]
+2021/01/13 21:56:50 [Team3]: Our Status: {Resources:0 LifeStatus:Critical CriticalConsecutiveTurnsCounter:1}
+2021/01/13 21:56:50 [Team4]: [TEAM3]: Trust Score Map: map[Team1:47.236344530640196 Team2:50 Team3:50.58420398126055 Team5:50 Team6:41.23775746690781]
+2021/01/13 21:56:50 [Team4]: Our Status: {Resources:0 LifeStatus:Critical CriticalConsecutiveTurnsCounter:2}
+2021/01/13 21:56:50 [Team5]: [TEAM3]: Trust Score Map: map[Team1:50 Team2:50 Team3:37.04507207435936 Team4:41.46156568158885 Team6:41.46156568158885]
+2021/01/13 21:56:50 [Team5]: Our Status: {Resources:0 LifeStatus:Critical CriticalConsecutiveTurnsCounter:3}
+2021/01/13 21:56:50 [SERVER]: finish startOfTurn
+2021/01/13 21:56:50 [SERVER]: start runOrgs
+2021/01/13 21:56:50 [SERVER]: start runIIGO
+2021/01/13 21:56:50 [SERVER]: President Team1, Speaker Team4, Judge Team1
+2021/01/13 21:56:50 [SERVER]: Common pool resources insufficient for executiveBranch broadcastTaxation
+2021/01/13 21:56:50 [SERVER]: finish runIIGO
+2021/01/13 21:56:50 [SERVER]: start runIIFO
+2021/01/13 21:56:50 [SERVER]: start runPredictionSession
+2021/01/13 21:56:50 [Team4]: Final Prediction: [{8.766195387470384 7.976518972781716 0.1821007602343592 5 16.67065097176631}]
+2021/01/13 21:56:50 [Team5]: Final Prediction: [{8.766360521533382 7.97666881966087 0.18199868514036338 5 16.67033280339062}]
+2021/01/13 21:56:50 [Team6]: Final Prediction: [{8.766047625600372 7.976384889875518 0.18219209697310731 5 16.670935678952265}]
+2021/01/13 21:56:50 [Team1]: Final Prediction: [{8.766544362728762 7.976835641871186 0.1818850465187587 5 16.66997860575071}]
+2021/01/13 21:56:50 [Team2]: Final Prediction: [{8.766380660307897 7.976687094100778 0.18198623666507954 5 16.670294002286507}]
+2021/01/13 21:56:50 [Team3]: Final Prediction: [{8.766357638823195 7.976666203815797 0.18200046704355155 5 16.670338357484077}]
+2021/01/13 21:56:50 [SERVER]: finish runPredictionSession
+2021/01/13 21:56:50 [SERVER]: Run Forage Predictions
+2021/01/13 21:56:50 [SERVER]: Getting Forage Information
+2021/01/13 21:56:50 [SERVER]: Distributing Forage Information
+2021/01/13 21:56:50 [SERVER]: Finish Running Forage Predictions
+2021/01/13 21:56:50 [SERVER]: finish runIIFO
+2021/01/13 21:56:50 [SERVER]: start runIITO
+2021/01/13 21:56:50 [SERVER]: start runGiftSession
+2021/01/13 21:56:50 [SERVER]: finish runGiftSession
+2021/01/13 21:56:50 [SERVER]: start runIntendedContributionSession
+2021/01/13 21:56:50 [SERVER]: finish runIntendedContributionSession
+2021/01/13 21:56:50 [SERVER]: finish runIITO
+2021/01/13 21:56:50 [SERVER]: finish runOrgs
+2021/01/13 21:56:50 [SERVER]: start endOfTurn
+2021/01/13 21:56:50 [SERVER]: start runIIGOAllocations
+2021/01/13 21:56:50 [SERVER]: finish runIIGOAllocations
+2021/01/13 21:56:50 [SERVER]: start runForage
+2021/01/13 21:56:50 [Team6]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team6]: coef: 0.1140625, sumOfCaught: 0, numberOfHunter: 10, decay: 5
+2021/01/13 21:56:50 [Team1]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team1]: coef: 0.111875, sumOfCaught: 0, numberOfHunter: 12, decay: 6
+2021/01/13 21:56:50 [Team2]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team2]: coef: 0.111875, sumOfCaught: 0, numberOfHunter: 12, decay: 6
+2021/01/13 21:56:50 [Team3]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team3]: coef: 0.111875, sumOfCaught: 0, numberOfHunter: 12, decay: 6
+2021/01/13 21:56:50 [Team4]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team4]: coef: 0.1140625, sumOfCaught: 0, numberOfHunter: 10, decay: 5
+2021/01/13 21:56:50 [Team5]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team5]: coef: 0.11296875, sumOfCaught: 0, numberOfHunter: 11, decay: 5.5
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team6 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Team6 did not have enough resources to participate in foraging
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team1 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Team1 did not have enough resources to participate in foraging
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team2 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Team2 did not have enough resources to participate in foraging
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team3 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Team3 did not have enough resources to participate in foraging
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team4 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Team4 did not have enough resources to participate in foraging
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team5 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Team5 did not have enough resources to participate in foraging
+2021/01/13 21:56:50 [SERVER]: finish runForage
+2021/01/13 21:56:50 [SERVER]: start runIIFOEndOfTurn
+2021/01/13 21:56:50 [SERVER]: finish runIIFOEndOfTurn
+2021/01/13 21:56:50 [SERVER]: start runIITOEndOfTurn
+2021/01/13 21:56:50 [SERVER]: finish runIITOEndOfTurn
+2021/01/13 21:56:50 [SERVER]: start runIIGOTaxCommonPool
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team1 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team1 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team1 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team1 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team2 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team2 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team2 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team2 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team3 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team3 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team3 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team3 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team4 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team4 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team4 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team4 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team5 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team5 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team5 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team5 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team6 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team6 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team6 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team6 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: finish runIIGOTaxCommonPool
+2021/01/13 21:56:50 [SERVER]: start probeDisaster
+2021/01/13 21:56:50 [SERVER]: No disaster reported. No disaster effects.
+2021/01/13 21:56:50 [SERVER]: finish probeDisaster
+2021/01/13 21:56:50 [SERVER]: start incrementTurnAndSeason
+2021/01/13 21:56:50 [SERVER]: finish incrementTurnAndSeason
+2021/01/13 21:56:50 [SERVER]: start deductCostOfLiving
+2021/01/13 21:56:50 [SERVER]: finish deductCostOfLiving
+2021/01/13 21:56:50 [SERVER]: start updateIslandLivingStatus
+2021/01/13 21:56:50 [SERVER]: finish updateIslandLivingStatus
+2021/01/13 21:56:50 [SERVER]: finish endOfTurn
+2021/01/13 21:56:50 [SERVER]: finish runTurn
+2021/01/13 21:56:50 [SERVER]: start runTurn
+2021/01/13 21:56:50 [SERVER]: TURN: 7, Season: 2
+2021/01/13 21:56:50 [SERVER]: start startOfTurn
+2021/01/13 21:56:50 [Team3]: [TEAM3]: Trust Score Map: map[Team1:29.397753707105274 Team2:40.903695337713344 Team4:50 Team5:50 Team6:50]
+2021/01/13 21:56:50 [Team3]: Our Status: {Resources:0 LifeStatus:Critical CriticalConsecutiveTurnsCounter:2}
+2021/01/13 21:56:50 [Team4]: [TEAM3]: Trust Score Map: map[Team1:47.236344530640196 Team2:50 Team3:50.58420398126055 Team5:50 Team6:41.23775746690781]
+2021/01/13 21:56:50 [Team4]: Our Status: {Resources:0 LifeStatus:Critical CriticalConsecutiveTurnsCounter:3}
+2021/01/13 21:56:50 [Team6]: [TEAM3]: Trust Score Map: map[Team1:50 Team2:56.14073713599272 Team3:50 Team4:50 Team5:50]
+2021/01/13 21:56:50 [Team6]: Our Status: {Resources:0 LifeStatus:Critical CriticalConsecutiveTurnsCounter:3}
+2021/01/13 21:56:50 [Team1]: [TEAM3]: Trust Score Map: map[Team2:21.123339255207732 Team3:50 Team4:50 Team5:31.752160321388708 Team6:45.840845466103886]
+2021/01/13 21:56:50 [Team1]: Our Status: {Resources:0 LifeStatus:Critical CriticalConsecutiveTurnsCounter:1}
+2021/01/13 21:56:50 [Team2]: [TEAM3]: Trust Score Map: map[Team1:50 Team3:41.160291220698035 Team4:35.35456149765563 Team5:41.12528447214161 Team6:50]
+2021/01/13 21:56:50 [Team2]: Our Status: {Resources:0 LifeStatus:Critical CriticalConsecutiveTurnsCounter:1}
+2021/01/13 21:56:50 [SERVER]: finish startOfTurn
+2021/01/13 21:56:50 [SERVER]: start runOrgs
+2021/01/13 21:56:50 [SERVER]: start runIIGO
+2021/01/13 21:56:50 [SERVER]: President Team1, Speaker Team4, Judge Team1
+2021/01/13 21:56:50 [SERVER]: Common pool resources insufficient for executiveBranch broadcastTaxation
+2021/01/13 21:56:50 [SERVER]: finish runIIGO
+2021/01/13 21:56:50 [SERVER]: start runIIFO
+2021/01/13 21:56:50 [SERVER]: start runPredictionSession
+2021/01/13 21:56:50 [Team6]: Final Prediction: [{8.766480136440341 7.976777361291728 0.18192474701609193 5 20.00412281474272}]
+2021/01/13 21:56:50 [Team1]: Final Prediction: [{8.76681905232779 7.977084902250317 0.18171525134669295 5 20.003339283694423}]
+2021/01/13 21:56:50 [Team2]: Final Prediction: [{8.766736427165576 7.977009926061439 0.18176632482630325 5 20.003530297054365}]
+2021/01/13 21:56:50 [Team3]: Final Prediction: [{8.766790180659426 7.977058703358811 0.18173309792667053 5 20.003406028980894}]
+2021/01/13 21:56:50 [Team4]: Final Prediction: [{8.76662791308399 7.9769114576039035 0.18183340114524615 5 20.003781166119573}]
+2021/01/13 21:56:50 [SERVER]: finish runPredictionSession
+2021/01/13 21:56:50 [SERVER]: Run Forage Predictions
+2021/01/13 21:56:50 [SERVER]: Getting Forage Information
+2021/01/13 21:56:50 [SERVER]: Distributing Forage Information
+2021/01/13 21:56:50 [SERVER]: Finish Running Forage Predictions
+2021/01/13 21:56:50 [SERVER]: finish runIIFO
+2021/01/13 21:56:50 [SERVER]: start runIITO
+2021/01/13 21:56:50 [SERVER]: start runGiftSession
+2021/01/13 21:56:50 [SERVER]: finish runGiftSession
+2021/01/13 21:56:50 [SERVER]: start runIntendedContributionSession
+2021/01/13 21:56:50 [SERVER]: finish runIntendedContributionSession
+2021/01/13 21:56:50 [SERVER]: finish runIITO
+2021/01/13 21:56:50 [SERVER]: finish runOrgs
+2021/01/13 21:56:50 [SERVER]: start endOfTurn
+2021/01/13 21:56:50 [SERVER]: start runIIGOAllocations
+2021/01/13 21:56:50 [SERVER]: finish runIIGOAllocations
+2021/01/13 21:56:50 [SERVER]: start runForage
+2021/01/13 21:56:50 [Team6]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team6]: coef: 0.1140625, sumOfCaught: 0, numberOfHunter: 10, decay: 5
+2021/01/13 21:56:50 [Team1]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team1]: coef: 0.11296875, sumOfCaught: 0, numberOfHunter: 11, decay: 5.5
+2021/01/13 21:56:50 [Team2]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team2]: coef: 0.11296875, sumOfCaught: 0, numberOfHunter: 11, decay: 5.5
+2021/01/13 21:56:50 [Team3]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team3]: coef: 0.11296875, sumOfCaught: 0, numberOfHunter: 11, decay: 5.5
+2021/01/13 21:56:50 [Team4]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team4]: coef: 0.1140625, sumOfCaught: 0, numberOfHunter: 10, decay: 5
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team6 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Team6 did not have enough resources to participate in foraging
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team1 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Team1 did not have enough resources to participate in foraging
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team2 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Team2 did not have enough resources to participate in foraging
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team3 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Team3 did not have enough resources to participate in foraging
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team4 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Team4 did not have enough resources to participate in foraging
+2021/01/13 21:56:50 [SERVER]: finish runForage
+2021/01/13 21:56:50 [SERVER]: start runIIFOEndOfTurn
+2021/01/13 21:56:50 [SERVER]: finish runIIFOEndOfTurn
+2021/01/13 21:56:50 [SERVER]: start runIITOEndOfTurn
+2021/01/13 21:56:50 [SERVER]: finish runIITOEndOfTurn
+2021/01/13 21:56:50 [SERVER]: start runIIGOTaxCommonPool
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team6 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team6 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team6 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team6 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team1 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team1 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team1 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team1 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team2 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team2 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team2 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team2 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team3 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team3 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team3 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team3 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team4 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team4 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team4 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team4 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: finish runIIGOTaxCommonPool
+2021/01/13 21:56:50 [SERVER]: start probeDisaster
+2021/01/13 21:56:50 [SERVER]: No disaster reported. No disaster effects.
+2021/01/13 21:56:50 [SERVER]: finish probeDisaster
+2021/01/13 21:56:50 [SERVER]: start incrementTurnAndSeason
+2021/01/13 21:56:50 [SERVER]: finish incrementTurnAndSeason
+2021/01/13 21:56:50 [SERVER]: start deductCostOfLiving
+2021/01/13 21:56:50 [SERVER]: finish deductCostOfLiving
+2021/01/13 21:56:50 [SERVER]: start updateIslandLivingStatus
+2021/01/13 21:56:50 [SERVER]: finish updateIslandLivingStatus
+2021/01/13 21:56:50 [SERVER]: finish endOfTurn
+2021/01/13 21:56:50 [SERVER]: finish runTurn
+2021/01/13 21:56:50 [SERVER]: start runTurn
+2021/01/13 21:56:50 [SERVER]: TURN: 8, Season: 2
+2021/01/13 21:56:50 [SERVER]: start startOfTurn
+2021/01/13 21:56:50 [Team1]: [TEAM3]: Trust Score Map: map[Team2:21.123339255207732 Team3:50 Team4:50 Team5:31.752160321388708 Team6:45.840845466103886]
+2021/01/13 21:56:50 [Team1]: Our Status: {Resources:0 LifeStatus:Critical CriticalConsecutiveTurnsCounter:2}
+2021/01/13 21:56:50 [Team2]: [TEAM3]: Trust Score Map: map[Team1:50 Team3:41.160291220698035 Team4:35.35456149765563 Team5:41.12528447214161 Team6:50]
+2021/01/13 21:56:50 [Team2]: Our Status: {Resources:0 LifeStatus:Critical CriticalConsecutiveTurnsCounter:2}
+2021/01/13 21:56:50 [Team3]: [TEAM3]: Trust Score Map: map[Team1:29.397753707105274 Team2:40.903695337713344 Team4:50 Team5:50 Team6:50]
+2021/01/13 21:56:50 [Team3]: Our Status: {Resources:0 LifeStatus:Critical CriticalConsecutiveTurnsCounter:3}
+2021/01/13 21:56:50 [SERVER]: finish startOfTurn
+2021/01/13 21:56:50 [SERVER]: start runOrgs
+2021/01/13 21:56:50 [SERVER]: start runIIGO
+2021/01/13 21:56:50 [SERVER]: President Team1, Speaker Team3, Judge Team1
+2021/01/13 21:56:50 [SERVER]: Common pool resources insufficient for executiveBranch broadcastTaxation
+2021/01/13 21:56:50 [SERVER]: finish runIIGO
+2021/01/13 21:56:50 [SERVER]: start runIIFO
+2021/01/13 21:56:50 [SERVER]: start runPredictionSession
+2021/01/13 21:56:50 [Team3]: Final Prediction: [{8.767655394085319 7.977843820186425 0.18119827948781195 5 33.33567671496816}]
+2021/01/13 21:56:50 [Team1]: Final Prediction: [{8.767648282275655 7.977837366748146 0.1812026755441226 5 33.33570411130851}]
+2021/01/13 21:56:50 [Team2]: Final Prediction: [{8.767474906300745 7.977680040946983 0.1813098452498411 5 33.336372009707354}]
+2021/01/13 21:56:50 [SERVER]: finish runPredictionSession
+2021/01/13 21:56:50 [SERVER]: Run Forage Predictions
+2021/01/13 21:56:50 [SERVER]: Getting Forage Information
+2021/01/13 21:56:50 [SERVER]: Distributing Forage Information
+2021/01/13 21:56:50 [SERVER]: Finish Running Forage Predictions
+2021/01/13 21:56:50 [SERVER]: finish runIIFO
+2021/01/13 21:56:50 [SERVER]: start runIITO
+2021/01/13 21:56:50 [SERVER]: start runGiftSession
+2021/01/13 21:56:50 [SERVER]: finish runGiftSession
+2021/01/13 21:56:50 [SERVER]: start runIntendedContributionSession
+2021/01/13 21:56:50 [SERVER]: finish runIntendedContributionSession
+2021/01/13 21:56:50 [SERVER]: finish runIITO
+2021/01/13 21:56:50 [SERVER]: finish runOrgs
+2021/01/13 21:56:50 [SERVER]: start endOfTurn
+2021/01/13 21:56:50 [SERVER]: start runIIGOAllocations
+2021/01/13 21:56:50 [SERVER]: finish runIIGOAllocations
+2021/01/13 21:56:50 [SERVER]: start runForage
+2021/01/13 21:56:50 [Team3]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team3]: coef: 0.11515625, sumOfCaught: 0, numberOfHunter: 9, decay: 4.5
+2021/01/13 21:56:50 [Team1]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team1]: coef: 0.11515625, sumOfCaught: 0, numberOfHunter: 9, decay: 4.5
+2021/01/13 21:56:50 [Team2]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team2]: coef: 0.11515625, sumOfCaught: 0, numberOfHunter: 9, decay: 4.5
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team3 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Team3 did not have enough resources to participate in foraging
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team1 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Team1 did not have enough resources to participate in foraging
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team2 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Team2 did not have enough resources to participate in foraging
+2021/01/13 21:56:50 [SERVER]: finish runForage
+2021/01/13 21:56:50 [SERVER]: start runIIFOEndOfTurn
+2021/01/13 21:56:50 [SERVER]: finish runIIFOEndOfTurn
+2021/01/13 21:56:50 [SERVER]: start runIITOEndOfTurn
+2021/01/13 21:56:50 [SERVER]: finish runIITOEndOfTurn
+2021/01/13 21:56:50 [SERVER]: start runIIGOTaxCommonPool
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team2 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team2 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team2 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team2 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team3 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team3 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team3 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team3 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team1 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team1 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team1 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team1 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: finish runIIGOTaxCommonPool
+2021/01/13 21:56:50 [SERVER]: start probeDisaster
+2021/01/13 21:56:50 [SERVER]: No disaster reported. No disaster effects.
+2021/01/13 21:56:50 [SERVER]: finish probeDisaster
+2021/01/13 21:56:50 [SERVER]: start incrementTurnAndSeason
+2021/01/13 21:56:50 [SERVER]: finish incrementTurnAndSeason
+2021/01/13 21:56:50 [SERVER]: start deductCostOfLiving
+2021/01/13 21:56:50 [SERVER]: finish deductCostOfLiving
+2021/01/13 21:56:50 [SERVER]: start updateIslandLivingStatus
+2021/01/13 21:56:50 [SERVER]: finish updateIslandLivingStatus
+2021/01/13 21:56:50 [SERVER]: finish endOfTurn
+2021/01/13 21:56:50 [SERVER]: finish runTurn
+2021/01/13 21:56:50 [SERVER]: start runTurn
+2021/01/13 21:56:50 [SERVER]: TURN: 9, Season: 2
+2021/01/13 21:56:50 [SERVER]: start startOfTurn
+2021/01/13 21:56:50 [Team1]: [TEAM3]: Trust Score Map: map[Team2:21.123339255207732 Team3:50 Team4:50 Team5:31.752160321388708 Team6:45.840845466103886]
+2021/01/13 21:56:50 [Team1]: Our Status: {Resources:0 LifeStatus:Critical CriticalConsecutiveTurnsCounter:3}
+2021/01/13 21:56:50 [Team2]: [TEAM3]: Trust Score Map: map[Team1:50 Team3:41.160291220698035 Team4:35.35456149765563 Team5:41.12528447214161 Team6:50]
+2021/01/13 21:56:50 [Team2]: Our Status: {Resources:0 LifeStatus:Critical CriticalConsecutiveTurnsCounter:3}
+2021/01/13 21:56:50 [SERVER]: finish startOfTurn
+2021/01/13 21:56:50 [SERVER]: start runOrgs
+2021/01/13 21:56:50 [SERVER]: start runIIGO
+2021/01/13 21:56:50 [SERVER]: President Team1, Speaker Team1, Judge Team1
+2021/01/13 21:56:50 [SERVER]: Common pool resources insufficient for executiveBranch broadcastTaxation
+2021/01/13 21:56:50 [SERVER]: finish runIIGO
+2021/01/13 21:56:50 [SERVER]: start runIIFO
+2021/01/13 21:56:50 [SERVER]: start runPredictionSession
+2021/01/13 21:56:50 [Team1]: Final Prediction: [{8.768080953167107 7.9782299833991726 0.1809352266537322 5 50.00105616696276}]
+2021/01/13 21:56:50 [Team2]: Final Prediction: [{8.7678310660781 7.978003229453024 0.1810896905337806 5 50.0025}]
+2021/01/13 21:56:50 [SERVER]: finish runPredictionSession
+2021/01/13 21:56:50 [SERVER]: Run Forage Predictions
+2021/01/13 21:56:50 [SERVER]: Getting Forage Information
+2021/01/13 21:56:50 [SERVER]: Distributing Forage Information
+2021/01/13 21:56:50 [SERVER]: Finish Running Forage Predictions
+2021/01/13 21:56:50 [SERVER]: finish runIIFO
+2021/01/13 21:56:50 [SERVER]: start runIITO
+2021/01/13 21:56:50 [SERVER]: start runGiftSession
+2021/01/13 21:56:50 [SERVER]: finish runGiftSession
+2021/01/13 21:56:50 [SERVER]: start runIntendedContributionSession
+2021/01/13 21:56:50 [SERVER]: finish runIntendedContributionSession
+2021/01/13 21:56:50 [SERVER]: finish runIITO
+2021/01/13 21:56:50 [SERVER]: finish runOrgs
+2021/01/13 21:56:50 [SERVER]: start endOfTurn
+2021/01/13 21:56:50 [SERVER]: start runIIGOAllocations
+2021/01/13 21:56:50 [SERVER]: finish runIIGOAllocations
+2021/01/13 21:56:50 [SERVER]: start runForage
+2021/01/13 21:56:50 [Team2]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team2]: coef: 0.1184375, sumOfCaught: 0, numberOfHunter: 6, decay: 3
+2021/01/13 21:56:50 [Team1]: Expected return of DeerForageType: 0 per cent
+2021/01/13 21:56:50 [Team1]: coef: 0.1184375, sumOfCaught: 0, numberOfHunter: 6, decay: 3
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team2 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Team2 did not have enough resources to participate in foraging
+2021/01/13 21:56:50 [SERVER]: Trying to take 0.01 from Team1 (reason: deer hunt participation)
+2021/01/13 21:56:50 [SERVER]: Team1 did not have enough resources to participate in foraging
+2021/01/13 21:56:50 [SERVER]: finish runForage
+2021/01/13 21:56:50 [SERVER]: start runIIFOEndOfTurn
+2021/01/13 21:56:50 [SERVER]: finish runIIFOEndOfTurn
+2021/01/13 21:56:50 [SERVER]: start runIITOEndOfTurn
+2021/01/13 21:56:50 [SERVER]: finish runIITOEndOfTurn
+2021/01/13 21:56:50 [SERVER]: start runIIGOTaxCommonPool
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team1 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team1 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team1 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team1 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team2 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team2 (reason: tax)
+2021/01/13 21:56:50 [SERVER]: Trying to take 0 from Team2 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: Took 0 from Team2 (reason: sanction)
+2021/01/13 21:56:50 [SERVER]: finish runIIGOTaxCommonPool
+2021/01/13 21:56:50 [SERVER]: start probeDisaster
+2021/01/13 21:56:50 [SERVER]: No disaster reported. No disaster effects.
+2021/01/13 21:56:50 [SERVER]: finish probeDisaster
+2021/01/13 21:56:50 [SERVER]: start incrementTurnAndSeason
+2021/01/13 21:56:50 [SERVER]: finish incrementTurnAndSeason
+2021/01/13 21:56:50 [SERVER]: start deductCostOfLiving
+2021/01/13 21:56:50 [SERVER]: finish deductCostOfLiving
+2021/01/13 21:56:50 [SERVER]: start updateIslandLivingStatus
+2021/01/13 21:56:50 [SERVER]: finish updateIslandLivingStatus
+2021/01/13 21:56:50 [SERVER]: finish endOfTurn
+2021/01/13 21:56:50 [SERVER]: finish runTurn
+2021/01/13 21:56:50 [SERVER]: All clients are dead!
+2021/01/13 21:56:50 Writing JSON output to 'D:\University\Somas\Sanctions\SOMAS2020/output/output.json'
+2021/01/13 21:56:50 Finished writing JSON output to 'D:\University\Somas\Sanctions\SOMAS2020/output/output.json'
