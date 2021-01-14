@@ -3,7 +3,7 @@ package team2
 import "github.com/SOMAS2020/SOMAS2020/internal/clients/team3/adv"
 
 func getislandParams() islandParams {
-	return gandhi()
+	return ardernLeeMacron()
 }
 
 func evilPeople() islandParams {

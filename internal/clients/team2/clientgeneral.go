@@ -22,6 +22,8 @@ func NewClient(clientID shared.ClientID) baseclient.Client {
 	}
 
 	return &ourClient
+
+	//return baseclient.NewClient(clientID)
 }
 
 func (c *client) StartOfTurn() {

@@ -65,6 +65,9 @@ func (c *client) Initialise(serverReadHandle baseclient.ServerReadHandle) {
 		} else if c.params.advType == adv.TargetAdv {
 			c.params.adv = &adv.Target{TargetID: shared.ClientID(rand.Intn(len(c.ServerReadHandle.GetGameState().ClientLifeStatuses)))}
 			c.params.adv.Initialise(c.GetID())
+		} else if c.params.advType == adv.KindMaliceAdv {
+			c.params.adv = &adv.KindMalice{}
+			c.params.adv.Initialise(c.GetID())
 		}
 	} else {
 		c.params.adv = nil

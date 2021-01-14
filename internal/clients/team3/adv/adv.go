@@ -12,6 +12,7 @@ const (
 	NoAdv Spec = iota
 	MaliceAdv
 	TargetAdv
+	KindMaliceAdv
 )
 
 type Adv interface {
